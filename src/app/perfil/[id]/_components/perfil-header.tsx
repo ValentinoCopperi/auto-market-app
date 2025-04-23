@@ -43,8 +43,7 @@ export function PerfilHeader({
   const numResenas = 0
 
   const handleEditarPerfil = () => {
-    // Implementar lógica para editar perfil
-    console.log("Editar perfil")
+    setIsEditModalOpen(true)
   }
 
   const handleCambiarBanner = () => {

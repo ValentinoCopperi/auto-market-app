@@ -79,7 +79,7 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
     try {
       setIsDeleting(true)
 
-      const response = await fetch(`http://localhost:3000/api/publiaciones/${publicacion.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/${publicacion.id}`, {
         method: "DELETE",
       })
 

@@ -9,7 +9,7 @@ import { getSession } from "@/lib/session/session"
 export default async function SubscriptionSuccessPage({
     searchParams,
 }: {
-    searchParams: { preapproval_id?: string }
+    searchParams: Promise<{ preapproval_id?: string }>
 }) {
 
     const get_nombre_plan = (plan: string) => {

@@ -19,7 +19,7 @@ const getPlan = (plan: Planes) => {
     }
 }
 
-export const suscribe = async (email: string, plan: Planes): Promise<ActionsResponse<string>> => {
+export const suscribe = async ( plan: Planes): Promise<ActionsResponse<string>> => {
 
     try {
 
@@ -58,6 +58,8 @@ export const suscribe = async (email: string, plan: Planes): Promise<ActionsResp
         
 
         const total_price = 15;
+
+        const email = session.email;
 
         const suscription = await new PreApproval(mercadopago).create({
             body: {

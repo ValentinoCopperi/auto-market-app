@@ -39,8 +39,7 @@ export default function SuscripcionesPage() {
   // Función para proceder al pago
   const handleProceedToPayment = async () => {
     setLoading(true)
-    const email = "test_user_1615397598@testuser.com"
-    const { data, error, message } = await suscribe(email, selectedPlan!)
+    const { data, error, message } = await suscribe(selectedPlan!)
     if (error) {
       toast.error(message)
     } else {

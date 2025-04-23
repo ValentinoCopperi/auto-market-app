@@ -64,7 +64,7 @@ const PublicacionEstadisticas = ({
     const fetchEstadisticas = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`/api/publiaciones/${id_publicacion}/estadisticas`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/${id_publicacion}/estadisticas`)
         if (!response.ok) {
           setError("Error al obtener las estadísticas")
           setIsLoading(false)

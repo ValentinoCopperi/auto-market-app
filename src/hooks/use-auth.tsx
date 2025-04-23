@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuth = async () => {
     try {
       setLoading(true)
-      const res = await fetch("http://localhost:3000/api/auth/authenticate")
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/authenticate`)
       const data = await res.json()
 
       if (data.authenticated && data.user) {
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
 
-      const res = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null)
     setSuccess(null)
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
         method: "POST",
         body: JSON.stringify(userData),
       })
@@ -141,7 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       setLoading(true)
-      await fetch("http://localhost:3000/api/auth/logout", { method: "POST" })
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, { method: "POST" })
       setUser(null)
       setIsAuthenticated(false)
       router.refresh()

@@ -70,7 +70,7 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
     useEffect(() => {
         const fetchConversations = async () => {
             setIsLoading(true)
-            const response = await fetch("http://localhost:3000/api/conversacion")
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/conversacion`)
             const { error, data } = await response.json()
             if (error || !data) {
                 setConversaciones([])
@@ -128,7 +128,7 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
         if (selectedConversation && pathname.includes("chat")) {
             setIsLoadingMensajes(true)
             const fetchMensajes = async () => {
-                const response = await fetch(`http://localhost:3000/api/conversacion/${selectedConversation}`)
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/conversacion/${selectedConversation}`)
                 const { error, data } = await response.json()
                 if (error || !data) {
                     setMensajes([])
@@ -170,7 +170,7 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
             // ,si no, se envia al id_cliente_receptor (Se utiliza en la seccion chat)
             const id_receptor_a_enviar = id_vendedor ? id_vendedor : id_cliente_vendedor
 
-            const response = await fetch("http://localhost:3000/api/mensajes", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/mensajes`, {
                 method: "POST",
                 body: JSON.stringify({ message, id_cliente_receptor : id_receptor_a_enviar })
             })

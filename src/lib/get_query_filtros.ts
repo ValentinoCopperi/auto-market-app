@@ -51,10 +51,10 @@ export const get_query_filtros = (searchParams?: Record<string, any>, marcaId?: 
           where.anio = parseInt(value)
           break
         case "tipo_transmision":
-          where.tipo_transmision = value
+          where.tipo_transmision = { contains: value, mode: "insensitive" }
           break
         case "tipo_combustible":
-          where.tipo_combustible = value
+          where.tipo_combustible = { contains: value, mode: "insensitive" }
           break
         case "categoria":
           where.categoria = { contains: value, mode: "insensitive" }
@@ -63,7 +63,7 @@ export const get_query_filtros = (searchParams?: Record<string, any>, marcaId?: 
           where.ciudad = { contains: value, mode: "insensitive" }
           break
         case "color":
-          where.color = value
+          where.color = { contains: value, mode: "insensitive" }
           break
         case "q":
           where.OR = [

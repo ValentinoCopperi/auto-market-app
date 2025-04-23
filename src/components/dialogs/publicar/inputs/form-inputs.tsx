@@ -60,7 +60,11 @@ export function FormSections({ control, fieldConfig, loading }: FormSectionsProp
                   </SelectContent>
                 </Select>
               ) : config.type === "textarea" ? (
-                <Textarea placeholder={config.placeholder} rows={config.rows || 3} {...field} />
+                <Textarea
+                  placeholder={config.placeholder}
+                  rows={config.rows || 3}
+                  {...{ ...field, value: String(field.value) }}
+                />
               ) : (
                 <Input
                   type={config.type || "text"}
@@ -68,6 +72,7 @@ export function FormSections({ control, fieldConfig, loading }: FormSectionsProp
                   max={config.max}
                   placeholder={config.placeholder}
                   {...field}
+                  value={typeof field.value === 'string' || typeof field.value === 'number' ? field.value : ''}
                 />
               )}
             </FormControl>

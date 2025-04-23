@@ -57,7 +57,7 @@ export const suscribe = async (email: string, plan: Planes): Promise<ActionsResp
         
         
 
-        const total_price = getPlan(plan).price - (existingSubscription?.tipo_suscripcion.precio ?? 0);
+        const total_price = 15;
 
         const suscription = await new PreApproval(mercadopago).create({
             body: {

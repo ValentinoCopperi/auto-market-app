@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model cliente {
+  id                                                 Int                  @id(map: "cliente_pk") @default(autoincrement())
+  nombre                                             String               @db.VarChar(60)
+  apellido                                           String?              @db.VarChar(60)
+  email                                              String               @unique @db.VarChar(50)
+  telefono                                           Int
+  contrasena                                         String               @db.VarChar(350)
+  ciudad                                             String               @db.VarChar(60)
+  profile_img_url                                    String?              @db.VarChar(350)
+  banner_img_url                                     String?              @db.VarChar(350)
+  tipo_cliente                                       String?
+  admin                                              Boolean?             @default(false)
+  descripcion                                        String?              @db.VarChar
+  conversacion_conversacion_id_cliente_1Tocliente    conversacion[]       @relation("conversacion_id_cliente_1Tocliente")
+  conversacion_conversacion_id_cliente_2Tocliente    conversacion[]       @relation("conversacion_id_cliente_2Tocliente")
+  favorito                                           favorito[]
+  mensaje                                            mensaje[]
+  pago                                               pago[]
+  publicacion                                        publicacion[]
+  publicacion_vistas                                 publicacion_vistas[]
+  suscripcion                                        suscripcion[]
+  valoracion_valoracion_id_cliente_valoradoTocliente valoracion[]         @relation("valoracion_id_cliente_valoradoTocliente")
+  valoracion_valoracion_id_cliente_votanteTocliente  valoracion[]         @relation("valoracion_id_cliente_votanteTocliente")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model conversacion {
+  id                                         Int       @id(map: "conversacion_pk") @default(autoincrement())
+  id_cliente_1                               Int
+  id_cliente_2                               Int
+  cliente_conversacion_id_cliente_1Tocliente cliente   @relation("conversacion_id_cliente_1Tocliente", fields: [id_cliente_1], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "id_conversacion_cliente_1")
+  cliente_conversacion_id_cliente_2Tocliente cliente   @relation("conversacion_id_cliente_2Tocliente", fields: [id_cliente_2], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "id_conversacion_cliente_2")
+  mensaje                                    mensaje[]
+
+  @@unique([id_cliente_1, id_cliente_2], map: "unique_conversacion")
+}
+
+model favorito {
+  id             Int         @id(map: "favorito_pk") @default(autoincrement())
+  publicacion_id Int
+  cliente_id     Int
+  created_at     DateTime?   @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  cliente        cliente     @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "favorito_clientes")
+  publicacion    publicacion @relation(fields: [publicacion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "favorito_publicacion")
+
+  @@unique([publicacion_id, cliente_id], map: "unique_favorito")
+}
+
+model marca {
+  id                     Int           @id(map: "marca_pk") @default(autoincrement())
+  nombre                 String        @unique @db.VarChar(60)
+  cantidad_publicaciones Int?          @default(0)
+  publicacion            publicacion[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mensaje {
+  id              Int          @id(map: "mensaje_pk") @default(autoincrement())
+  fecha           DateTime     @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamptz(6)
+  contenido       String       @db.VarChar(150)
+  id_cliente      Int
+  id_conversacion Int
+  conversacion    conversacion @relation(fields: [id_conversacion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mensaje_conversacion")
+  cliente         cliente      @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model pago {
+  id             Int          @id(map: "pago_pk") @default(autoincrement())
+  id_suscripcion Int?
+  monto          Int
+  metodo_pago    String       @db.VarChar(100)
+  transaccion_id String?      @unique @db.VarChar(350)
+  estado         String       @db.VarChar(60)
+  id_cliente     Int
+  id_pago_mp     Int?
+  cliente        cliente      @relation(fields: [id_cliente], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  suscripcion    suscripcion? @relation(fields: [id_suscripcion], references: [id], map: "pago_suscripcion")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model publicacion {
+  id                   Int                    @id(map: "publicacion_pk") @default(autoincrement())
+  id_cliente           Int
+  id_marca             Int
+  modelo               String                 @db.VarChar(50)
+  precio               Decimal                @db.Decimal
+  kilometraje          Int
+  tipo_combustible     String                 @db.VarChar(40)
+  anio                 Int
+  tipo_transmision     String                 @db.VarChar(50)
+  color                String                 @db.VarChar(100)
+  destacado            Boolean?               @default(false)
+  categoria            String?                @db.VarChar
+  ciudad               String                 @db.VarChar
+  tipo_moneda          String                 @db.VarChar
+  titulo               String                 @db.VarChar
+  descripcion          String?                @db.VarChar
+  created_at           DateTime?              @default(now())
+  url_portada          String?
+  favorito             favorito[]
+  cliente              cliente                @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publicacion_cliente")
+  marca                marca                  @relation(fields: [id_marca], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publicacion_marca")
+  publicacion_imagenes publicacion_imagenes[]
+  publicacion_vistas   publicacion_vistas[]
+}
+
+model publicacion_imagenes {
+  id             Int         @id(map: "publicacion_imagenes_pk") @default(autoincrement())
+  url            String      @db.VarChar(350)
+  created_at     DateTime    @default(now()) @db.Timestamp(6)
+  publicacion_id Int
+  publicacion    publicacion @relation(fields: [publicacion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publicacion_imagenes_fk")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model suscripcion {
+  id                  Int              @id(map: "suscripcion_pk") @default(autoincrement())
+  id_cliente          Int
+  id_tipo_suscripcion Int
+  fecha_inicio        DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
+  fecha_fin           DateTime         @db.Date
+  estado              String           @db.VarChar(60)
+  id_suscripcion_mp   String?          @db.VarChar
+  pago                pago[]
+  cliente             cliente          @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "suscripcion_cliente")
+  tipo_suscripcion    tipo_suscripcion @relation(fields: [id_tipo_suscripcion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "suscripcion_tipo_suscripcion")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model tipo_suscripcion {
+  id                             Int           @id(map: "tipo_suscripcion_pk") @default(autoincrement())
+  nombre                         String        @unique @db.VarChar(60)
+  precio                         Int
+  max_publicaciones              Int
+  max_publicaciones_por_vehiculo Int
+  publicaciones_destacadas       Boolean?      @default(false)
+  suscripcion                    suscripcion[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model valoracion {
+  id                                              Int      @id(map: "valoracion_pk") @default(autoincrement())
+  comentario                                      String?  @db.VarChar(150)
+  valoracion                                      Int
+  id_cliente_votante                              Int
+  id_cliente_valorado                             Int
+  created_at                                      DateTime @default(now()) @db.Timestamp(6)
+  cliente_valoracion_id_cliente_valoradoTocliente cliente  @relation("valoracion_id_cliente_valoradoTocliente", fields: [id_cliente_valorado], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cliente_valorado")
+  cliente_valoracion_id_cliente_votanteTocliente  cliente  @relation("valoracion_id_cliente_votanteTocliente", fields: [id_cliente_votante], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "valoracion_cliente_votante")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model publicacion_vistas {
+  id             Int         @id @default(autoincrement())
+  id_publicacion Int
+  id_cliente     Int
+  created_at     DateTime?   @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  cliente        cliente     @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  publicacion    publicacion @relation(fields: [id_publicacion], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([id_publicacion, id_cliente], map: "unique_vista")
+}

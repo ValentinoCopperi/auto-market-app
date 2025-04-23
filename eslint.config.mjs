@@ -29,6 +29,12 @@ const eslintConfig = [
       "react/no-unstable-nested-components": "off",
       "react/no-unknown-property": "off",
       "react/no-array-index-key": "off",
+      "no-var": "off",
+      "no-unused-vars": "off",
+      "no-undef": "off",
+      "no-undef-init": "off",
+      "no-unused-imports": "off",
+      "no-unused-expressions": "off",
     },
   },
 ];

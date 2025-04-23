@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const { closeDialog } = useDialogStore()
 
-  // Verificar autenticación al carga
+  // Verificar autenticación al carg
   useEffect(() => {
     checkAuth()
   }, [])

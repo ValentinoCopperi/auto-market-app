@@ -35,6 +35,7 @@ const eslintConfig = [
       "no-undef-init": "off",
       "no-unused-imports": "off",
       "no-unused-expressions": "off",
+      "react/display-name": "off"
     },
   },
 ];

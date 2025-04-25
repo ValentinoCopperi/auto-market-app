@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { suscribe } from "@/actions/mercadopago-actions"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
-import { planes, Planes } from "@/types/suscriciones"
+import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
 
 
@@ -23,18 +23,7 @@ export default function SuscripcionesPage() {
     setSelectedPlan(planName)
   }
 
-  const getPlanName = (plan: Planes) => {
-    switch (plan) {
-      case "plan_ocasion":
-        return "Plan Ocasión"
-      case "plan_vendedor":
-        return "Plan Vendedor"
-      case "plan_agencia":
-        return "Plan Agencia"
-      default:
-        return "Plan Desconocido"
-    }
-  }
+  
 
   // Función para proceder al pago
   const handleProceedToPayment = async () => {

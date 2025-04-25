@@ -85,6 +85,7 @@ model pago {
   estado         String       @db.VarChar(60)
   id_cliente     Int
   id_pago_mp     Int?
+  fecha_pago     DateTime?    @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   cliente        cliente      @relation(fields: [id_cliente], references: [id], onDelete: NoAction, onUpdate: NoAction)
   suscripcion    suscripcion? @relation(fields: [id_suscripcion], references: [id], map: "pago_suscripcion")
 }

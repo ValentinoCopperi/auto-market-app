@@ -191,6 +191,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
         id_cliente: parseInt(id_cliente),
       },
       select: {
+        estado: true,
         tipo_suscripcion: {
           select: {
             publicaciones_destacadas: true,
@@ -203,6 +204,10 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
 
     if (!suscripcion) {
       return { error: true, message: "No tienes una suscripción activa" }
+    }
+
+    if(suscripcion.estado === "vencida"){
+      return { error: true, message: "Tu suscripción está vencida. Porfavor, actualiza tu plan" }
     }
 
     const count_publicaciones = await prisma.publicacion.count({

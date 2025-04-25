@@ -17,6 +17,8 @@ import { SearchBar } from "@/components/search-bar"
 import SendMessage from "./_components/send-message"
 import { MensajesProvider } from "@/hooks/use-mensajes"
 import PublicarBtn from "./_components/publicar-btn"
+import { getSuscripcionByUsuario } from "@/actions/suscripcion-actions"
+import SuscripcionInfo from "./_components/suscripcion-info"
 
 export default async function PerfilPage({
     params,
@@ -52,6 +54,9 @@ export default async function PerfilPage({
 
     const editable = session?.email === cliente.email && cliente.id.toString() === session?.userId
 
+
+   
+    
     return (
         <div className="min-h-screen bg-background pb-12">
             {/* Banner y perfil */}
@@ -68,6 +73,12 @@ export default async function PerfilPage({
                         {/* Estadísticas del vendedor */}
                         <PerfilStats calificacion={calificacion} numResenas={resenas.length} favoritos={0} />
 
+                        {/* Suscripción del usuario */}
+                        {
+                            editable && (
+                                <SuscripcionInfo id_cliente={cliente.id} />
+                            )
+                        }
                         {/* Acciones (solo visible si no es el propio perfil) */}
                         {!editable && (
                             <div className="bg-card rounded-lg border border-border p-4 space-y-3">

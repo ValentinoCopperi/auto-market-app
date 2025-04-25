@@ -105,7 +105,7 @@ const ConfigBtn = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/suscripcion" className="cursor-pointer w-full">
+                    <Link href={isAuthenticated ? `/perfil/${user?.id}/suscripcion` : "/suscripcion"} className="cursor-pointer w-full">
                         <div className="flex items-center gap-2">
                             <CreditCard className="h-4 w-4" />
                             <div className="flex flex-col">
@@ -116,31 +116,7 @@ const ConfigBtn = () => {
                     </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/billetera" className="cursor-pointer w-full">
-                        <div className="flex items-center gap-2">
-                            <Wallet className="h-4 w-4" />
-                            <div className="flex flex-col">
-                                <span className="font-medium">Billetera</span>
-                                <span className="text-xs text-muted-foreground">Balance y transacciones</span>
-                            </div>
-                        </div>
-                    </Link>
-                </DropdownMenuItem>
-
-
-
-                <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/seguridad" className="cursor-pointer w-full">
-                        <div className="flex items-center gap-2">
-                            <Shield className="h-4 w-4" />
-                            <div className="flex flex-col">
-                                <span className="font-medium">Seguridad</span>
-                                <span className="text-xs text-muted-foreground">Privacidad y seguridad</span>
-                            </div>
-                        </div>
-                    </Link>
-                </DropdownMenuItem>
+               
 
                 <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
                     <Link href="/configuracion" className="cursor-pointer w-full">
@@ -159,8 +135,8 @@ const ConfigBtn = () => {
                         <div className="flex items-center gap-2">
                             <HelpCircle className="h-4 w-4" />
                             <div className="flex flex-col">
-                                <span className="font-medium">Ayuda</span>
-                                <span className="text-xs text-muted-foreground">Centro de ayuda</span>
+                                <span className="font-medium">Contacto</span>
+                                <span className="text-xs text-muted-foreground">Centro de contacto</span>
                             </div>
                         </div>
                     </Link>

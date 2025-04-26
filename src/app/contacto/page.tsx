@@ -255,8 +255,7 @@ export default function ContactPage() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Con más de 15 años de experiencia en el sector automotriz, Valentino fundó AutoMarket en 2020 con la
-                        visión de transformar la forma en que se compran y venden vehículos en Argentina.
+                        Desarrollador Full Stack
                       </p>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">

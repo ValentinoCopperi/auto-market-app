@@ -17,11 +17,11 @@ export default async function SubscriptionSuccessPage({
         if (plan === "plan_vendedor") return "Plan Vendedor"
         if (plan === "plan_agencia") return "Plan Agencia"
     }
-
+    const session = await getSession()
     // Get the user's active subscription
     const subscription = await prisma.suscripcion.findFirst({
         where: {
-            id_cliente: Number(18),
+            id_cliente: Number(session?.userId),
         },
         include: {
             tipo_suscripcion: true,
@@ -53,22 +53,6 @@ export default async function SubscriptionSuccessPage({
                     )}
                 </p>
 
-                {subscription && (
-                    <div className="p-4 w-full lg:w-1/2 mx-auto rounded-md mb-6 bg-secondary-foreground/50 text-white">
-                        <div className="flex justify-between mb-2">
-                            <span className="">Plan:</span>
-                            <span className="font-medium">{get_nombre_plan(subscription.tipo_suscripcion.nombre)}</span>
-                        </div>
-                        <div className="flex justify-between mb-2">
-                            <span className="">Precio:</span>
-                            <span className="font-medium">ARS ${subscription.tipo_suscripcion.precio}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="">Próximo pago:</span>
-                            <span className="font-medium">{new Date(subscription.fecha_fin).toLocaleDateString()}</span>
-                        </div>
-                    </div>
-                )}
 
                 <p className="text-sm  mb-6">
                     Tu suscripción se renovará automáticamente cada mes. Puedes cancelarla en cualquier momento desde tu perfil.
@@ -80,7 +64,7 @@ export default async function SubscriptionSuccessPage({
                     </Button>
 
                     <Button variant="outline" asChild className="w-full">
-                        <Link href="/profile/subscription">Administrar Suscripción</Link>
+                        <Link href={`/perfil/${session?.userId}/suscripcion`}>Administrar Suscripción</Link>
                     </Button>
                 </div>
             </div>

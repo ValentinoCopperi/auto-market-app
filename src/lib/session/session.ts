@@ -98,10 +98,42 @@ export async function isAdmin(): Promise<boolean> {
   return session?.admin === true
 }
 
-export async function updateSuscripcion(suscripcion: string): Promise<string | null> {
+/**
+ * Actualiza el campo "suscripcion" de la cookie de sesión
+ */
+export async function updateSuscripcion(newSuscripcion: string) {
   const cookieStore = await cookies()
-  cookieStore.set("suscripcion", suscripcion)
-  return suscripcion
+  const sessionCookie = cookieStore.get("session")?.value
+
+  if (!sessionCookie) {
+    console.error("No se encontró la cookie de sesión")
+    return
+  }
+
+  const session = await decrypt(sessionCookie)
+
+  if (!session) {
+    console.error("No se pudo decodificar la sesión")
+    return
+  }
+
+  // Actualizar el dato de la suscripción
+  const updatedSession = {
+    ...session,
+    suscripcion: newSuscripcion,
+  }
+
+  // Re-firmar la cookie con los nuevos datos
+  const newToken = await encrypt(updatedSession)
+
+  // Guardar la nueva cookie
+  cookieStore.set("session", newToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    expires: new Date(session.expiresAt), // Respetamos la expiración original
+    sameSite: "lax",
+    path: "/",
+  })
 }
 
 /**

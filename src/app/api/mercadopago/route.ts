@@ -5,6 +5,7 @@ import { getSession, updateSuscripcion } from "@/lib/session/session";
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
+    const cookiesStore = cookies()
     try {
         // Obtenemos el cuerpo de la petición que incluye el tipo de notificación
         const body: { data: { id: string }; type: string } = await request.json();
@@ -104,15 +105,24 @@ export async function POST(request: Request) {
                     let subscriptionId: number
                     if (existingSubscription) {
                         // Update existing subscription
-                        await tx.suscripcion.update({
+                        const updated_suscripcion = await tx.suscripcion.update({
                             where: { id: existingSubscription.id },
                             data: {
                                 id_tipo_suscripcion: tipo_suscripcion.id,
                                 fecha_fin: endDate,
                                 // Keep it active
                             },
+                            select:{
+                                id: true,
+                                tipo_suscripcion: {
+                                    select: {
+                                        nombre: true
+                                    }
+                                }
+                            }
                         })
-                        subscriptionId = existingSubscription.id
+                        subscriptionId = updated_suscripcion.id
+                        await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
                         console.log("Updated existing subscription:", existingSubscription.id)
                     } else {
                         // Create new subscription
@@ -124,8 +134,17 @@ export async function POST(request: Request) {
                                 fecha_fin: endDate,
                                 estado: "activa",
                             },
+                            select:{
+                                id: true,
+                                tipo_suscripcion: {
+                                    select: {
+                                        nombre: true
+                                    }
+                                }
+                            }
                         })
                         subscriptionId = nueva_suscripcion.id
+                        await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
                         console.log("Created new subscription:", nueva_suscripcion.id)
                     }
 
@@ -142,6 +161,8 @@ export async function POST(request: Request) {
                     })
 
                     console.log("Created payment record:", nuevo_pago.id)
+
+
                 })
 
             }

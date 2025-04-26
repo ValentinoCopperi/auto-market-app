@@ -5,7 +5,7 @@ import { ArrowRight, Car } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Marca } from "@/types/publicaciones"
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
-import { getMarcasByCantidadPublicaciones    } from "@/actions/marcas-actions"
+import { getMarcasByCantidadPublicaciones } from "@/actions/marcas-actions"
 
 export async function BrandsSection() {
     const marcas: Marca[] = await getMarcasByCantidadPublicaciones()
@@ -50,7 +50,12 @@ function BrandItem({ id, name, count }: BrandCardProps) {
                         {count || 0}
                     </div>
                     <div className="relative w-[120px] h-[120px]">
-                        <Image src={`/${name}-logo.png` || "/placeholder.svg"} alt={name || "Marca"} fill className="object-contain" />
+                        <Image
+                            src={name ? `/${name}-logo.png` : "/placeholder.svg"}
+                            alt={name || "Marca"}
+                            fill
+                            className="object-contain"
+                        />
                     </div>
                 </div>
                 <h3 className="text-lg font-semibold mb-4">{name ? name.charAt(0).toUpperCase() + name.slice(1) : "Marca"}</h3>

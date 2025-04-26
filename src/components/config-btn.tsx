@@ -131,7 +131,7 @@ const ConfigBtn = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/ayuda" className="cursor-pointer w-full">
+                    <Link href="/contacto" className="cursor-pointer w-full">
                         <div className="flex items-center gap-2">
                             <HelpCircle className="h-4 w-4" />
                             <div className="flex flex-col">

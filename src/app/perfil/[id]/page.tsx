@@ -54,7 +54,6 @@ export default async function PerfilPage({
 
     const editable = session?.email === cliente.email && cliente.id.toString() === session?.userId
 
-
    
     
     return (

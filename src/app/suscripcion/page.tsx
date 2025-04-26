@@ -9,6 +9,7 @@ import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
+import EmailDialog from "./_components/email-dialog"
 
 
 
@@ -26,9 +27,9 @@ export default function SuscripcionesPage() {
   
 
   // Función para proceder al pago
-  const handleProceedToPayment = async () => {
+  const handleProceedToPayment = async (email:string) => {
     setLoading(true)
-    const { data, error, message } = await suscribe(selectedPlan!)
+    const { data, error, message } = await suscribe(email,selectedPlan!)
     if (error) {
       toast.error(message)
     } else {
@@ -75,13 +76,10 @@ export default function SuscripcionesPage() {
                   {getPlanName(selectedPlan)} seleccionado
                 </h2>
                 <p className="text-muted-foreground mt-2">
-                  Todos los pagos son procesados por Mercado Pago.
+                  Todos los pagos son procesados por Mercado Pago. Tu email debe existir en Mercado Pago.
                 </p>
               </div>
-              <Button disabled={loading} className="bg-blue-900 hover:bg-blue-800 text-white" onClick={handleProceedToPayment}>
-                {loading ? "Procesando..." : "Proceder al pago"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} />
             </div>
           </div>
         )}

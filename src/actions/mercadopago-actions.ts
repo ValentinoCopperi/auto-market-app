@@ -19,7 +19,7 @@ const getPlan = (plan: Planes) => {
     }
 }
 
-export const suscribe = async ( plan: Planes): Promise<ActionsResponse<string>> => {
+export const suscribe = async (email:string, plan: Planes): Promise<ActionsResponse<string>> => {
 
     try {
 
@@ -29,6 +29,13 @@ export const suscribe = async ( plan: Planes): Promise<ActionsResponse<string>> 
             return {
                 error: true,
                 message: "Debes iniciar sesión para suscribirte",
+            }
+        }
+
+        if(!email || !email.includes("@")) {
+            return {
+                error: true,
+                message: "El email es requerido",
             }
         }
 
@@ -55,12 +62,9 @@ export const suscribe = async ( plan: Planes): Promise<ActionsResponse<string>> 
             }
         }
         
-        
 
         const total_price = 15;
-
-        const email = session.email;
-
+        
         const suscription = await new PreApproval(mercadopago).create({
             body: {
                 back_url: `${process.env.APP_URL}/suscripcion/success`,

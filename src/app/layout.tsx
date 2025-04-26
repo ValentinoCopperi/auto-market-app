@@ -6,6 +6,7 @@ import { Providers } from "@/components/providers/providers";
 import { LoginDialog } from "@/components/dialogs/auth/login-dialog";
 import { PublishDialog } from "@/components/dialogs/publicar/publicar-dialog";
 import { RegisterDialog } from "@/components/dialogs/auth/register-dialog";
+import { Footer } from "@/components/footer";
 const inter = Inter({
   weight: ['400', '500', '600'],
   style: 'normal',
@@ -34,6 +35,7 @@ export default function RootLayout({
             <LoginDialog />
             <PublishDialog />
             <RegisterDialog />
+            <Footer />
           </Providers>
         </div>
 

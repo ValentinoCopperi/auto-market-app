@@ -171,7 +171,7 @@ const LandingPage = () => {
         </div>
 
         {/* Contenido del hero */}
-        <div className="container relative z-10 px-4 md:px-6">
+        <div className="container relative z-10 px-4 md:px-6 pb-16">
           <motion.div
             className="max-w-4xl mx-auto text-center"
             variants={containerVariants}
@@ -222,7 +222,7 @@ const LandingPage = () => {
               <Link href="/publicaciones" className="cursor-pointer">
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-base font-medium"
+                  className="bg-blue-600 hover:bg-blue-600/90 text-white px-8 py-6 text-base font-medium"
                 >
                   Explorar vehículos
                   <motion.div
@@ -323,7 +323,7 @@ const LandingPage = () => {
         </div>
 
         {/* Decoración de curva en la parte inferior */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 z-10">
+        <div className="absolute bottom-0 left-0 right-0 h-14 md:h-24 z-10">
           <svg
             viewBox="0 0 1440 96"
             fill="none"

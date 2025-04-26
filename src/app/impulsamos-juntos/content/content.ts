@@ -34,7 +34,7 @@ export const IMPULSEMOS_JUNTOS_CONTENT: Record<string, IMPULSEMOS_JUNTOS_CONTENT
   rstronic: {
     instagram_url: "https://www.instagram.com/",
     hero_section: {
-      image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1966&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     data_slug: {
       title: "RSTRONIC",
@@ -49,7 +49,7 @@ export const IMPULSEMOS_JUNTOS_CONTENT: Record<string, IMPULSEMOS_JUNTOS_CONTENT
   "esp-off-performance": {
     instagram_url: "https://www.instagram.com/",
     hero_section: {
-      image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     data_slug: {
       title: "ESP OFF PERFORMANCE",

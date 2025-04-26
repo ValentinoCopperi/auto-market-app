@@ -42,6 +42,7 @@ interface BrandCardProps {
 }
 
 function BrandItem({ id, name, count }: BrandCardProps) {
+    
     return (
         <CarouselItem key={id} className="md:basis-1/4">
             <div className="bg-card rounded-lg shadow-sm border border-border p-6 flex flex-col items-center hover:shadow-md transition-all duration-300 ">

@@ -25,7 +25,6 @@ export const getMarcasByCantidadPublicaciones = unstable_cache(async () => {
   unstable_cacheLife({revalidate: 600})
   unstable_cacheTag("marcas")
 
-  
 
   try {
     const marcas = await prisma.marca.findMany({
@@ -64,6 +63,12 @@ export const getMarcasByCantidadPublicaciones = unstable_cache(async () => {
           {
             nombre: {
               equals: "peugeot",
+              mode: "insensitive"
+            }
+          },
+          {
+            nombre: {
+              equals: "volkswagen",
               mode: "insensitive"
             }
           }

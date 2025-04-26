@@ -22,7 +22,7 @@ const ImpulsamosJuntosPage = async ({
 
     return (
         <div>
-            <HeaderBanner image={content.hero_section.image} instagram_url={content.instagram_url} />
+            <HeaderBanner  instagram_url={content.instagram_url} />
             <div className='container mx-auto px-4'>
                 <DataSlug slug={slug} />
                 {slug === "motorpoint" ? <MotorpointOptions /> : <VideosSlug />}

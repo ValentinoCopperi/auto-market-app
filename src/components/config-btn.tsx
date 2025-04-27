@@ -92,17 +92,7 @@ const ConfigBtn = () => {
                     </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/facturacion" className="cursor-pointer w-full">
-                        <div className="flex items-center gap-2">
-                            <Receipt className="h-4 w-4" />
-                            <div className="flex flex-col">
-                                <span className="font-medium">Facturación</span>
-                                <span className="text-xs text-muted-foreground">Historial de pagos y facturas</span>
-                            </div>
-                        </div>
-                    </Link>
-                </DropdownMenuItem>
+              
 
                 <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
                     <Link href={isAuthenticated ? `/perfil/${user?.id}/suscripcion` : "/suscripcion"} className="cursor-pointer w-full">

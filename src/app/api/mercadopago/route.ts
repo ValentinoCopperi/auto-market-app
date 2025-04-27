@@ -3,6 +3,7 @@ import { PreApproval } from "mercadopago";
 import prisma from "@/lib/prisma";
 import { getSession, updateSuscripcion } from "@/lib/session/session";
 import { cookies } from "next/headers";
+import { sendEmail } from "@/lib/resend";
 
 export async function POST(request: Request) {
     const cookiesStore = cookies()
@@ -123,6 +124,12 @@ export async function POST(request: Request) {
                         })
                         subscriptionId = updated_suscripcion.id
                         await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
+                        //Enviar correo de confirmacion de suscripcion
+                        await sendEmail({
+                            to: user.email,
+                            subject: "Suscripción actualizada",
+                            html: `<p>Tu suscripción ha sido actualizada a ${updated_suscripcion.tipo_suscripcion.nombre}.</p>`
+                        })
                         console.log("Updated existing subscription:", existingSubscription.id)
                     } else {
                         // Create new subscription
@@ -145,6 +152,12 @@ export async function POST(request: Request) {
                         })
                         subscriptionId = nueva_suscripcion.id
                         await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
+                         //Enviar correo de confirmacion de suscripcion
+                         await sendEmail({
+                            to: user.email,
+                            subject: "Suscripción actualizada",
+                            html: `<p>Tu suscripción ha sido actualizada a ${nueva_suscripcion.tipo_suscripcion.nombre}.</p>`
+                        })
                         console.log("Created new subscription:", nueva_suscripcion.id)
                     }
 

@@ -55,7 +55,7 @@ interface Pago {
     fecha_pago: Date | null;
 }
 
-export const getPagos = async (id: number) : Promise<ActionsResponse<Pago[]>> => {
+export const getPagosByUsuario = async (id: number) : Promise<ActionsResponse<Pago[]>> => {
     try {
         const pagos = await prisma.pago.findMany({
             where: {

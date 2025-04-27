@@ -90,10 +90,10 @@ const NavBar = () => {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300 py-2",
+        "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
-          : "bg-background border-b border-border",
+          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-1"
+          : "bg-background border-b border-border py-2",
       )}
     >
       <div className="container mx-auto py-3 px-4 flex items-center justify-between">

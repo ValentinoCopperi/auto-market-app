@@ -1,3 +1,5 @@
+"use server"
+
 import prisma from "@/lib/prisma"
 import { ActionsResponse } from "@/types/actions-response"
 import { ResponseSuscripcionUsuario } from "@/types/suscriciones"

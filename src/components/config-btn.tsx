@@ -81,7 +81,7 @@ const ConfigBtn = () => {
 
 
                 <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/reputacion" className="cursor-pointer w-full">
+                    <Link href="/resenas" className="cursor-pointer w-full">
                         <div className="flex items-center gap-2">
                             <Star className="h-4 w-4" />
                             <div className="flex flex-col">

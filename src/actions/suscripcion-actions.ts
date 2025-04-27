@@ -79,3 +79,44 @@ export const getPagosByUsuario = async (id: number) : Promise<ActionsResponse<Pa
         }   
     }
 }
+
+export const puedeVerEstadisticas = async (id: number) : Promise<ActionsResponse<boolean>> => {
+    try {
+        const suscripcion = await prisma.suscripcion.findFirst({
+            where: {
+                id_cliente: id
+            },
+            select: {
+                tipo_suscripcion: {
+                    select: {
+                        nombre: true
+                    }
+                }
+            }
+        })
+        if(!suscripcion) return {
+            error:true,
+            message: "No tiene suscripcion",
+            data: false
+        }
+
+        if(suscripcion.tipo_suscripcion.nombre === "plan_ocasion") return {
+            error:true,
+            message: "No tiene acceso a ver estadisticas.Por favor actualice su plan",
+            data: false
+        }
+
+        return {
+            error:false,
+            message: "Suscripción obtenida correctamente",
+            data: true
+        }
+    } catch (error) {
+        console.error("Error al verificar si puede ver estadisticas", error)
+        return {
+            error: true,
+            message: "Error al verificar si puede ver estadisticas",
+            data: false
+        }
+    }
+}

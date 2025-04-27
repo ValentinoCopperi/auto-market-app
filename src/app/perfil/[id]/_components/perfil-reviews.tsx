@@ -25,7 +25,6 @@ export function PerfilReviews({ resenas, calificacion, numResenas}: PerfilReview
       </div>
     )
   }
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -42,8 +41,8 @@ export function PerfilReviews({ resenas, calificacion, numResenas}: PerfilReview
               />
             ))}
           </div>
-          <span className="font-medium">{calificacion}</span>
-          <span className="text-sm text-muted-foreground">({numResenas} reseñas)</span>
+          <span className="font-medium">{calificacion.toFixed(1)}</span>
+          <span className="text-sm text-muted-foreground">({numResenas.toFixed(0)} reseñas)</span>
         </div>
       </div>
 
@@ -71,7 +70,7 @@ export function PerfilReviews({ resenas, calificacion, numResenas}: PerfilReview
                     <h4 className="font-medium">{resena.cliente_valoracion_id_cliente_votanteTocliente.nombre}</h4>
                   </Link>
                   <div className="flex items-center text-sm text-muted-foreground">
-                    <span>12/12/2024</span>
+                    <span>{resena.created_at?.toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>

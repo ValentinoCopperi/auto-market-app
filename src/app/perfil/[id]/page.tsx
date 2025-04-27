@@ -19,6 +19,7 @@ import { MensajesProvider } from "@/hooks/use-mensajes"
 import PublicarBtn from "./_components/publicar-btn"
 import { getSuscripcionByUsuario } from "@/actions/suscripcion-actions"
 import SuscripcionInfo from "./_components/suscripcion-info"
+import { BtnCalificar } from "./_components/calificar/btn-calificar"
 
 export default async function PerfilPage({
     params,
@@ -90,10 +91,7 @@ export default async function PerfilPage({
                                 </div>
 
                                 <div className="grid ">
-                                    <Button variant="outline">
-                                        <Star className="h-4 w-4 mr-2" />
-                                        Calificar
-                                    </Button>
+                                    <BtnCalificar nombre={cliente.nombre} id_cliente={cliente.id}/>
                                 </div>
                             </div>
                         )}

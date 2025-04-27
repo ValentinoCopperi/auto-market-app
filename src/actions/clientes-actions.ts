@@ -132,11 +132,11 @@ interface EditarPerfilRequest {
   descripcion?: string | null
   new_profile_img?: File | null
   new_banner_img?: File | null
-  }
+}
 
 
-export const editarPerfil = async (id: number, data: EditarPerfilRequest) : Promise<ActionsResponse<string>> => {
-  
+export const editarPerfil = async (id: number, data: EditarPerfilRequest): Promise<ActionsResponse<string>> => {
+
   try {
     const session = await getSession()
     const sessionId = session?.userId
@@ -155,7 +155,7 @@ export const editarPerfil = async (id: number, data: EditarPerfilRequest) : Prom
 
     const { nombre, apellido, telefono, ciudad, descripcion, new_profile_img, new_banner_img } = data
 
-    if(!nombre || !telefono || !ciudad) return {
+    if (!nombre || !telefono || !ciudad) return {
       error: true,
       message: "Todos los campos son requeridos"
     }
@@ -171,7 +171,7 @@ export const editarPerfil = async (id: number, data: EditarPerfilRequest) : Prom
     let new_banner_img_url = cliente.banner_img_url
 
 
-    if(new_profile_img) {
+    if (new_profile_img) {
       const { error, message, data } = await uploadProfileImage(new_profile_img, id, cliente.profile_img_url)
       if (error || !data) return {
         error: true,
@@ -180,7 +180,7 @@ export const editarPerfil = async (id: number, data: EditarPerfilRequest) : Prom
       new_profile_img_url = data
     }
 
-    if(new_banner_img) {
+    if (new_banner_img) {
       const { error, message, data } = await uploadProfileBannerImage(new_banner_img, id, cliente.banner_img_url)
       if (error || !data) return {
         error: true,
@@ -188,7 +188,7 @@ export const editarPerfil = async (id: number, data: EditarPerfilRequest) : Prom
       }
       new_banner_img_url = data
     }
-    
+
     const parsedTelefono = parseInt(telefono)
 
     console.log(parsedTelefono)
@@ -220,3 +220,69 @@ export const editarPerfil = async (id: number, data: EditarPerfilRequest) : Prom
     }
   }
 }
+
+export const calificarCliente = async (id_cliente_calificado: number, rating: number, comment: string): Promise<ActionsResponse<string>> => {
+
+  try {
+    const session = await getSession()
+    const sessionId = session?.userId
+
+    if (!session || !sessionId) return {
+      error: true,
+      message: "No estás autenticado"
+    }
+
+    const parsedSessionId = parseInt(sessionId)
+
+    if (parsedSessionId === id_cliente_calificado) return {
+      error: true,
+      message: "No puedes calificar a ti mismo"
+    }
+
+    if (rating < 1 || rating > 5) return {
+      error: true,
+      message: "La calificación debe ser entre 1 y 5"
+    }
+
+    if (typeof comment !== "string") return {
+      error: true,
+      message: "El comentario debe ser un texto plano"
+    }
+
+    if (comment.length > 200) return {
+      error: true,
+      message: "El comentario debe ser menor a 200 caracteres"
+    }
+
+    const cliente_calificado = await prisma.cliente.findUnique({ where: { id: id_cliente_calificado } });
+
+    if (!cliente_calificado) return {
+      error: true,
+      message: "No se encontró el cliente a calificar"
+    }
+
+    const calificacion = await prisma.valoracion.create({
+      data: {
+        id_cliente_votante: parsedSessionId,
+        id_cliente_valorado: id_cliente_calificado,
+        valoracion: rating,
+        comentario: comment
+      }
+    })
+
+    return {
+      error: false,
+      message: "Calificación creada correctamente",
+    }
+  } catch (error) {
+    console.error("Error al calificar al cliente:", error)
+    return {
+      error: true,
+      message: "Error al calificar al cliente"
+    }
+
+  }
+
+}
+
+

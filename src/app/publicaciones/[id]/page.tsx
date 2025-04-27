@@ -13,8 +13,7 @@ import { unstable_cache } from "next/cache"
 import { EditPublicationDialog } from "@/components/dialogs/editar-publicacion/editar-publicacion-dialog"
 import { agregarVista } from "@/actions/publicaciones-actions"
 import PublicacionEstadisticas from "./_components/publicacion-estadisticas"
-import { puedeVerEstadisticas } from "@/lib/planes"
-
+import { puedeVerEstadisticas } from "@/actions/suscripcion-actions"
 
 
 const getPublicacion =async   (id: string) : Promise<PublicacionCompleto> => {
@@ -79,9 +78,10 @@ const PublicacionPage = async ({
         await agregarVista(publicacion.id,parseInt(session?.userId))
         esFavorito = await esPublicacionFavorita(id,session?.userId)
     }
-
-    if(esEditable && session?.suscripcion){
-        verEstadisticas = puedeVerEstadisticas(session?.suscripcion)
+    
+    if(esEditable && session?.userId){
+        const {data} = await puedeVerEstadisticas(Number(session?.userId))
+        verEstadisticas = data || false
     }
    
     return (

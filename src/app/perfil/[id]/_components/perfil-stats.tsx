@@ -23,7 +23,7 @@ export function PerfilStats({calificacion, numResenas, favoritos}: {calificacion
           ))}
         </div>
         <span className="font-medium">{calificacion.toFixed(1)}</span>
-        <span className="text-sm text-muted-foreground">({numResenas} reseñas)</span>
+        <span className="text-sm text-muted-foreground">({numResenas.toFixed(0)} reseñas)</span>
       </div>
     </div>
   )

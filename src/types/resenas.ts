@@ -13,3 +13,8 @@ export interface Resena {
     profile_img_url: string
   }
 }
+
+export interface ResenaStats {
+  total_resenas: number
+  promedio_valoracion: number
+}

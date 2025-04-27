@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Star, Clock, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Cliente } from "@/types/cliente"
+import { getResenasByUsuarioStats } from "@/actions/resenas-actions"
 
 
 
@@ -10,11 +11,10 @@ interface VendedorCardProps {
   vendedor: Cliente
 }
 
-export function VendedorCard({ vendedor }: VendedorCardProps) {
+export async function VendedorCard({ vendedor }: VendedorCardProps) {
+  
+  const {total_resenas, promedio_valoracion} = await getResenasByUsuarioStats(vendedor.id)
   const nombreCompleto = `${vendedor.nombre} ${vendedor.apellido || ""}`.trim()
-  const calificacion =  1
-  const numResenas = 3
-
 
   return (
     <div className="bg-card rounded-lg border border-border p-4">
@@ -37,11 +37,11 @@ export function VendedorCard({ vendedor }: VendedorCardProps) {
           <h4 className="font-medium">{nombreCompleto}</h4>
 
           {/* Calificación */}
-          {numResenas > 0 ? (
+          {total_resenas > 0 ? (
             <div className="flex items-center text-sm">
               <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
-              <span>{calificacion.toFixed(1)}</span>
-              <span className="text-muted-foreground ml-1">({numResenas})</span>
+              <span>{promedio_valoracion.toFixed(1)}</span>
+              <span className="text-muted-foreground ml-1">({total_resenas})</span>
             </div>
           ) : (
             <span className="text-sm text-muted-foreground">Sin calificaciones</span>

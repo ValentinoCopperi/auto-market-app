@@ -57,7 +57,7 @@ export const planes = [
             "1 publicación activa en simultáneo",
             "Posicionamiento máximo",
             "Duración ilimitada de la publicación",
-            "Hasta 30 fotos por vehículo",
+            "Hasta 10 fotos por vehículo",
             "Chat con compradores",
             "Recibe ofertas directas",
             "Estadísticas básicas de visitas",
@@ -76,7 +76,7 @@ export const planes = [
         features: [
             "Hasta 3 publicaciones simultáneas",
             "Duración ilimitada de publicaciones",
-            "50 fotos por vehículo",
+            "30 fotos por vehículo",
             "Publicaciones destacadas",
             "Chat y ofertas",
             "Estadísticas detalladas",

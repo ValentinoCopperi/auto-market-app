@@ -19,7 +19,7 @@ const getPlan = (plan: Planes) => {
     }
 }
 
-export const suscribe = async (email:string, plan: Planes): Promise<ActionsResponse<string>> => {
+export const suscribe = async (plan: Planes): Promise<ActionsResponse<string>> => {
 
     try {
 
@@ -32,12 +32,14 @@ export const suscribe = async (email:string, plan: Planes): Promise<ActionsRespo
             }
         }
 
-        if(!email || !email.includes("@")) {
-            return {
-                error: true,
-                message: "El email es requerido",
-            }
-        }
+        // if(!email || !email.includes("@")) {
+        //     return {
+        //         error: true,
+        //         message: "El email es requerido",
+        //     }
+        // }
+
+
 
         const existingSubscription = await prisma.suscripcion.findFirst({
             where: {
@@ -54,6 +56,7 @@ export const suscribe = async (email:string, plan: Planes): Promise<ActionsRespo
             }
         })
 
+        
 
         if(existingSubscription?.tipo_suscripcion.nombre === plan){
             return {
@@ -68,7 +71,7 @@ export const suscribe = async (email:string, plan: Planes): Promise<ActionsRespo
         const suscription = await new PreApproval(mercadopago).create({
             body: {
                 back_url: `${process.env.APP_URL}/suscripcion/success`,
-                payer_email: email,
+                payer_email: "mjmorazzo@gmail.com",
                 reason: "Suscripción a auto market - " + getPlan(plan).name,
                 auto_recurring: {
                     frequency_type: "months",
@@ -80,6 +83,7 @@ export const suscribe = async (email:string, plan: Planes): Promise<ActionsRespo
                 external_reference: plan + "|" + session.userId,
             },
         })
+
 
         return {
             error: false,

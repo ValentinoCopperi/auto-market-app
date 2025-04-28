@@ -14,7 +14,7 @@ export async function BrandsSection() {
         <section className="container mx-auto px-4 py-12">
             <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-bold">Marcas Populares</h2>
-                <Link href="#">
+                <Link href="/publicaciones">
                     <Button variant="outline" className="border-border text-foreground">
                         <p className="hidden md:block">Ver Todas las Marcas</p>
                         <p className="block md:hidden">Ver Marcas</p>

@@ -51,7 +51,7 @@ export const PublishDialog = memo(() => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
       // Limit to 10 photos total
-      const updatedPhotos = [...photos, ...newFiles].slice(0, 10)
+      const updatedPhotos = [...photos, ...newFiles].slice(0, 100)
       setPhotos(updatedPhotos)
 
       // Update the form value

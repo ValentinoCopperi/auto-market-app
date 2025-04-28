@@ -24,12 +24,16 @@ export default function SuscripcionesPage() {
     setSelectedPlan(planName)
   }
 
-  
+
 
   // Función para proceder al pago
-  const handleProceedToPayment = async (email:string) => {
+  const handleProceedToPayment = async () => {
+    if(!selectedPlan) {
+      toast.error("Debes seleccionar un plan")
+      return
+    }
     setLoading(true)
-    const { data, error, message } = await suscribe(email,selectedPlan!)
+    const { data, error, message } = await suscribe(selectedPlan)
     if (error) {
       toast.error(message)
     } else {
@@ -79,7 +83,10 @@ export default function SuscripcionesPage() {
                   Todos los pagos son procesados por Mercado Pago. Tu email debe existir en Mercado Pago.
                 </p>
               </div>
-              <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} />
+              <Button disabled={loading} onClick={handleProceedToPayment} className="bg-blue-900 hover:bg-blue-800 text-white">
+                {loading ? "Procesando..." : "Proceder al pago"}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         )}

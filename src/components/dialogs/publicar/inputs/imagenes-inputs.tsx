@@ -72,7 +72,7 @@ const ImagenesInput = ({
         </div>
 
 
-        <p className="text-xs text-muted-foreground">* Puedes subir hasta 10 fotos</p>
+        <p className="text-xs text-muted-foreground">* El limite de imagenes depende del plan que tengas contratado</p>
         <p className="text-xs text-muted-foreground">* La primera foto será la portada de tu publicación</p>
       </div>
     </>

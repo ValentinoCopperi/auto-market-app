@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Filter } from "lucide-react"
+import { Filter, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Marca } from "@/types/publicaciones"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import type { Marca } from "@/types/publicaciones"
 import { CIUDADES } from "@/types/filtros"
 
 interface FilterSidebarProps {
@@ -31,28 +32,28 @@ const currencyConfig = {
 export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [isOpen, setIsOpen] = useState(false)
 
   const defaultCiudad = currentFilters.ciudad?.charAt(0).toUpperCase() + currentFilters.ciudad?.slice(1) || "all"
   //Santiago+del+estero -> Santiago del Estero
   const parsedDefaultCiudad = defaultCiudad.replace(/\+/g, " ")
 
   const [moneda, setMoneda] = useState<"USD" | "ARG">(currentFilters.moneda || "USD")
-  const[currentConfig, setCurrentConfig] = useState(currencyConfig[moneda])
+  const [currentConfig, setCurrentConfig] = useState(currencyConfig[moneda])
 
   const getPriceRange = (): [number, number] => {
-
     if (currentFilters.precio_min && currentFilters.precio_max) {
       return [Number(currentFilters.precio_min), Number(currentFilters.precio_max)]
-    }else if(currentFilters.precio_min){
+    } else if (currentFilters.precio_min) {
       return [Number(currentFilters.precio_min), currentConfig.max]
-    }else if(currentFilters.precio_max){
+    } else if (currentFilters.precio_max) {
       return [0, Number(currentFilters.precio_max)]
     }
     return [0, currentConfig.max]
   }
 
   const [priceRange, setPriceRange] = useState<[number, number]>(getPriceRange())
-  
+
   const handleMonedaChange = (value: "USD" | "ARG") => {
     setMoneda(value)
     setCurrentConfig(currencyConfig[value])
@@ -76,13 +77,13 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
       } else {
         params.delete("precio_min")
       }
-      
+
       if (priceRange[1] < currentConfig.max) {
         params.set("precio_max", priceRange[1].toString())
       } else {
         params.delete("precio_max")
       }
-      
+
       params.set("moneda", moneda)
     } else {
       // Actualizar o eliminar parámetros según los nuevos filtros
@@ -97,10 +98,11 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
 
     // Navegar a la nueva URL con los parámetros actualizados
     router.push(`/publicaciones?${params.toString()}`)
+    setIsOpen(false) // Cerrar el drawer en móvil después de aplicar filtros
   }
 
-  return (
-    <div className="bg-card rounded-lg border border-border p-4">
+  const FilterContent = () => (
+    <>
       <div className="flex items-center gap-2 mb-4">
         <Filter className="h-5 w-5" />
         <h2 className="text-lg font-semibold">Filtros</h2>
@@ -120,13 +122,11 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas las marcas</SelectItem>
-                  {
-                    marcas.map(marca => (
-                      <SelectItem key={marca.id} value={marca.nombre}>
-                        {marca.nombre.charAt(0).toUpperCase() + marca.nombre.slice(1)}
-                      </SelectItem>
-                    ))
-                  }
+                  {marcas.map((marca) => (
+                    <SelectItem key={marca.id} value={marca.nombre}>
+                      {marca.nombre.charAt(0).toUpperCase() + marca.nombre.slice(1)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -321,9 +321,41 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
         </AccordionItem>
       </Accordion>
 
-      <Button className="w-full mt-6" onClick={() => router.push("/publicaciones")}>
+      <Button
+        className="w-full mt-6"
+        onClick={() => {
+          router.push("/publicaciones")
+          setIsOpen(false)
+        }}
+      >
         Limpiar Filtros
       </Button>
-    </div>
+    </>
+  )
+
+  return (
+    <>
+      {/* Botón para móvil que abre el Sheet */}
+      <div className="lg:hidden mb-4">
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full flex items-center gap-2">
+              <Filter className="h-4 w-4" />
+              Ver filtros
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[85vw] sm:w-[350px] overflow-y-auto">
+            <div className="mt-8 px-2">
+              <FilterContent />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* Versión de escritorio que siempre está visible */}
+      <div className="hidden lg:block bg-card rounded-lg border border-border p-4">
+        <FilterContent />
+      </div>
+    </>
   )
 }

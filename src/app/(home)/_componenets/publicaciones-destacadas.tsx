@@ -18,7 +18,7 @@ export const PublicacionesDestacadas = async () => {
                     <h2 className="text-2xl font-bold">Vehículos Destacados</h2>
                     <p className="text-muted-foreground hidden md:block">Descubre nuestra selección de vehículos premium</p>
                 </div>
-                <Link href="#">
+                <Link href="/publicaciones">
                     <Button variant="outline" className="border-border text-foreground">
                         <p className="hidden md:block">Ver Todos los Vehículos</p>
                         <p className="block md:hidden">Ver Vehículos</p>

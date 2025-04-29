@@ -64,8 +64,8 @@ export default function SuscripcionesPage() {
           {/* Plan Ocasión */}
 
           {
-            planes.map((plan) => (
-              <SuscripcionCard key={plan.id} plan={plan} selectedPlan={selectedPlan} handleSelectPlan={handleSelectPlan} />
+            planes.map((plan, index) => (
+              <SuscripcionCard key={index} plan={plan} selectedPlan={selectedPlan} handleSelectPlan={handleSelectPlan} />
             ))
           }
 
@@ -96,7 +96,7 @@ export default function SuscripcionesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-muted-foreground mb-4">
-                Suscríbete a AutoMarket para maximizar tus oportunidades de venta. Nuestros planes están diseñados para
+                Suscríbete a  CarMarket para maximizar tus oportunidades de venta. Nuestros planes están diseñados para
                 adaptarse a tus necesidades, ya sea que quieras vender un único vehículo o que seas un vendedor
                 profesional.
               </p>

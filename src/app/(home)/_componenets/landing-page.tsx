@@ -179,7 +179,7 @@ const LandingPage = () => {
             animate="visible"
           >
             <motion.div variants={childVariants} className="mb-2 mt-8">
-              <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary border border-primary/20 backdrop-blur-sm text-white ">
+              <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-primary/10  border border-primary/20 backdrop-blur-sm text-white dark:text-white">
                 La plataforma líder en compra y venta de vehículos
               </span>
             </motion.div>
@@ -350,7 +350,7 @@ const LandingPage = () => {
           variants={containerVariants}
         >
           <motion.h2 className="text-3xl md:text-4xl font-bold mb-4" variants={childVariants}>
-            ¿Por qué elegir AutoMarket?
+            ¿Por qué elegir CarMarket?
           </motion.h2>
           <motion.p className="text-lg text-muted-foreground max-w-2xl mx-auto" variants={childVariants}>
             Ofrecemos la mejor experiencia para comprar y vender vehículos con herramientas innovadoras y un proceso

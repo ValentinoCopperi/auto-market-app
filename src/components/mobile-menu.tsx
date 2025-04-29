@@ -72,7 +72,7 @@ export function MobileMenu() {
                   <circle cx="17" cy="17" r="2" />
                 </svg>
               </div>
-              <span className="text-xl font-bold">AutoMarket</span>
+              <span className="text-xl font-bold">CarMarket</span>
             </div>
             <div className="flex items-center gap-2">
               <ModeToggle />

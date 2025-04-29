@@ -105,14 +105,16 @@ const PublicacionPage = async ({
                             
                         </div>
 
-                        {/* Detalles de la publicación */}
-                        <PublicacionDetails publicacion={publicacion} />
-
+                        {/* Detalles de la publicación visible en desktop*/}
+                        <div className="hidden lg:block">
+                            <PublicacionDetails publicacion={publicacion} />
+                        </div>
                         
 
                         {/* Acciones de publicación (solo visible en móvil) */}
                         <div className="block lg:hidden space-y-4">
                             <PublicacionActions publicacion={publicacion} esEditable={esEditable} esFavorito={esFavorito} />
+                            <PublicacionDetails publicacion={publicacion} />
                             {
                                 (esEditable) && (
                                     <PublicacionEstadisticas id_publicacion={publicacion.id} verEstadisticas={verEstadisticas} />

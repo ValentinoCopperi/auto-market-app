@@ -80,14 +80,15 @@ const EditarPerfilDialog = ({ isEditModalOpen, setIsEditModalOpen, cliente }: Ed
         )
         setCrop(crop)
       } else {
-        // Para banner, usamos un recorte panorámico (16:5 o similar)
+        // For banner, use a wider panoramic ratio that matches your container
+        const bannerAspectRatio = 5; // 5:1 ratio is more appropriate for wide banners
         const crop = centerCrop(
           makeAspectCrop(
             {
               unit: "%",
               width: 90,
             },
-            16 / 5, // Relación de aspecto para banner
+            bannerAspectRatio, // Wider aspect ratio for banner
             width,
             height,
           ),
@@ -118,8 +119,8 @@ const EditarPerfilDialog = ({ isEditModalOpen, setIsEditModalOpen, cliente }: Ed
     const scaleX = imgRef.current.naturalWidth / imgRef.current.width
     const scaleY = imgRef.current.naturalHeight / imgRef.current.height
 
-    canvas.width = completedCrop.width
-    canvas.height = completedCrop.height
+    canvas.width = completedCrop.width * scaleX
+    canvas.height = completedCrop.height * scaleY
 
     ctx.drawImage(
       imgRef.current,
@@ -129,8 +130,8 @@ const EditarPerfilDialog = ({ isEditModalOpen, setIsEditModalOpen, cliente }: Ed
       completedCrop.height * scaleY,
       0,
       0,
-      completedCrop.width,
-      completedCrop.height,
+      canvas.width,
+      canvas.height
     )
 
     // Convertir el canvas a un Blob

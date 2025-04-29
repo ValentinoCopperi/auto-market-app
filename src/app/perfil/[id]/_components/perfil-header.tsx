@@ -246,9 +246,10 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
             src={banner_img_url || "/placeholder.svg"}
             alt="Banner de perfil"
             fill
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
             className="object-cover object-center"
             priority
+            quality={90} // Increase image quality
           />
         )}
         {isLoadingBanner && (
@@ -264,9 +265,8 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
           <Button
             variant="secondary"
             size="sm"
-            className={`absolute right-4 top-4 transition-opacity duration-200 ${
-              isHoveringBanner ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute right-4 top-4 transition-opacity duration-200 ${isHoveringBanner ? "opacity-100" : "opacity-0"
+              }`}
             onClick={handleCambiarBanner}
           >
             <Upload className="h-4 w-4 mr-2" />
@@ -300,9 +300,8 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
               {/* Overlay para cambiar avatar (solo visible al hacer hover si es editable) */}
               {editable && (
                 <div
-                  className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 cursor-pointer ${
-                    isHoveringAvatar ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 cursor-pointer ${isHoveringAvatar ? "opacity-100" : "opacity-0"
+                    }`}
                   onClick={handleCambiarAvatar}
                 >
                   <Camera className="h-8 w-8 text-white" />

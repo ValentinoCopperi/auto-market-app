@@ -30,7 +30,7 @@ export function Footer() {
                   <circle cx="17" cy="17" r="2" />
                 </svg>
               </div>
-              <span className="text-xl font-bold">AutoMarket</span>
+              <span className="text-xl font-bold">CarMarket</span>
             </div>
             <p className="text-muted-foreground text-sm">
               La plataforma líder para comprar y vender vehículos en Argentina. Conectamos compradores y vendedores para
@@ -164,7 +164,7 @@ export function Footer() {
         {/* Footer inferior */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} AutoMarket. Todos los derechos reservados.
+            © {new Date().getFullYear()} CarMarket. Todos los derechos reservados.
           </p>
           <div className="flex space-x-6">
             <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">

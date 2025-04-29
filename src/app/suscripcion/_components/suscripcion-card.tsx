@@ -24,6 +24,7 @@ const SuscripcionCard = ({ plan, selectedPlan, handleSelectPlan }: SuscripcionCa
 
     return (
         <div
+        
             className={`bg-card rounded-xl border ${selectedPlan === plan.id ? "border-primary border-2" : "border-border"} overflow-hidden shadow-sm flex flex-col transition-all duration-200`}
         >
             <div className="p-6 border-b border-border">

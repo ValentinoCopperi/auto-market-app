@@ -62,12 +62,6 @@ export const getMarcasByCantidadPublicaciones = unstable_cache(async () => {
           },
           {
             nombre: {
-              equals: "peugeot",
-              mode: "insensitive"
-            }
-          },
-          {
-            nombre: {
               equals: "volkswagen",
               mode: "insensitive"
             }

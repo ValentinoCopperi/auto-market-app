@@ -18,6 +18,9 @@ import { toast } from "sonner"
 import { agregarFavorito, eliminarFavorito } from "@/actions/favoritos-actions"
 import { EditPublicationDialog } from "@/components/dialogs/editar-publicacion/editar-publicacion-dialog"
 import { Publicacion } from "@/types/publicaciones"
+import HacerOfertaBtn from "./hacer-oferta-btn"
+import { MensajesProvider } from "@/hooks/use-mensajes"
+import OfertaDialog from "./hacer-oferta-btn"
 
 interface PublicacionActionsProps {
   publicacion: Publicacion
@@ -32,6 +35,7 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isFavorito, setIsFavorito] = useState(esFavorito)
   const [loading, setLoading] = useState(false)
+  const [showOfertaDialog, setShowOfertaDialog] = useState(false)
 
   const addFavorito = async () => {
     setLoading(true)
@@ -102,7 +106,7 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
       setShowDeleteDialog(false)
     }
   }
-
+  
   return (
     <>
       <div className="bg-card rounded-lg border border-border p-4">
@@ -117,10 +121,18 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
         <div className="space-y-3">
           {!esEditable ? (
             <>
-              <Button className="w-full bg-blue-900 hover:bg-blue-800 text-white">
+              <Button onClick={() => setShowOfertaDialog(prev => !prev)} className="w-full bg-blue-900 hover:bg-blue-800 text-white">
                 <DollarSign className="h-4 w-4 mr-2" />
                 Hacer oferta
               </Button>
+              {
+                showOfertaDialog && (
+                  <MensajesProvider>
+                    <OfertaDialog precio_default={publicacion.precio} id_cliente_vendedor={publicacion.cliente.id} titulo={publicacion.titulo} open={showOfertaDialog} onClose={() => setShowOfertaDialog(false)}/>
+                  </MensajesProvider>
+                )
+              }
+              {/* <HacerOfertaBtn precio_default={publicacion.precio} id_cliente_vendedor={publicacion.cliente.id} titulo={publicacion.titulo} /> */}
 
               <div className="grid grid-cols-2 gap-3">
                 {

@@ -6,13 +6,14 @@ import React, { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 
-interface EmailDialogProps{
-    loading:boolean;
-    handleProceedToPayment:(email:string)=>void;
+interface EmailDialogProps {
+    loading: boolean;
+    handleProceedToPayment: (email: string) => void;
+    email: string;
+    setEmail: (email: string) => void;
 }
 
-const EmailDialog = ({loading, handleProceedToPayment}:EmailDialogProps) => {
-    const [email, setEmail] = useState("")
+const EmailDialog = ({ loading, handleProceedToPayment, email, setEmail }: EmailDialogProps) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -25,19 +26,21 @@ const EmailDialog = ({loading, handleProceedToPayment}:EmailDialogProps) => {
                 <DialogHeader>
                     <DialogTitle>Ingrese su email</DialogTitle>
                     <DialogDescription>
-                        Este email debe ser el que este asociado a su cuenta de Mercado Pago.
+                        <h1 className='text-sm text-muted-foreground'>Si tu email no es el que esta asociado a tu cuenta de Mercado Pago, debes ingresar el que esta asociado a tu cuenta de Mercado Pago.</h1>
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
+                <div className="grid gap-4 py-2">
+                    <div className="grid grid-cols-4 items-center gap-2">
                         <Label htmlFor="username" className="text-right">
                             Email
                         </Label>
-                        <Input id="email" type='email' value={email} className="col-span-3" onChange={(e)=>setEmail(e.target.value)} />
+                        <Input id="email" type='email' value={email} className="col-span-3" onChange={(e) => setEmail(e.target.value)} />
+
                     </div>
+                    <p className='text-xs text-muted-foreground'>Pedimos este email para que puedas recibir las notificaciones de tu suscripción y que puedas cancelarla en caso de que lo desees.</p>
                 </div>
                 <DialogFooter>
-                    <Button disabled={loading} className="bg-blue-900 hover:bg-blue-800 text-white" type="submit" onClick={()=>handleProceedToPayment(email)}>
+                    <Button disabled={loading} className="bg-blue-900 hover:bg-blue-800 text-white" type="submit" onClick={() => handleProceedToPayment(email)}>
                         <ArrowRight className="ml-2 h-4 w-4" />
                         {loading ? "Procesando..." : "Proceder al pago"}
                     </Button>

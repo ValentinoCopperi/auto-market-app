@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
 import EmailDialog from "./_components/email-dialog"
+import { useAuth } from "@/hooks/use-auth"
 
 
 
@@ -17,8 +18,10 @@ import EmailDialog from "./_components/email-dialog"
 
 export default function SuscripcionesPage() {
   // Añadir estado para el plan seleccionado
+  const {user} = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<Planes | null>(null)
   const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState(user?.email || "")
   // Función para manejar la selección de plan
   const handleSelectPlan = (planName: Planes) => {
     setSelectedPlan(planName)
@@ -33,7 +36,7 @@ export default function SuscripcionesPage() {
       return
     }
     setLoading(true)
-    const { data, error, message } = await suscribe(selectedPlan)
+    const { data, error, message } = await suscribe(email, selectedPlan)
     if (error) {
       toast.error(message)
     } else {
@@ -83,10 +86,7 @@ export default function SuscripcionesPage() {
                   Todos los pagos son procesados por Mercado Pago. Tu email debe existir en Mercado Pago.
                 </p>
               </div>
-              <Button disabled={loading} onClick={handleProceedToPayment} className="bg-blue-900 hover:bg-blue-800 text-white">
-                {loading ? "Procesando..." : "Proceder al pago"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} />
             </div>
           </div>
         )}

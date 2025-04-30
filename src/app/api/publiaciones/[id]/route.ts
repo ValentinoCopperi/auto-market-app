@@ -26,7 +26,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             nombre: true,
           },
         },
-        publicacion_imagenes: true,
+        publicacion_imagenes: {
+          select: {
+            id: true,
+            url: true,
+          },
+          orderBy: {
+            //Las q se crearon primero seran las primeras
+            created_at: "asc",
+          },
+        },
         cliente: {
           select: {
             id: true,

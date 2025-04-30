@@ -24,10 +24,6 @@ export async function POST(request: Request) {
                 let identifier: string
 
                 const parts = external_reference.split("|")
-                if (parts.length !== 2) {
-                    console.error("Invalid external_reference format:", external_reference)
-                    return new Response(null, { status: 400 })
-                }
 
                 plan = parts[0]
                 identifier = parts[1]
@@ -35,32 +31,10 @@ export async function POST(request: Request) {
                 console.log("Plan:", plan, "Identifier:", identifier)
 
                 // Determine if identifier is an email or user ID
-                let user
-                const session = await getSession()
-
-                // Try to find user by email first
-                if (identifier.includes("@")) {
-                    user = await prisma.cliente.findUnique({
-                        where: { email: identifier },
-                    })
-
-                    // Verify session if we have one
-                    if (session && session.email !== identifier) {
-                        console.log("Session email doesn't match identifier")
-                        return new Response(null, { status: 401 })
-                    }
-                } else {
-                    // Try to find by ID
-                    user = await prisma.cliente.findUnique({
-                        where: { id: Number.parseInt(identifier, 10) },
-                    })
-
-                    // Verify session if we have one
-                    if (session && user && session.email !== user.email) {
-                        console.log("Session email doesn't match user email")
-                        return new Response(null, { status: 401 })
-                    }
-                }
+                const user = await prisma.cliente.findUnique({
+                    where: { id: Number.parseInt(identifier, 10) },
+                })
+                
 
                 if (!user) {
                     console.error("User not found for identifier:", identifier)

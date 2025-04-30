@@ -1,12 +1,9 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { Input } from "@/components/ui/input"
-import { Search, Filter, ChevronRight, Car, Star, Shield, TrendingUp, ArrowRight } from "lucide-react"
+import { ChevronRight, Car, Star, Shield, TrendingUp } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { useAuth } from "@/hooks/use-auth"
@@ -14,6 +11,7 @@ import { useDialogStore } from "@/lib/store/dialogs-store"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"
+import SearchBar from "./search-bar"
 
 // Imágenes de autos de alta calidad de Unsplash
 const heroImages = [
@@ -81,16 +79,6 @@ const LandingPage = () => {
     }
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
-  }
-
-  const handleSearchSubmit = () => {
-    if (query.trim().length > 2) {
-      router.push(`/publicaciones?q=${query}`)
-    }
-  }
-
   // Variantes de animación mejoradas
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -147,14 +135,14 @@ const LandingPage = () => {
       {/* Hero Section con imagen de fondo */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {/* Imágenes de fondo con transición */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 bg-gray-900">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
               className="absolute inset-0"
             >
               <Image
@@ -165,7 +153,7 @@ const LandingPage = () => {
                 priority
               />
               {/* Overlay más consistente y oscuro para mejor contraste */}
-              <div className="absolute inset-0 bg-black/70 dark:bg-black/80"></div>
+              <div className="absolute inset-0 bg-black/70 dark:bg-black/80 transition-opacity duration-500"></div>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -190,7 +178,10 @@ const LandingPage = () => {
               style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)" }}
             >
               Encuentra el{" "}
-              <span className="text-white relative" style={{ textShadow: "0 0 8px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5)" }}>
+              <span
+                className="text-white relative"
+                style={{ textShadow: "0 0 8px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5)" }}
+              >
                 vehículo perfecto
                 <svg
                   className="absolute -bottom-2 left-0 w-full"
@@ -245,65 +236,7 @@ const LandingPage = () => {
             </motion.div>
 
             {/* Buscador mejorado */}
-            <motion.div
-              className="max-w-3xl mx-auto relative z-10"
-              variants={childVariants}
-              animate={searchFocused ? { scale: 1.02 } : { scale: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="bg-background/80 dark:bg-background/70 backdrop-blur-md rounded-xl shadow-2xl border border-border/50 p-4">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Input
-                      type="text"
-                      placeholder="Buscar por marca, modelo o año..."
-                      className="pl-10 py-6 w-full bg-transparent text-foreground"
-                      value={query}
-                      onChange={handleSearch}
-                      onFocus={() => setSearchFocused(true)}
-                      onBlur={() => setSearchFocused(false)}
-                    />
-                    <motion.div
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground"
-                      animate={searchFocused ? { scale: 1.2, color: "#3b82f6" } : { scale: 1 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Search />
-                    </motion.div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleSearchSubmit}
-                      size="lg"
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
-                    >
-                      <Search className="h-4 w-4 mr-2" />
-                      Buscar
-                    </Button>
-                    <Link href={"/publicaciones"} className="cursor-pointer">
-                      <Button variant="outline" size="lg" className="border-border text-foreground">
-                        <Filter className="h-4 w-4 mr-2" />
-                        Filtros
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Búsquedas populares */}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="text-sm text-muted-foreground">Popular:</span>
-                  {["Corola", "Fiesta", "Hilux", "Fiat", "Gol"].map((tag) => (
-                    <Link
-                      href={`/publicaciones?q=${tag}`}
-                      key={tag}
-                      className="text-sm px-3 py-1 rounded-full bg-muted hover:bg-muted/80 transition-colors"
-                    >
-                      {tag}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+            <SearchBar />
 
             {/* Indicadores de imagen */}
             <motion.div className="flex justify-center gap-2 mt-8" variants={childVariants}>
@@ -376,8 +309,6 @@ const LandingPage = () => {
           ))}
         </div>
       </section>
-
-
 
       {/* CTA final */}
       <section className="py-20 container px-4 md:px-6">

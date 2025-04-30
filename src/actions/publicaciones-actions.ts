@@ -47,7 +47,7 @@ export const getPublicaciones = async (searchParams?: Record<string, any>, marca
           },
         },
       }),
-    
+
       prisma.publicacion.count({ where }),
     ])
 
@@ -206,7 +206,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
       return { error: true, message: "No tienes una suscripción activa" }
     }
 
-    if(suscripcion.estado === "vencida"){
+    if (suscripcion.estado === "vencida") {
       return { error: true, message: "Tu suscripción está vencida. Porfavor, actualiza tu plan" }
     }
 
@@ -229,7 +229,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
     }
 
     if (photos.length > suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo) {
-      return { error: true, message: "Pasaste el limite de fotos de tu plan. Porfavor, elimina algunas fotos y vuelve a intentarlo" }
+      return { error: true, message: `Limite de fotos de tu plan: ${suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo}. Porfavor, elimina algunas fotos y vuelve a intentarlo` }
     }
 
     if (precio <= 0) {
@@ -244,8 +244,8 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
       return { error: true, message: "Todos los campos son requeridos" }
     }
 
-    if(typeof precio !== "number" || typeof anio !== "number" || typeof kilometraje !== "number"){
-      return { error: true, message: "Error en los datos ingresados"}
+    if (typeof precio !== "number" || typeof anio !== "number" || typeof kilometraje !== "number") {
+      return { error: true, message: "Error en los datos ingresados" }
     }
 
     if (precio <= 0 || anio <= 0) {
@@ -303,7 +303,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
           throw new Error("La imagen es demasiado grande. El tamaño máximo es de 5MB")
         }
 
-        const response = await uploadImage({file:photo,publicacionId:newPublicacion.id,tx})
+        const response = await uploadImage({ file: photo, publicacionId: newPublicacion.id, tx })
         if (response.error) {
           throw new Error("Hubo un error al subir la imagen. Trata de subir desde la publicacion");
         }
@@ -384,6 +384,29 @@ export async function editarPublicacion(editedPubliacion: Publicacion, newImages
       return { error: true, message: "No puedes editar una publicación que no es tuya" }
     }
 
+    const total_imagenes = publicacion.publicacion_imagenes.length + newImages.length
+    
+    const suscripcion = await prisma.suscripcion.findFirst({
+      where: {
+        id_cliente: parseInt(id_cliente),
+      },
+      select: {
+        tipo_suscripcion: {
+          select: {
+            max_publicaciones_por_vehiculo: true
+          }
+        },
+      }
+    })
+
+    if (!suscripcion) {
+      return { error: true, message: "No tienes una suscripción activa" }
+    }
+
+  
+    if (total_imagenes > suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo) {
+      return { error: true, message: `Limite de fotos de tu plan: ${suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo}. Porfavor, elimina algunas fotos y vuelve a intentarlo` }
+    }
 
     const new_edited_publicacion = await prisma.publicacion.update({
       where: { id: editedPubliacion.id },
@@ -406,7 +429,7 @@ export async function editarPublicacion(editedPubliacion: Publicacion, newImages
 
     if (newImages.length > 0) {
       const uploadedPhotos = await Promise.all(newImages.map(async (photo) => {
-        const response = await uploadImage({file:photo,publicacionId:editedPubliacion.id})
+        const response = await uploadImage({ file: photo, publicacionId: editedPubliacion.id })
         if (response.error) {
           throw new Error("Hubo un error al subir la imagen. Trata de subir desde la publicacion");
         }
@@ -435,7 +458,7 @@ export async function editarPublicacion(editedPubliacion: Publicacion, newImages
   }
 }
 
-export async function agregarVista(id_publicacion: number, id_usuario: number){
+export async function agregarVista(id_publicacion: number, id_usuario: number) {
 
   try {
     await prisma.publicacion_vistas.create({

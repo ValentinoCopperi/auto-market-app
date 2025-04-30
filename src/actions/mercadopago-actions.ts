@@ -19,7 +19,7 @@ const getPlan = (plan: Planes) => {
     }
 }
 
-export const suscribe = async (plan: Planes): Promise<ActionsResponse<string>> => {
+export const suscribe = async (email: string, plan: Planes): Promise<ActionsResponse<string>> => {
 
     try {
 
@@ -32,12 +32,12 @@ export const suscribe = async (plan: Planes): Promise<ActionsResponse<string>> =
             }
         }
 
-        // if(!email || !email.includes("@")) {
-        //     return {
-        //         error: true,
-        //         message: "El email es requerido",
-        //     }
-        // }
+        if(!email || !email.includes("@")) {
+            return {
+                error: true,
+                message: "El email es requerido",
+            }
+        }
 
 
 
@@ -71,7 +71,7 @@ export const suscribe = async (plan: Planes): Promise<ActionsResponse<string>> =
         const suscription = await new PreApproval(mercadopago).create({
             body: {
                 back_url: `${process.env.APP_URL}/suscripcion/success`,
-                payer_email: "mjmorazzo@gmail.com",
+                payer_email: email,
                 reason: "Suscripción a auto market - " + getPlan(plan).name,
                 auto_recurring: {
                     frequency_type: "months",

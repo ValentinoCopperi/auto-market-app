@@ -329,6 +329,11 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
         data: { cantidad_publicaciones: { increment: 1 } }
       })
 
+      
+
+    },{
+      maxWait : 20000,
+      timeout : 20000,
     })
 
     if (publicacion_id === 0) {
@@ -343,7 +348,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
       return { error: true, message: error.message }
     } else {
       console.error("Error publishing vehicle:", error)
-      return { error: true, message: "Error al publicar el vehículo" }
+      return { error: true, message: "Error al publicar el vehículo. Porfavor, intenta nuevamente" }
     }
   }
 }

@@ -47,6 +47,10 @@ const ImagenesInput = ({
                 alt={`Foto ${index + 1}`}
                 className="w-full h-full object-cover"
               />
+              {/* Tamaño de la imagen en megabytes */}
+              <p className="absolute bottom-0 left-0 text-xl text-white">
+                {(photo.size / 1024 / 1024).toFixed(2)} MB
+              </p>
               <Button
                 type="button"
                 variant="destructive"
@@ -59,21 +63,20 @@ const ImagenesInput = ({
             </div>
           ))}
 
-          {photos.length < 10 && (
-            <button
-              type="button"
-              onClick={handleAddPhotoClick}
-              className="aspect-square flex flex-col items-center justify-center border border-dashed border-border rounded-md hover:bg-muted/50 transition-colors"
-            >
-              <Camera className="h-8 w-8 text-muted-foreground mb-2" />
-              <span className="text-xs text-muted-foreground">Agregar Foto</span>
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleAddPhotoClick}
+            className="aspect-square flex flex-col items-center justify-center border border-dashed border-border rounded-md hover:bg-muted/50 transition-colors"
+          >
+            <Camera className="h-8 w-8 text-muted-foreground mb-2" />
+            <span className="text-xs text-muted-foreground">Agregar Foto</span>
+          </button>
         </div>
 
 
         <p className="text-xs text-muted-foreground">* El limite de imagenes depende del plan que tengas contratado</p>
         <p className="text-xs text-muted-foreground">* Podrias cambiar la portada de tu publicación en el apartado de editar publicación, una vez publicada</p>
+        <p className="text-xs text-muted-foreground">* El tamaño de las imagenes no debe exceder los 5MB</p>
       </div>
     </>
   )

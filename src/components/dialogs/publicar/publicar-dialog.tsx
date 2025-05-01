@@ -180,7 +180,7 @@ export const PublishDialog = memo(() => {
               )}
             />
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex flex-col md:flex-row justify-end gap-3 pt-2">
               {error && <p className="text-red-500">{error}</p>}
               {success && <p className="text-green-500">{success}</p>}
               <Button disabled={loading} type="button" variant="outline" onClick={closeDialog}>

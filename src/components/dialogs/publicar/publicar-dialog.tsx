@@ -99,7 +99,8 @@ export const PublishDialog = memo(() => {
         router.refresh()
       }
     } catch (error) {
-      setError("Error al publicar el vehículo")
+      console.error(error)
+      setError(error instanceof Error ? error.message : "Error al publicar el vehículo")
     } finally {
       setLoading(false)
     }

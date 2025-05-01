@@ -332,8 +332,8 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
       
 
     },{
-      maxWait : 20000,
-      timeout : 20000,
+      maxWait : 50000,
+      timeout : 50000,
     })
 
     if (publicacion_id === 0) {

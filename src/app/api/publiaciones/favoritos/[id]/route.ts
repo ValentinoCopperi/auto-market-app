@@ -49,31 +49,28 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                         destacado: true,
                         tipo_moneda: true,
                         created_at: true,
-                        marca: {
-                            select: {
-                                id: true,
-                                nombre: true,
-                            },
+                        url_portada: true,
+                        marca : {
+                            select : {
+                                nombre : true,
+                            }
                         },
-                        cliente: {
-                            select: {
-                                id: true,
-                                nombre: true,
-                            },
-                        },
-                        publicacion_imagenes: {
-                            select: {
-                                id: true,
-                                url: true,
-                            },
-                            take: 1,
-                        },
+                        cliente : {
+                            select : {
+                                id : true,
+                                nombre : true,
+                            }
+                        }
                     },
                 },
+                
             },
+            
         });
-
-        return NextResponse.json({ error: false, favoritos: favoritos, message: "Favoritos obtenidos correctamente" }, { status: 200 });
+        
+        return NextResponse.json({ error: false, favoritos: favoritos.map((favorito) => ({
+            ...favorito.publicacion,
+        })), message: "Favoritos obtenidos correctamente" }, { status: 200 });
 
     } catch (error) {
         console.error("Error al obtener favoritos:", error);

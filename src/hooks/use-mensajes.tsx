@@ -57,7 +57,7 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
     //Buscador de conversaciones
     const [search, setSearch] = useState<string>("")
     //Menu de conversaciones en mobile
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(true)
     //Para el id del cliente receptor en la seccion chat
     const [id_cliente_vendedor, setId_cliente_vendedor] = useState<number | null>(null)
     //Mensajes temporales para el chat dialog

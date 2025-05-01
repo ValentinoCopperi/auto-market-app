@@ -3,6 +3,7 @@ import PublicacionCard from "@/components/publicaciones/publicacion-card"
 import { FavoritosResult } from "@/types/favoritos"
 import { getSession } from "@/lib/session/session"
 import { Metadata } from "next"
+import { Publicacion } from "@/types/publicaciones"
 
 
 type SearchParams = Promise<{ [q: string]: string | undefined }>
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   description: 'Publicaciones que te gustan',
 }
 
-const getFavoritos = async (q?: string) : Promise<FavoritosResult[]> => {
+const getFavoritos = async (q?: string) : Promise<Publicacion[]> => {
 
   const params = new URLSearchParams()
 
@@ -66,7 +67,7 @@ export default async function FavoritosPage(props: { searchParams: SearchParams 
             <div className="text-center text-muted-foreground">No se encontraron publicaciones</div>
           ) : (
             favoritos.map((favorito) => (
-              <PublicacionCard key={favorito.id} publicacion={favorito.publicacion} />
+              <PublicacionCard key={favorito.id} publicacion={favorito} />
             ))
           )}
         </div>

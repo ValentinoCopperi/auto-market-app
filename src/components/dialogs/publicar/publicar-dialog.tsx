@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useRef, memo } from "react"
+import { useState, useRef, useEffect, memo } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -16,9 +16,6 @@ import ImagenesInput from "./inputs/imagenes-inputs"
 import { publicarVehiculo } from "@/actions/publicaciones-actions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Info } from "lucide-react"
-
 export const PublishDialog = memo(() => {
   const { isOpen, dialogType, closeDialog } = useDialogStore()
   const open = isOpen && dialogType === "publicar"
@@ -26,8 +23,9 @@ export const PublishDialog = memo(() => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm<PublicarFormValues>({
     resolver: zodResolver(publicarFormSchema),
@@ -52,18 +50,8 @@ export const PublishDialog = memo(() => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
-
-      // Validar tamaño de archivos
-      const validFiles = newFiles.filter((file) => {
-        if (file.size > 5 * 1024 * 1024) {
-          toast.error(`La imagen "${file.name}" excede el límite de 5MB`)
-          return false
-        }
-        return true
-      })
-
-      // Limit to 10 photos total (o el límite que tengas)
-      const updatedPhotos = [...photos, ...validFiles].slice(0, 10)
+      // Limit to 10 photos total
+      const updatedPhotos = [...photos, ...newFiles].slice(0, 100)
       setPhotos(updatedPhotos)
 
       // Update the form value
@@ -77,63 +65,41 @@ export const PublishDialog = memo(() => {
 
   const onSubmit = async (data: PublicarFormValues) => {
     setError(null)
+    setSuccess(null)
     setLoading(true)
 
-    // Validar que haya al menos una foto
-    if (photos.length === 0) {
-      setError("Debes subir al menos una foto")
-      setLoading(false)
-      return
-    }
-
-    // Validar tamaño de fotos nuevamente
-    for (const photo of photos) {
-      if (photo.size > 5 * 1024 * 1024) {
-        setError("El tamaño de alguna foto excede el límite de 5MB")
+    photos.forEach(photo => {
+      //Tamaño maximo de 5MB
+      if(photo.size > 1024 * 1024 * 5) {
+        setError("El tamaño de la foto debe ser menor a 5MB")
         setLoading(false)
         return
       }
-    }
+    })
+
 
     try {
-      // Mostrar toast de inicio de proceso
-      const toastId = toast.loading("Publicando vehículo...", {
-        duration: 10000, // Duración larga para dar tiempo al proceso
-      })
-
       // Ensure photos are included in the form data
       const formData = {
         ...data,
-        photos: photos,
+        photos: photos, // Add photos to the form data
       }
+
 
       const response = await publicarVehiculo(formData)
 
-      // Actualizar el toast según el resultado
-      if (response.error) {
-        toast.error(response.message, { id: toastId })
+      if(response.error) {
         setError(response.message)
       } else {
-        toast.success(response.message, { id: toastId })
+        toast.success(response.message)
         setPhotos([])
         form.reset()
         closeDialog()
-
-        // Mostrar un toast adicional sobre el procesamiento de imágenes
-        if (photos.length > 1) {
-          toast.info(
-            "Las imágenes adicionales se están procesando en segundo plano y aparecerán pronto en tu publicación.",
-            { duration: 8000 },
-          )
-        }
-
-        router.push(`/publicaciones/${response.data}`)
+        router.push(`/publicaciones/${response.data}`);
         router.refresh()
       }
     } catch (error) {
-      console.error(error)
       setError(error instanceof Error ? error.message : "Error al publicar el vehículo")
-      toast.error("Ocurrió un error al publicar el vehículo")
     } finally {
       setLoading(false)
     }
@@ -214,20 +180,9 @@ export const PublishDialog = memo(() => {
               )}
             />
 
-            {photos.length > 3 && (
-              <Alert  className="bg-blue-50 border-blue-200">
-                <Info className="h-4 w-4" />
-                <AlertTitle>Información importante</AlertTitle>
-                <AlertDescription>
-                  Has seleccionado {photos.length} imágenes. La primera imagen se procesará inmediatamente y será la
-                  portada de tu publicación. Las imágenes adicionales se procesarán en segundo plano y aparecerán en tu
-                  publicación en breve.
-                </AlertDescription>
-              </Alert>
-            )}
-
             <div className="flex flex-col md:flex-row justify-end gap-3 pt-2">
               {error && <p className="text-red-500">{error}</p>}
+              {success && <p className="text-green-500">{success}</p>}
               <Button disabled={loading} type="button" variant="outline" onClick={closeDialog}>
                 Cancelar
               </Button>
@@ -241,4 +196,5 @@ export const PublishDialog = memo(() => {
     </Dialog>
   )
 })
+
 

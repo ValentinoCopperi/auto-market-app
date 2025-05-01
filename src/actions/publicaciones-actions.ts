@@ -174,13 +174,10 @@ export const getPublicacionesByUsuario = unstable_cache(async (id_usuario: numbe
   }
 }, ["publicaciones-usuario"], { revalidate: 10 })
 
-
 export async function publicarVehiculo(data: PublicarFormValues): Promise<ActionsResponse<number>> {
   try {
-
     const session = await getSession()
     const id_cliente = session?.userId
-
 
     if (!session || !id_cliente) {
       return { error: true, message: "No estás autenticado" }
@@ -188,7 +185,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
 
     const suscripcion = await prisma.suscripcion.findFirst({
       where: {
-        id_cliente: parseInt(id_cliente),
+        id_cliente: Number.parseInt(id_cliente),
       },
       select: {
         estado: true,
@@ -196,10 +193,10 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
           select: {
             publicaciones_destacadas: true,
             max_publicaciones: true,
-            max_publicaciones_por_vehiculo: true
-          }
+            max_publicaciones_por_vehiculo: true,
+          },
         },
-      }
+      },
     })
 
     if (!suscripcion) {
@@ -212,35 +209,65 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
 
     const count_publicaciones = await prisma.publicacion.count({
       where: {
-        id_cliente: parseInt(id_cliente),
+        id_cliente: Number.parseInt(id_cliente),
       },
     })
-
 
     if (count_publicaciones >= suscripcion.tipo_suscripcion.max_publicaciones) {
       return { error: true, message: "Pasaste el limite de publicaciones. Porfavor, actualiza tu plan" }
     }
 
-    const { anio, photos, titulo, marca, modelo, tipo_transmision, tipo_combustible, kilometraje, precio, tipo_moneda, categoria, ciudad, color, descripcion } = data
-
+    const {
+      anio,
+      photos,
+      titulo,
+      marca,
+      modelo,
+      tipo_transmision,
+      tipo_combustible,
+      kilometraje,
+      precio,
+      tipo_moneda,
+      categoria,
+      ciudad,
+      color,
+      descripcion,
+    } = data
 
     if (photos.length === 0) {
       return { error: true, message: "Debes subir al menos una foto" }
     }
 
     if (photos.length > suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo) {
-      return { error: true, message: `Limite de fotos de tu plan: ${suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo}. Porfavor, elimina algunas fotos y vuelve a intentarlo` }
+      return {
+        error: true,
+        message: `Limite de fotos de tu plan: ${suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo}. Porfavor, elimina algunas fotos y vuelve a intentarlo`,
+      }
     }
 
-    if (precio <= 0) {
-      return { error: true, message: "El precio debe ser mayor a 0" }
+    // Validate all photos before starting the transaction
+    for (const photo of photos) {
+      if (photo.size > 5 * 1024 * 1024) {
+        return { error: true, message: `La imagen "${photo.name}" es demasiado grande. El tamaño máximo es de 5MB` }
+      }
     }
 
-    if (anio <= 1900 || anio >= 2030) {
-      return { error: true, message: "El año debe ser mayor a 1900 y menor a 2030" }
-    }
-
-    if (!titulo || !marca || !modelo || !tipo_transmision || !tipo_combustible || !precio || !tipo_moneda || !categoria || !ciudad || !color || !descripcion || !photos || !anio) {
+    // Basic validations
+    if (
+      !titulo ||
+      !marca ||
+      !modelo ||
+      !tipo_transmision ||
+      !tipo_combustible ||
+      !precio ||
+      !tipo_moneda ||
+      !categoria ||
+      !ciudad ||
+      !color ||
+      !descripcion ||
+      !photos ||
+      !anio
+    ) {
       return { error: true, message: "Todos los campos son requeridos" }
     }
 
@@ -249,92 +276,136 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
     }
 
     if (precio <= 0 || anio <= 0) {
-
       return { error: true, message: "El precio y año deben ser mayores a 0" }
     }
 
-    const publicacion_destacada = suscripcion.tipo_suscripcion.publicaciones_destacadas;
-    //Transaccion para crear la publicacion y subir las imagenes
-    await prisma.$transaction(async (tx) => {
-      const marca_seleccionada = await tx.marca.findFirst({
-        where: {
-          nombre: {
-            equals: marca,
-            mode: "insensitive"
-          },
-        },
-      })
+    if (anio <= 1900 || anio >= 2030) {
+      return { error: true, message: "El año debe ser mayor a 1900 y menor a 2030" }
+    }
 
-      if (!marca_seleccionada) {
-        throw new Error("Marca no encontrada")
-      }
+    const publicacion_destacada = suscripcion.tipo_suscripcion.publicaciones_destacadas
 
-      const newPublicacion = await tx.publicacion.create({
-        data: {
-          titulo: titulo,
-          modelo: modelo,
-          anio: anio,
-          tipo_transmision: tipo_transmision,
-          tipo_combustible: tipo_combustible,
-          kilometraje: kilometraje,
-          precio: precio,
-          tipo_moneda: tipo_moneda,
-          categoria: categoria,
-          ciudad: ciudad,
-          color: color,
-          descripcion: descripcion,
-          id_cliente: parseInt(id_cliente),
-          id_marca: marca_seleccionada.id,
-          destacado: publicacion_destacada,
-        }
-      })
+    let newPublicacionId: number
 
-      if (!newPublicacion) {
-        throw new Error("Error al crear la publicación. Intenta nuevamente.")
-      }
-
-
-      const uploadedPhotos = await Promise.all(photos.map(async (photo) => {
-
-        //Tamaño maximo de 
-        if (photo.size > 5 * 1024 * 1024) {
-          throw new Error("La imagen es demasiado grande. El tamaño máximo es de 5MB")
-        }
-
-        const response = await uploadImage({ file: photo, publicacionId: newPublicacion.id, tx })
-        if (response.error) {
-          throw new Error("Hubo un error al subir la imagen. Trata de subir desde la publicacion");
-        }
-        return response.url;
-      }))
-
-
-      if (uploadedPhotos.length > 0) {
-        const url_portada = uploadedPhotos[0]
-        if (url_portada) {
-          await tx.publicacion.update({
-            where: { id: newPublicacion.id },
-            data: {
-              url_portada
-            }
+    try {
+      // First transaction: Create the publication
+      const result = await prisma.$transaction(
+        async (tx) => {
+          const marca_seleccionada = await tx.marca.findFirst({
+            where: {
+              nombre: {
+                equals: marca,
+                mode: "insensitive",
+              },
+            },
           })
+
+          if (!marca_seleccionada) {
+            throw new Error("Marca no encontrada")
+          }
+
+          const newPublicacion = await tx.publicacion.create({
+            data: {
+              titulo: titulo,
+              modelo: modelo,
+              anio: anio,
+              tipo_transmision: tipo_transmision,
+              tipo_combustible: tipo_combustible,
+              kilometraje: kilometraje,
+              precio: precio,
+              tipo_moneda: tipo_moneda,
+              categoria: categoria,
+              ciudad: ciudad,
+              color: color,
+              descripcion: descripcion,
+              id_cliente: Number.parseInt(id_cliente),
+              id_marca: marca_seleccionada.id,
+              destacado: publicacion_destacada,
+            },
+          })
+
+          await tx.marca.update({
+            where: { id: marca_seleccionada?.id },
+            data: { cantidad_publicaciones: { increment: 1 } },
+          })
+
+          return newPublicacion.id
+        },
+        {
+          maxWait: 10000,
+          timeout: 10000,
+        },
+      )
+
+      newPublicacionId = result
+    } catch (error) {
+      console.error("Error creating publication:", error)
+      return { error: true, message: "Error al crear la publicación. Intenta nuevamente." }
+    }
+
+    // Second step: Upload images sequentially instead of in parallel
+    const uploadedPhotos: string[] = []
+    let firstPhotoUrl: string | null = null
+
+    for (let i = 0; i < photos.length; i++) {
+      const photo = photos[i]
+      try {
+        const response = await uploadImage({
+          file: photo,
+          publicacionId: newPublicacionId,
+          tx: null, // No transaction here since we're outside the transaction
+        })
+
+        if (response.error) {
+          console.error(`Error uploading image ${i + 1}/${photos.length}:`, response.message)
+          continue // Continue with next photo instead of failing completely
         }
+        
+        if (response.url) {
+          uploadedPhotos.push(response.url)
+        }
+
+        // Save the first successful photo URL
+        if (i === 0 && response.url) {
+          firstPhotoUrl = response.url
+        }
+      } catch (error) {
+        console.error(`Error processing image ${i + 1}/${photos.length}:`, error)
+        // Continue with next photo
       }
+    }
 
+    // If we have at least one successful photo, update the cover image
+    if (firstPhotoUrl) {
+      try {
+        await prisma.publicacion.update({
+          where: { id: newPublicacionId },
+          data: { url_portada: firstPhotoUrl },
+        })
+      } catch (error) {
+        console.error("Error updating cover image:", error)
+        // Continue anyway since the publication is created
+      }
+    }
 
-      await tx.marca.update({
-        where: { id: marca_seleccionada?.id },
-        data: { cantidad_publicaciones: { increment: 1 } }
-      })
+    // If no photos were uploaded successfully but we created the publication
+    if (uploadedPhotos.length === 0) {
+      return {
+        error: false,
+        message:
+          "Vehículo publicado correctamente, pero hubo problemas al subir las imágenes. Puedes añadir imágenes más tarde.",
+        data: newPublicacionId,
+      }
+    }
 
-      return { error: false, message: "Vehículo publicado correctamente", data: newPublicacion.id }
-
-    },{
-      maxWait : 50000,
-      timeout : 50000,
-    })
-    
-    return { error: false, message: "Vehículo publicado correctamente"}
+    return {
+      error: false,
+      message:
+        uploadedPhotos.length < photos.length
+          ? `Vehículo publicado correctamente con ${uploadedPhotos.length} de ${photos.length} imágenes.`
+          : "Vehículo publicado correctamente",
+      data: newPublicacionId,
+    }
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error publishing vehicle:", error.message)
@@ -345,7 +416,6 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
     }
   }
 }
-
 
 export async function editarPublicacion(editedPubliacion: Publicacion, newImages: File[]): Promise<ActionsResponse<null>> {
   try {

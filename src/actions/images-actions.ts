@@ -30,7 +30,7 @@ export async function uploadImage({ file, publicacionId, tx }: UploadImageData) 
             .upload(filePath, file)
 
         if (error) {
-            console.error("Error al subir imagen 213:", error)
+            console.error("Error al subir imagen:", error)
             return { error: true, message: error.message };
         }
 

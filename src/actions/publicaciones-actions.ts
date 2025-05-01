@@ -253,8 +253,6 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
       return { error: true, message: "El precio y año deben ser mayores a 0" }
     }
 
-    //Id de la publicacion para devolverla al usuario y hacer redirect
-    let publicacion_id: number = 0
     const publicacion_destacada = suscripcion.tipo_suscripcion.publicaciones_destacadas;
     //Transaccion para crear la publicacion y subir las imagenes
     await prisma.$transaction(async (tx) => {
@@ -295,10 +293,10 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
         throw new Error("Error al crear la publicación. Intenta nuevamente.")
       }
 
-      publicacion_id = newPublicacion.id
 
       const uploadedPhotos = await Promise.all(photos.map(async (photo) => {
 
+        //Tamaño maximo de 
         if (photo.size > 5 * 1024 * 1024) {
           throw new Error("La imagen es demasiado grande. El tamaño máximo es de 5MB")
         }
@@ -329,19 +327,14 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
         data: { cantidad_publicaciones: { increment: 1 } }
       })
 
-      
+      return { error: false, message: "Vehículo publicado correctamente", data: newPublicacion.id }
 
     },{
       maxWait : 50000,
       timeout : 50000,
     })
-
-    if (publicacion_id === 0) {
-      return { error: true, message: "Error al publicar el vehículo" }
-    }
-
-    return { error: false, message: "Vehículo publicado correctamente", data: publicacion_id }
-
+    
+    return { error: false, message: "Vehículo publicado correctamente"}
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error publishing vehicle:", error.message)

@@ -102,6 +102,21 @@ export const PublishDialog = memo(() => {
     fileInputRef.current?.click()
   }
 
+  const uploadPromises = (id_publicacion: number) => photos.map(async (photo) => {
+    const formData = new FormData();
+    formData.append("file", photo);
+    formData.append("publicacionId", id_publicacion.toString());
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/imagenes`, {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error("Error al subir imagen");
+    }
+    const result = await response.json();
+    return result.url;
+  });
+
   const onSubmit = async (formData: PublicarFormSchemaValues) => {
     try {
       setLoading(true)
@@ -144,23 +159,11 @@ export const PublishDialog = memo(() => {
       const id_publicacion = result.data
 
 
-     
-      const uploadedImages = []
-      for (const photo of photos) {
-        const formData = new FormData()
-        formData.append("file", photo)
-        formData.append("publicacionId", id_publicacion.toString())
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/imagenes`, {
-          method: "POST",
-          body: formData,
-        })
-        if (!response.ok) {
-          throw new Error("Error al subir imagenes. Intenta nuevamente.")
-        }
-        const result = await response.json()
-        uploadedImages.push(result.url)
-      }
+      const uploadedImages = await Promise.all(uploadPromises(id_publicacion));
 
+      if (uploadedImages.length !== photos.length) {
+        throw new Error("Error al subir algunas imagenes. Puedes editar la publicación para subir las que falten.")
+      }
       // Show success message
       toast.success(result.message || "Vehículo publicado correctamente")
 

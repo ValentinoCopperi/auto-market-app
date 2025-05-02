@@ -12,3 +12,4 @@ export interface Cliente {
   admin: boolean
   descripcion: string
 }
+

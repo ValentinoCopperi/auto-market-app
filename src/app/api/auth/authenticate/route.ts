@@ -12,11 +12,11 @@ export async function GET() {
       return NextResponse.json({error: true, message: "No hay sesión", authenticated: false }, { status: 200 })
     }
 
-    const cliente = await getClienteById(session.userId);
+    //const cliente = await getClienteById(session.userId);
 
-    if (!cliente) {
-      return NextResponse.json({error: true, message: "No hay cliente", authenticated: false }, { status: 200 })
-    }
+    // if (!cliente) {
+    //   return NextResponse.json({error: true, message: "No hay cliente", authenticated: false }, { status: 200 })
+    // }
 
     // Responder con los datos de la sesión
     return NextResponse.json({error: false, message: "Sesión encontrada", authenticated: true, user: {

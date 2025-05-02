@@ -8,12 +8,13 @@ import { LoginFormSchema } from "@/types/auth/login"
 import { toast } from "sonner"
 import { useDialogStore } from "@/lib/store/dialogs-store"
 import { RegistroFormSchema } from "@/types/auth/registro"
+import { Planes } from "@/types/suscriciones"
 
 interface User {
   id: string
   email: string
   admin: boolean
-  suscripcion: string | null
+  suscripcion: Planes | null
 }
 
 interface AuthContextType {
@@ -40,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const { closeDialog } = useDialogStore()
-
+  
   // Verificar autenticación al carg
   useEffect(() => {
     checkAuth()

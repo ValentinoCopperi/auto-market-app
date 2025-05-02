@@ -27,14 +27,15 @@ import { useAuth } from "@/hooks/use-auth"
 import { toast } from "sonner"
 import { editarPublicacion } from "@/actions/publicaciones-actions"
 import { useRouter } from "next/navigation"
+import { compressImages } from "@/lib/images/imagenes-comprension"
 
 interface EditPublicationDialogProps {
   publicacion: Publicacion
 }
 
 interface imagesUrls {
-  url: string;
-  es_nueva: boolean;
+  url: string
+  es_nueva: boolean
 }
 
 export function EditPublicationDialog({ publicacion }: EditPublicationDialogProps) {
@@ -52,7 +53,9 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
 
   const [newImages, setNewImages] = useState<File[]>([])
   //Sirve para mostrar las imagenes en el preview
-  const [imageURLs, setImageURLs] = useState<imagesUrls[]>(publicacion.publicacion_imagenes.map((image) => ({ url: image.url, es_nueva: false })))
+  const [imageURLs, setImageURLs] = useState<imagesUrls[]>(
+    publicacion.publicacion_imagenes.map((image) => ({ url: image.url, es_nueva: false })),
+  )
 
   // Initialize URLs for preview
   useState(() => {
@@ -96,7 +99,6 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
     setIsLoading(false)
     router.refresh()
   }
-
   const handleImageSelect = (index: number) => {
     setSelectedImageIndex(index)
   }
@@ -147,28 +149,41 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
     }
   }
 
-  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
 
     if (files.length > 0) {
-      // Add files to newImages array
-      setNewImages((prev) => [...prev, ...files])
+      try {
+        // Compress the images before adding them
+        const compressedFiles = await compressImages(files, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          initialQuality: 0.8,
+        })
 
-      // Create object URLs for preview
-      const fileURLs = files.map((file) => URL.createObjectURL(file))
-      setImageURLs((prev) => [...prev, ...fileURLs.map((url) => ({ url, es_nueva: true }))])
+        // Add compressed files to newImages array
+        setNewImages((prev) => [...prev, ...compressedFiles])
 
-      // Update the publication images array with placeholder objects
-      const newImageObjects = files.map((file) => ({
-        id: Math.random(), // Temporary ID
-        url: URL.createObjectURL(file),
-        publicacion_id: editedPublication.id,
-      }))
+        // Create object URLs for preview
+        const fileURLs = compressedFiles.map((file) => URL.createObjectURL(file))
+        setImageURLs((prev) => [...prev, ...fileURLs.map((url) => ({ url, es_nueva: true }))])
 
-      setEditedPublication((prev) => ({
-        ...prev,
-        publicacion_imagenes: [...prev.publicacion_imagenes, ...newImageObjects],
-      }))
+        // Update the publication images array with placeholder objects
+        const newImageObjects = compressedFiles.map((file) => ({
+          id: Math.random(), // Temporary ID
+          url: URL.createObjectURL(file),
+          publicacion_id: editedPublication.id,
+        }))
+
+        setEditedPublication((prev) => ({
+          ...prev,
+          publicacion_imagenes: [...prev.publicacion_imagenes, ...newImageObjects],
+        }))
+      } catch (error) {
+        console.error("Error al comprimir las imágenes:", error)
+        toast.error(error instanceof Error ? error.message : "Error al comprimir las imágenes")
+      }
     }
 
     e.target.value = ""
@@ -185,7 +200,6 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
       })
     }
   }, [])
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -485,47 +499,42 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                         fill
                         className="object-cover"
                       />
-
                       {/* Overlay con acciones */}
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
-                        {
-                          !imageUrl.es_nueva && (
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              className="mb-2"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleSetCoverImage(imageUrl.url)
-                              }}
-                              disabled={editedPublication.url_portada === imageUrl.url}
-                            >
-                              {editedPublication.url_portada === imageUrl.url ? (
-                                <>
-                                  <Check className="h-3 w-3 mr-1" />
-                                  Portada actual
-                                </>
-                              ) : (
-                                <>Establecer como portada</>
-                              )}
-                            </Button>
-                          )
-                        }
-                        {
-                          (imageURLs.length > 1) && (
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleRemoveImage(index, imageUrl.url)
-                              }}
-                            >
-                              <X className="h-3 w-3 mr-1" />
-                              Eliminar
-                            </Button>
-                          )
-                        }
+                        {!imageUrl.es_nueva && (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="mb-2"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleSetCoverImage(imageUrl.url)
+                            }}
+                            disabled={editedPublication.url_portada === imageUrl.url}
+                          >
+                            {editedPublication.url_portada === imageUrl.url ? (
+                              <>
+                                <Check className="h-3 w-3 mr-1" />
+                                Portada actual
+                              </>
+                            ) : (
+                              <>Establecer como portada</>
+                            )}
+                          </Button>
+                        )}
+                        {imageURLs.length > 1 && (
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleRemoveImage(index, imageUrl.url)
+                            }}
+                          >
+                            <X className="h-3 w-3 mr-1" />
+                            Eliminar
+                          </Button>
+                        )}
                       </div>
 
                       {/* Indicador de número */}

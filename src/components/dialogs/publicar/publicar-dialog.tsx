@@ -15,8 +15,11 @@ import ImagenesInput from "./inputs/imagenes-inputs"
 import { publicarVehiculo } from "@/actions/publicaciones-actions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useAuth } from "@/hooks/use-auth"
+import { max_fotos, Planes } from "@/types/suscriciones"
 
 export const PublishDialog = memo(() => {
+  const { user } = useAuth()
   const { isOpen, dialogType, closeDialog } = useDialogStore()
   const open = isOpen && dialogType === "publicar"
   const [photos, setPhotos] = useState<File[]>([])
@@ -26,6 +29,8 @@ export const PublishDialog = memo(() => {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const router = useRouter()
+
+
 
   // Create form with validation (sin photos)
   const form = useForm<PublicarFormSchemaValues>({
@@ -51,7 +56,7 @@ export const PublishDialog = memo(() => {
 
   // Get form state for error display
   const { formState } = form
-  const { errors, isSubmitting, isValid, isDirty } = formState
+  const { errors } = formState
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -68,6 +73,14 @@ export const PublishDialog = memo(() => {
   useEffect(() => {
     if (photos.length === 0) {
       setPhotoError("Debes subir al menos una foto")
+      return
+    }
+    if (user?.suscripcion) {
+      if (photos.length > max_fotos[user.suscripcion]) {
+        setPhotoError(`El limite de tu plan es de ${max_fotos[user.suscripcion]} fotos`)
+      } else {
+        setPhotoError(null)
+      }
     } else {
       setPhotoError(null)
     }
@@ -76,8 +89,7 @@ export const PublishDialog = memo(() => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
-      // Limit to 100 photos total
-      const updatedPhotos = [...photos, ...newFiles].slice(0, 100)
+      const updatedPhotos = [...photos, ...newFiles].slice(0, max_fotos[user?.suscripcion as Planes] || 10)
       setPhotos(updatedPhotos)
     }
   }
@@ -88,57 +100,52 @@ export const PublishDialog = memo(() => {
 
   const onSubmit = async (formData: PublicarFormSchemaValues) => {
     try {
-      // Verificar si hay errores de validación antes de continuar
-      const isFormValid = await form.trigger()
-      if (!isFormValid) {
-        // Mostrar todos los errores de validación
-        Object.keys(form.formState.errors).forEach((key) => {
-          const error = form.formState.errors[key as keyof PublicarFormSchemaValues]
-          if (error?.message) {
-            toast.error(`${key}: ${error.message}`)
-          }
-        })
-        return
-      }
-
-      // Validación manual de fotos
-      if (photos.length === 0) {
-        setPhotoError("Debes subir al menos una foto")
-        toast.error("Debes subir al menos una foto")
-        return
-      }
-
-      setError(null)
-      setSuccess(null)
       setLoading(true)
 
-      // Combinar los datos del formulario con las fotos
-      const completeFormData: PublicarFormValues = {
-        ...formData,
-        photos: photos,
+      if (photos.length === 0) {
+        setPhotoError("Debes subir al menos una foto")
+        setLoading(false)
+        return
+      }
+      // Create a new FormData instance
+      const formDataToSend = new FormData()
+
+      // Add all form fields
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataToSend.append(key, String(value))
+      })
+
+      // Add photos
+      photos.forEach((photo, index) => {
+        formDataToSend.append(`photo_${index}`, photo)
+      })
+
+      // Send the request
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones`, {
+        method: "POST",
+        body: formDataToSend,
+      })
+
+      // Handle response
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || "Error al publicar el vehículo")
       }
 
-      const response = await publicarVehiculo(completeFormData)
+      const result = await response.json()
 
-      if (response.error) {
-        // Asegurarse de que response.message no sea undefined
-        const errorMsg = response.message || "Error al publicar el vehículo"
-        setError(errorMsg)
-        toast.error(errorMsg)
-      } else {
-        toast.success(response.message || "Vehículo publicado con éxito")
-        setPhotos([])
-        form.reset()
+      // Show success message
+      toast.success(result.message || "Vehículo publicado correctamente")
+
+      // Redirect to the publication page
+      if (result.data) {
         closeDialog()
-        router.push(`/publicaciones/${response.data}`)
+        router.push(`/publicaciones/${result.data}`)
         router.refresh()
       }
     } catch (error) {
-      console.error("Error en la publicación:", error)
-      // Asegurarse de que siempre hay un mensaje de error
-      const errorMessage = error instanceof Error && error.message ? error.message : "Error al publicar el vehículo"
-      setError(errorMessage)
-      toast.error(errorMessage)
+      console.error("Error al publicar:", error)
+      toast.error(error instanceof Error ? error.message : "Error al publicar el vehículo. Inténtalo de nuevo.")
     } finally {
       setLoading(false)
     }

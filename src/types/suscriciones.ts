@@ -32,6 +32,12 @@ export const planes_precios = {
     "plan_agencia": 300,
 }
 
+export const max_fotos = {
+    "plan_ocasion": 10,
+    "plan_vendedor": 30,
+    "plan_agencia": 50,
+}
+
 //Function para obtener el nombre del plan convertido
 export const getPlanName = (plan: Planes) => {
     switch (plan) {

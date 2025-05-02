@@ -233,7 +233,7 @@ export async function publicarVehiculo(data: PublicarFormValues): Promise<Action
       color,
       descripcion,
     } = data
-    console.log(data)
+    
     if (photos.length === 0) {
       return { error: true, message: "Debes subir al menos una foto" }
     }

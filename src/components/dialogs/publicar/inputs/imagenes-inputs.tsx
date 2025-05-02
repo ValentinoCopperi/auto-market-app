@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { X, Camera, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { compressImage } from "@/lib/imagenes-comprension"
+import { compressImage } from "@/lib/images/imagenes-comprension"
 import { toast } from "sonner"
 
 interface ImagenesInputProps {

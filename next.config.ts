@@ -7,6 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
+    useCache: true,
     serverActions: {
       bodySizeLimit: "50mb",
     },

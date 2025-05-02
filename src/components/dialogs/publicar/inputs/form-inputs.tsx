@@ -61,12 +61,14 @@ export function FormSections({ control, fieldConfig, loading }: FormSectionsProp
                 </Select>
               ) : config.type === "textarea" ? (
                 <Textarea
+                  disabled={loading}
                   placeholder={config.placeholder}
                   rows={config.rows || 3}
                   {...{ ...field, value: String(field.value) }}
                 />
               ) : (
                 <Input
+                  disabled={loading}
                   type={config.type || "text"}
                   min={config.min}
                   max={config.max}

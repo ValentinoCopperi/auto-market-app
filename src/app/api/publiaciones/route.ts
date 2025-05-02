@@ -51,7 +51,7 @@ interface UploadImageData {
     publicacionId: number
     tx: any | null
 }
-export async function uploadImage({ file, publicacionId, tx }: UploadImageData) {
+async function uploadImage({ file, publicacionId, tx }: UploadImageData) {
     try {
         if (!file) {
             return { error: true, message: "No se ha enviado ningún archivo" }

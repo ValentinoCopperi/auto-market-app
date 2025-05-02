@@ -87,6 +87,10 @@ export const PublishDialog = memo(() => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      if (photos.length + e.target.files.length > max_fotos[user?.suscripcion as Planes]) {
+        setPhotoError(`El limite de tu plan es de ${max_fotos[user?.suscripcion as Planes]} fotos`)
+        return
+      }
       const newFiles = Array.from(e.target.files)
       // Limit to 100 photos total
       const updatedPhotos = [...photos, ...newFiles].slice(0, max_fotos[user?.suscripcion as Planes])
@@ -107,6 +111,9 @@ export const PublishDialog = memo(() => {
         setLoading(false)
         return
       }
+
+
+      //Numero random para la publicacion entre 1 y 300000
       // Create a new FormData instance
       const formDataToSend = new FormData()
 
@@ -115,10 +122,7 @@ export const PublishDialog = memo(() => {
         formDataToSend.append(key, String(value))
       })
 
-      // Add photos
-      photos.forEach((photo, index) => {
-        formDataToSend.append(`photo_${index}`, photo)
-      })
+      formDataToSend.append("cantidad_fotos", photos.length.toString())
 
       // Send the request
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones`, {
@@ -126,7 +130,6 @@ export const PublishDialog = memo(() => {
         body: formDataToSend,
       })
 
-      // Handle response
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.message || "Error al publicar el vehículo")
@@ -134,13 +137,37 @@ export const PublishDialog = memo(() => {
 
       const result = await response.json()
 
+      if (result.error) {
+        throw new Error(result.message || "Error al publicar el vehículo")
+      }
+
+      const id_publicacion = result.data
+
+
+     
+      const uploadedImages = []
+      for (const photo of photos) {
+        const formData = new FormData()
+        formData.append("file", photo)
+        formData.append("publicacionId", id_publicacion.toString())
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/imagenes`, {
+          method: "POST",
+          body: formData,
+        })
+        if (!response.ok) {
+          throw new Error("Error al subir imagenes. Intenta nuevamente.")
+        }
+        const result = await response.json()
+        uploadedImages.push(result.url)
+      }
+
       // Show success message
       toast.success(result.message || "Vehículo publicado correctamente")
 
       // Redirect to the publication page
-      if (result.data) {
+      if (id_publicacion) {
         closeDialog()
-        router.push(`/publicaciones/${result.data}`)
+        router.push(`/publicaciones/${id_publicacion}`)
         router.refresh()
       }
     } catch (error) {

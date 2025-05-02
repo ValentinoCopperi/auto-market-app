@@ -1,55 +1,78 @@
-import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { isAuthenticated } from "@/lib/session/session"
+import { NextRequest, NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
+import prisma from "@/lib/prisma"
 
-export async function POST(request: Request) {
-
-  if (!isAuthenticated()) {
-    return NextResponse.json({ error: true, message: "No estás autenticado" }, { status: 401 })
-  }
-
+export async function POST(request: NextRequest) {
   try {
+    // Get form data with the file
     const formData = await request.formData()
     const file = formData.get("file") as File
+    const publicacionId = formData.get("publicacionId") as string
 
     if (!file) {
       return NextResponse.json({ error: true, message: "No se ha enviado ningún archivo" }, { status: 400 })
     }
 
-    // Crear un nombre único para el archivo
-    const fileExt = file.name.split(".").pop()
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`
-    const filePath = `publicaciones/${fileName}`
-
-
-    // Subir archivo a Supabase storage
-    const { data, error } = await supabase.storage
-      .from("auto-market") // Reemplaza con el nombre de tu bucket
-      .upload(filePath, file)
-
-    if (error) {
-        console.error("Error al subir imagen 213:", error)
-      return NextResponse.json({ error: true, message: error.message }, { status: 500 })
+    // Validate file size
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: true, message: "La imagen es demasiado grande. El tamaño máximo es de 5MB" },
+        { status: 400 },
+      )
     }
 
-    // Obtener URL pública del archivo subido
+    // Create a unique filename
+    const fileExt = file.name.split(".").pop()
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+    const filePath = `publicaciones/${publicacionId}/${fileName}`
+
+    // Upload to Supabase with retry logic
+    let uploadAttempt = 0
+    let uploadResult
+
+    while (uploadAttempt < 3) {
+      try {
+        uploadResult = await supabase.storage.from("auto-market").upload(filePath, file)
+
+        if (!uploadResult.error) break
+
+        // If there's an error, wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        uploadAttempt++
+      } catch (e) {
+        console.error(`Upload attempt ${uploadAttempt + 1} failed:`, e)
+        uploadAttempt++
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      }
+    }
+
+    if (!uploadResult || uploadResult.error) {
+      console.error("Error al subir imagen después de intentos:", uploadResult?.error)
+      return NextResponse.json(
+        { error: true, message: uploadResult?.error?.message || "Error al subir imagen" },
+        { status: 500 },
+      )
+    }
+
+    // Get public URL
     const {
       data: { publicUrl },
-    } = supabase.storage.from("auto-market").getPublicUrl(data.path)
+    } = supabase.storage.from("auto-market").getPublicUrl(uploadResult.data.path)
 
-    console.log(data.path)
-    console.log(publicUrl)
-
-    return NextResponse.json({
-      error: false,
+    await prisma.publicacion_imagenes.create({
       data: {
-        path: data.path,
+        publicacion_id: Number(publicacionId),
         url: publicUrl,
       },
     })
+
+    return NextResponse.json({
+      error: false,
+      message: "Imagen subida correctamente",
+      url: publicUrl,
+    })
   } catch (error) {
     console.error("Error al subir imagen:", error)
-    return NextResponse.json({ error: true, message: "Error al subir la imagen" }, { status: 500 })
+    return NextResponse.json({ error: true, message: "Error al subir imagen" }, { status: 500 })
   }
 }

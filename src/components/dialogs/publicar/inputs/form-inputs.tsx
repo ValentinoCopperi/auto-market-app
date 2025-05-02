@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { PublicarFormValues } from "@/types/publicar"
+import type { PublicarFormSchemaValues } from "@/types/publicar"
 
 type FieldType = "text" | "number" | "textarea" | "select"
 
@@ -22,19 +22,19 @@ interface FieldConfig {
 
 interface FieldConfigMap {
   [key: string]: {
-    [key in keyof PublicarFormValues]?: FieldConfig
+    [key in keyof PublicarFormSchemaValues]?: FieldConfig
   }
 }
 
 interface FormSectionsProps {
-  control: Control<PublicarFormValues>
+  control: Control<PublicarFormSchemaValues>
   fieldConfig: FieldConfigMap
   loading: boolean
 }
 
 export function FormSections({ control, fieldConfig, loading }: FormSectionsProps) {
   // Helper function to render a form field based on its configuration
-  const renderField = (name: keyof PublicarFormValues, config: FieldConfig) => {
+  const renderField = (name: keyof PublicarFormSchemaValues, config: FieldConfig) => {
     return (
       <FormField
         key={name as string}

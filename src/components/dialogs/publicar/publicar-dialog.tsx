@@ -1,33 +1,34 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useRef, useEffect, memo } from "react"
+import { useState, useRef, memo, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Control, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useDialogStore } from "@/lib/store/dialogs-store"
-import { Form, FormField, FormMessage } from "@/components/ui/form"
+import { Form } from "@/components/ui/form"
 import { CATEOGORIAS, COLORES, TRANSMISION, COMBUSTIBLE, TIPO_MONEDA, MARCAS, CIUDADES } from "@/types/filtros"
-import { type PublicarFormValues, publicarFormSchema } from "@/types/publicar"
+import { type PublicarFormSchemaValues, type PublicarFormValues, publicarFormSchema } from "@/types/publicar"
 import { FormSections } from "./inputs/form-inputs"
 import ImagenesInput from "./inputs/imagenes-inputs"
 import { publicarVehiculo } from "@/actions/publicaciones-actions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+
 export const PublishDialog = memo(() => {
   const { isOpen, dialogType, closeDialog } = useDialogStore()
   const open = isOpen && dialogType === "publicar"
   const [photos, setPhotos] = useState<File[]>([])
+  const [photoError, setPhotoError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const router = useRouter()
 
-  const router = useRouter();
-
-  const form = useForm<PublicarFormValues>({
+  // Create form with validation (sin photos)
+  const form = useForm<PublicarFormSchemaValues>({
     resolver: zodResolver(publicarFormSchema),
     defaultValues: {
       titulo: "",
@@ -43,19 +44,41 @@ export const PublishDialog = memo(() => {
       ciudad: "",
       color: "Rojo",
       descripcion: "",
-      photos: [],
+      // Ya no incluimos photos aquí
     },
+    mode: "onChange", // Validar al cambiar para mostrar errores más rápido
   })
+
+  // Get form state for error display
+  const { formState } = form
+  const { errors, isSubmitting, isValid, isDirty } = formState
+
+  // Reset form when dialog closes
+  useEffect(() => {
+    if (!open) {
+      form.reset()
+      setPhotos([])
+      setPhotoError(null)
+      setError(null)
+      setSuccess(null)
+    }
+  }, [open, form])
+
+  // Validar fotos cuando cambian
+  useEffect(() => {
+    if (photos.length === 0) {
+      setPhotoError("Debes subir al menos una foto")
+    } else {
+      setPhotoError(null)
+    }
+  }, [photos])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
-      // Limit to 10 photos total
+      // Limit to 100 photos total
       const updatedPhotos = [...photos, ...newFiles].slice(0, 100)
       setPhotos(updatedPhotos)
-
-      // Update the form value
-      form.setValue("photos", updatedPhotos)
     }
   }
 
@@ -63,53 +86,70 @@ export const PublishDialog = memo(() => {
     fileInputRef.current?.click()
   }
 
-  const onSubmit = async (data: PublicarFormValues) => {
-    setError(null)
-    setSuccess(null)
-    setLoading(true)
-
-    photos.forEach(photo => {
-      //Tamaño maximo de 5MB
-      if(photo.size > 1024 * 1024 * 5) {
-        setError("El tamaño de la foto debe ser menor a 5MB")
-        setLoading(false)
+  const onSubmit = async (formData: PublicarFormSchemaValues) => {
+    try {
+      // Verificar si hay errores de validación antes de continuar
+      const isFormValid = await form.trigger()
+      if (!isFormValid) {
+        // Mostrar todos los errores de validación
+        Object.keys(form.formState.errors).forEach((key) => {
+          const error = form.formState.errors[key as keyof PublicarFormSchemaValues]
+          if (error?.message) {
+            toast.error(`${key}: ${error.message}`)
+          }
+        })
         return
       }
-    })
 
-
-    try {
-      // Ensure photos are included in the form data
-      const formData = {
-        ...data,
-        photos: photos, // Add photos to the form data
+      // Validación manual de fotos
+      if (photos.length === 0) {
+        setPhotoError("Debes subir al menos una foto")
+        toast.error("Debes subir al menos una foto")
+        return
       }
 
+      setError(null)
+      setSuccess(null)
+      setLoading(true)
 
-      const response = await publicarVehiculo(formData)
+      // Combinar los datos del formulario con las fotos
+      const completeFormData: PublicarFormValues = {
+        ...formData,
+        photos: photos,
+      }
 
-      if(response.error) {
-        setError(response.message)
+      const response = await publicarVehiculo(completeFormData)
+
+      if (response.error) {
+        // Asegurarse de que response.message no sea undefined
+        const errorMsg = response.message || "Error al publicar el vehículo"
+        setError(errorMsg)
+        toast.error(errorMsg)
       } else {
-        toast.success(response.message)
+        toast.success(response.message || "Vehículo publicado con éxito")
         setPhotos([])
         form.reset()
         closeDialog()
-        router.push(`/publicaciones/${response.data}`);
+        router.push(`/publicaciones/${response.data}`)
         router.refresh()
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Error al publicar el vehículo")
+      console.error("Error en la publicación:", error)
+      // Asegurarse de que siempre hay un mensaje de error
+      const errorMessage = error instanceof Error && error.message ? error.message : "Error al publicar el vehículo"
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
   }
 
-  // Update photos in form when photos state changes
-  const updateFormPhotos = (newPhotos: File[]) => {
-    setPhotos(newPhotos)
-    form.setValue("photos", newPhotos)
-  }
+  // Debug form state
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      console.log("Form errors:", errors)
+    }
+  }, [errors])
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && closeDialog()}>
@@ -158,31 +198,35 @@ export const PublishDialog = memo(() => {
               }}
             />
 
-            <FormField
-              control={form.control}
-              name="photos"
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <ImagenesInput
-                    loading={loading}
-                    photos={photos}
-                    setPhotos={updateFormPhotos}
-                    handleFileChange={handleFileChange}
-                    handleAddPhotoClick={handleAddPhotoClick}
-                    fileInputRef={fileInputRef}
-                  />
-                  <FormMessage />
-                  {photos.length > 0 && <p className="text-sm text-muted-foreground">Fotos subidas: {photos.length}</p>}
-                  {field.value.length === 0 && form.formState.isSubmitted && (
-                    <p className="text-sm text-red-500">Debes subir al menos una foto</p>
-                  )}
-                </div>
-              )}
-            />
+            {/* Componente de imágenes (ahora fuera del formulario) */}
+            <div className="space-y-2">
+              <ImagenesInput
+                loading={loading}
+                photos={photos}
+                setPhotos={setPhotos}
+                handleFileChange={handleFileChange}
+                handleAddPhotoClick={handleAddPhotoClick}
+                fileInputRef={fileInputRef}
+                error={photoError}
+              />
+              {photos.length > 0 && <p className="text-sm text-muted-foreground">Fotos subidas: {photos.length}</p>}
+            </div>
+
+            {/* Display all form errors in a summary - always visible when there are errors */}
+            {Object.keys(errors).length > 0 && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                <p className="text-sm font-medium text-red-800 mb-1">Por favor corrige los siguientes errores:</p>
+                <ul className="text-sm text-red-700 list-disc pl-5">
+                  {Object.entries(errors).map(([key, error]) => (
+                    <li key={key}>{`${key}: ${error?.message}`}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="flex flex-col md:flex-row justify-end gap-3 pt-2">
-              {error && <p className="text-red-500">{error}</p>}
-              {success && <p className="text-green-500">{success}</p>}
+              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {success && <p className="text-green-500 text-sm">{success}</p>}
               <Button disabled={loading} type="button" variant="outline" onClick={closeDialog}>
                 Cancelar
               </Button>
@@ -197,4 +241,4 @@ export const PublishDialog = memo(() => {
   )
 })
 
-
+export default PublishDialog

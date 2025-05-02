@@ -1,5 +1,7 @@
 "use client"
 
+import { DialogFooter } from "@/components/ui/dialog"
+
 import type React from "react"
 
 import { useEffect, useState } from "react"
@@ -10,7 +12,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -152,8 +153,17 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
   const handleAddImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
 
+    if (newImages.length >= 5 || newImages.length + files.length > 5) {
+      toast.error("Solo puedes subir un máximo de 5 nuevas imágenes por solicitud")
+      e.target.value = ""
+      return
+    }
+
     if (files.length > 0) {
       try {
+        setIsLoading(true)
+        toast.loading("Comprimiendo imágenes...", { id: "compressing-images" })
+
         // Compress the images before adding them
         const compressedFiles = await compressImages(files, {
           maxSizeMB: 1,
@@ -180,9 +190,15 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
           ...prev,
           publicacion_imagenes: [...prev.publicacion_imagenes, ...newImageObjects],
         }))
+
+        toast.success("Imágenes comprimidas correctamente", { id: "compressing-images" })
       } catch (error) {
         console.error("Error al comprimir las imágenes:", error)
-        toast.error(error instanceof Error ? error.message : "Error al comprimir las imágenes")
+        toast.error(error instanceof Error ? error.message : "Error al comprimir las imágenes", {
+          id: "compressing-images",
+        })
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -212,7 +228,27 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
           Editar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        {isLoading && (
+          <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-50">
+            <div className="flex flex-col items-center">
+              <svg
+                className="animate-spin h-10 w-10 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <p className="mt-2 text-sm font-medium">Procesando...</p>
+            </div>
+          </div>
+        )}
         <DialogHeader>
           <DialogTitle>Editar publicación</DialogTitle>
           <DialogDescription>
@@ -220,7 +256,7 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="info" className="w-full">
-          <TabsList className="grid w-full grid-cols-1 lg:grid-cols-3 my-8">
+          <TabsList className="grid w-full grid-cols-3 my-4 sm:my-8 text-xs sm:text-sm">
             <TabsTrigger value="info">Información básica</TabsTrigger>
             <TabsTrigger value="details">Detalles técnicos</TabsTrigger>
             <TabsTrigger value="images">Imágenes</TabsTrigger>
@@ -456,9 +492,16 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
               </div>
 
               {/* Galería de imágenes */}
-              <div>
+              <div className={cn(newImages.length > 5 ? "border-2 border-red-500 p-4 rounded-lg" : "")}>
                 <div className="flex items-center justify-between mb-3">
-                  <Label className="text-base">Galería de imágenes ({imageURLs.length})</Label>
+                  <div>
+                    <Label className="text-base">Galería de imágenes ({imageURLs.length})</Label>
+                    {newImages.length > 5 && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Solo se permiten subir 5 nuevas imágenes por solicitud. Has seleccionado {newImages.length}.
+                      </p>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2">
                     <Input
                       type="file"
@@ -467,12 +510,14 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                       className="hidden"
                       multiple
                       onChange={handleAddImage}
+                      disabled={newImages.length >= 5}
                     />
                     <Button
                       variant="outline"
                       size="sm"
                       type="button"
                       onClick={() => document.getElementById("image-upload")?.click()}
+                      disabled={newImages.length >= 5}
                     >
                       <ImageIcon className="h-4 w-4 mr-2" />
                       Agregar imagen
@@ -480,7 +525,7 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3">
                   {imageURLs.map((imageUrl, index) => (
                     <div
                       key={index}
@@ -500,12 +545,12 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                         className="object-cover"
                       />
                       {/* Overlay con acciones */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-1">
                         {!imageUrl.es_nueva && (
                           <Button
                             variant="secondary"
                             size="sm"
-                            className="mb-2"
+                            className="mb-1 w-full text-xs"
                             onClick={(e) => {
                               e.stopPropagation()
                               handleSetCoverImage(imageUrl.url)
@@ -515,10 +560,14 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                             {editedPublication.url_portada === imageUrl.url ? (
                               <>
                                 <Check className="h-3 w-3 mr-1" />
-                                Portada actual
+                                <span className="hidden sm:inline">Portada actual</span>
+                                <span className="sm:hidden">Portada</span>
                               </>
                             ) : (
-                              <>Establecer como portada</>
+                              <>
+                                <span className="hidden sm:inline">Establecer como portada</span>
+                                <span className="sm:hidden">Como portada</span>
+                              </>
                             )}
                           </Button>
                         )}
@@ -526,6 +575,7 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                           <Button
                             variant="destructive"
                             size="sm"
+                            className="w-full text-xs"
                             onClick={(e) => {
                               e.stopPropagation()
                               handleRemoveImage(index, imageUrl.url)
@@ -561,8 +611,34 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
             <Button disabled={isLoading} variant="outline" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button disabled={isLoading} onClick={onSave}>
-              {isLoading ? "Guardando..." : "Guardar cambios"}
+            <Button disabled={isLoading || newImages.length > 5} onClick={onSave}>
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Guardando...
+                </>
+              ) : (
+                "Guardar cambios"
+              )}
             </Button>
           </div>
         </DialogFooter>

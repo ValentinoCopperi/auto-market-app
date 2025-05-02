@@ -67,7 +67,7 @@ export const PublishDialog = memo(() => {
       setSuccess(null)
     }
   }, [open, form])
-
+  console.log(user?.suscripcion)
   // Validar fotos cuando cambian
   useEffect(() => {
     if (photos.length === 0) {

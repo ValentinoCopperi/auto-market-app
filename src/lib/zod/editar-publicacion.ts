@@ -15,6 +15,6 @@ export const editarPublicacionSchema = z.object({
     color: z.string().min(1, "El color es requerido"),
     descripcion: z.string().min(1, "La descripción es requerida"),
     url_portada: z.string().optional(),
-    imagenes_a_eliminar: z.array(z.number()).optional(),
   })
   
+  export type EditarPublicacionSchemaValues = z.infer<typeof editarPublicacionSchema>

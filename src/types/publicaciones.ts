@@ -15,7 +15,7 @@ export interface Publicacion {
     destacado : boolean;
     descripcion : string;
     categoria : Categoria;
-    ciudad?:string;
+    ciudad:string;
     tipo_moneda : 'USD' | 'ARG';
     titulo : string;
     created_at : Date;

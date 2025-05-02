@@ -73,7 +73,6 @@ export async function POST(request: Request) {
                     const existingSubscription = await tx.suscripcion.findFirst({
                         where: {
                             id_cliente: user.id,
-                            estado: "activa",
                         },
                     })
 
@@ -85,6 +84,7 @@ export async function POST(request: Request) {
                             data: {
                                 id_tipo_suscripcion: tipo_suscripcion.id,
                                 fecha_fin: endDate,
+                                estado: "activa",
                                 // Keep it active
                             },
                             select:{

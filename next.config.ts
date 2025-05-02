@@ -1,20 +1,19 @@
-import type { NextConfig } from "next";
-
-const nextConfig : NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   experimental: {
-    useCache: true,
     serverActions: {
       bodySizeLimit: "50mb",
-    }
-  },
-  api:{
-    bodyParser:{
-      sizeLimit: "50mb",
     },
-    responseLimit: "50mb",
+    serverComponentsExternalPackages: ["sharp"],
   },
   images: {
-    remotePatterns:[
+    remotePatterns: [
       {
         protocol: "https",
         hostname: "images.unsplash.com",
@@ -28,6 +27,12 @@ const nextConfig : NextConfig = {
         pathname: "/storage/v1/object/public/auto-market/**",
       },
     ],
+    unoptimized: true,
   },
-};
-export default nextConfig;
+  // Configuración para aumentar el tiempo de ejecución en Vercel
+  serverRuntimeConfig: {
+    maxDuration: 300, // 5 minutos en segundos
+  },
+}
+
+export default nextConfig

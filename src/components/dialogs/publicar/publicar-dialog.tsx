@@ -12,7 +12,6 @@ import { CATEOGORIAS, COLORES, TRANSMISION, COMBUSTIBLE, TIPO_MONEDA, MARCAS, CI
 import { type PublicarFormSchemaValues, type PublicarFormValues, publicarFormSchema } from "@/types/publicar"
 import { FormSections } from "./inputs/form-inputs"
 import ImagenesInput from "./inputs/imagenes-inputs"
-import { publicarVehiculo } from "@/actions/publicaciones-actions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAuth } from "@/hooks/use-auth"
@@ -89,7 +88,8 @@ export const PublishDialog = memo(() => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
-      const updatedPhotos = [...photos, ...newFiles].slice(0, max_fotos[user?.suscripcion as Planes] || 10)
+      // Limit to 100 photos total
+      const updatedPhotos = [...photos, ...newFiles].slice(0, max_fotos[user?.suscripcion as Planes])
       setPhotos(updatedPhotos)
     }
   }

@@ -256,10 +256,25 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="info" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 my-4 sm:my-8 text-xs sm:text-sm">
-            <TabsTrigger value="info">Información básica</TabsTrigger>
-            <TabsTrigger value="details">Detalles técnicos</TabsTrigger>
-            <TabsTrigger value="images">Imágenes</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 my-4 sm:my-8">
+            <TabsTrigger
+              value="info"
+              className="px-1 sm:px-3 py-1.5 text-[10px] sm:text-xs md:text-sm whitespace-nowrap"
+            >
+              Información
+            </TabsTrigger>
+            <TabsTrigger
+              value="details"
+              className="px-1 sm:px-3 py-1.5 text-[10px] sm:text-xs md:text-sm whitespace-nowrap"
+            >
+              Detalles
+            </TabsTrigger>
+            <TabsTrigger
+              value="images"
+              className="px-1 sm:px-3 py-1.5 text-[10px] sm:text-xs md:text-sm whitespace-nowrap"
+            >
+              Imágenes
+            </TabsTrigger>
           </TabsList>
 
           {/* Pestaña de información básica */}
@@ -341,7 +356,7 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="descripcion">Descripción</Label>
+              <Label htmlFor="descripcion">Descripci��n</Label>
               <Textarea
                 id="descripcion"
                 rows={5}
@@ -544,8 +559,8 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
                         fill
                         className="object-cover"
                       />
-                      {/* Overlay con acciones */}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-1">
+                      {/* Overlay con acciones - ahora siempre visible en móvil */}
+                      <div className="absolute inset-0 bg-black/60 md:opacity-0 md:group-hover:opacity-100 opacity-100 transition-opacity flex flex-col items-center justify-center p-1">
                         {!imageUrl.es_nueva && (
                           <Button
                             variant="secondary"

@@ -237,7 +237,7 @@ export const PublishDialog = memo(() => {
               <Button disabled={loading} type="button" variant="outline" onClick={closeDialog}>
                 Cancelar
               </Button>
-              <Button disabled={loading} type="submit" className="bg-blue-900 hover:bg-blue-800 text-white">
+              <Button disabled={loading || photos.length === 0 || photoError !== null} type="submit" className="bg-blue-900 hover:bg-blue-800 text-white">
                 {loading ? "Publicando..." : "Publicar Vehículo"}
               </Button>
             </div>

@@ -21,6 +21,7 @@ export interface Publicacion {
     created_at : Date;
     cliente: ClienteVendedor;
     url_portada? : string;
+    vendido : boolean;
 }
 
 export interface PublicacionCompleto extends Publicacion {

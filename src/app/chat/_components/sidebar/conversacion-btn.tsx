@@ -45,13 +45,13 @@ const ConversacionBtn = ({ conversacion, selectedConversation, setSelectedConver
             }}
         >
             <div className="relative mr-3">
-                <Link href={`/perfil/${cliente.id}`}>
+                <Link href={`/perfil/${cliente.id}/publicaciones`}>
                     {getAvatar(cliente)}
                 </Link>
             </div>
             <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center mb-1">
-                    <Link href={`/perfil/${cliente.id}`}>
+                    <Link href={`/perfil/${cliente.id}/publicaciones`}>
                         <h3 className="text-md font-semibold hover:underline cursor-pointer truncate flex items-center">
                             {cliente.nombre} {cliente?.apellido ? cliente?.apellido : ""}
                         </h3>

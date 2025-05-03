@@ -58,7 +58,7 @@ export async function VendedorCard({ vendedor }: VendedorCardProps) {
       </div>
 
       {/* Botón para ver perfil */}
-      <Link href={`/perfil/${vendedor.id}`}>
+      <Link href={`/perfil/${vendedor.id}/publicaciones`}>
         <Button variant="outline" className="w-full">
           Ver perfil completo
         </Button>

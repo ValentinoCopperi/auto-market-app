@@ -2,8 +2,7 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Home, ChevronRight, Filter, ChevronDown } from "lucide-react"
 import { PublicacionesSkeleton } from "@/components/publicaciones/publicaciones-skeleton"
-import { SidebarSkeleton } from "@/app/publicaciones/_components/sidebar-skeleton"
-
+import { SidebarSkeleton } from "./_components/sidebar-skeleton"
 export default function PublicacionesPageSkeleton() {
   return (
     <div className="px-4 py-6">

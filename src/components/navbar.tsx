@@ -202,10 +202,10 @@ const NavBar = () => {
 
             {isAuthenticated && (
               <Link
-                href={`/perfil/${user?.id}`}
+                href={`/perfil/${user?.id}/publicaciones`}
                 className={cn(
                   "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                  pathname === `/perfil/${user?.id}`
+                  pathname === `/perfil/${user?.id}/publicaciones`
                     ? "bg-muted text-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                 )}

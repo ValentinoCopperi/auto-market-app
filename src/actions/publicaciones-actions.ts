@@ -134,7 +134,13 @@ export const getPublicacionesByUsuario = unstable_cache(async (id_usuario: numbe
 
   try {
     const publicaciones = await prisma.publicacion.findMany({
-      where: { id_cliente: id_usuario, titulo: { contains: q, mode: "insensitive" } },
+      where: {
+        AND: [
+          { id_cliente: id_usuario },
+          { vendido: false },
+          { titulo: { contains: q, mode: "insensitive" } }
+        ]
+      },
       include: {
         marca: {
           select: {
@@ -148,13 +154,7 @@ export const getPublicacionesByUsuario = unstable_cache(async (id_usuario: numbe
             nombre: true,
           },
         },
-        publicacion_imagenes: {
-          select: {
-            id: true,
-            url: true,
-          },
-          take: 1,
-        },
+       
       },
     })
 
@@ -173,6 +173,78 @@ export const getPublicacionesByUsuario = unstable_cache(async (id_usuario: numbe
     return []
   }
 }, ["publicaciones-usuario"], { revalidate: 10 })
+
+
+export const getPublicacionesByUsuarioVendidos = unstable_cache(async (id_usuario: number) => {
+  "use cache"
+  unstable_cacheTag("publicaciones-usuario")
+  unstable_cacheLife({ revalidate: 10 })
+
+
+  try {
+    const publicaciones = await prisma.publicacion.findMany({
+      where: {
+        AND: [
+          { id_cliente: id_usuario },
+          { vendido: true },
+        ]
+      },
+      include: {
+        marca: {
+          select: {
+            id: true,
+            nombre: true,
+          },
+        },
+        cliente: {
+          select: {
+            id: true,
+            nombre: true,
+          },
+        },
+      }
+    })
+
+    // Convert Decimal objects to regular numbers
+    const serializedPublicaciones = publicaciones.map((pub) => ({
+      ...pub,
+      precio: pub.precio ? Number.parseFloat(pub.precio.toString()) : null,
+      // Convert any other Decimal fields if they exist
+      // For example:
+      // kilometraje: pub.kilometraje ? parseFloat(pub.kilometraje.toString()) : null,
+    }))
+
+    return serializedPublicaciones as unknown as Publicacion[]
+  } catch (error) {
+    console.error("Error fetching publicaciones:", error)
+    return []
+  }
+}, ["publicaciones-usuario-vendidos"], { revalidate: 10 })
+
+export const changeVendido = async (id_publicacion: number, id_cliente: number, vendido: boolean): Promise<ActionsResponse<null>> => {
+  try {
+    const session = await getSession()
+    const id_usuario = session?.userId
+
+    if (!session || !id_usuario) {
+      return { error: true, message: "No estás autenticado" }
+    }
+
+    if (id_cliente !== parseInt(id_usuario)) {
+      return { error: true, message: "No puedes cambiar el estado de vendido de una publicación que no es tuya" }
+    }
+    
+    await prisma.publicacion.update({
+      where: { id: id_publicacion },
+      data: { vendido },
+    })
+
+    return { error: false, message: "Publicación actualizada correctamente" }
+  } catch (error) {
+    console.error("Error changing vendido:", error)
+    return { error: true, message: "Error al cambiar el estado de vendido" }
+  }
+}
 
 // export async function publicarVehiculo(data: PublicarFormValues): Promise<ActionsResponse<number>> {
 //   try {

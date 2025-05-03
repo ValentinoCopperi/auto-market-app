@@ -1,5 +1,5 @@
 import type { Publicacion } from "@/types/publicaciones"
-import { MapPin, Star } from "lucide-react"
+import { CheckCircle, MapPin, Star } from "lucide-react"
 import { ArrowRight } from "lucide-react"
 import { Button } from "../ui/button"
 import Image from "next/image"
@@ -36,6 +36,12 @@ const PublicacionCard = ({ publicacion }: { publicacion: Publicacion }) => {
           <div className="absolute top-3 right-3 bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded-md flex items-center">
             <Star className="h-3 w-3 mr-1 fill-current" />
             Destacado
+          </div>
+        )}
+        {publicacion.vendido && (
+          <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-md flex items-center">
+            <CheckCircle className="h-3 w-3 mr-1 fill-current" />
+            Vendido
           </div>
         )}
       </div>

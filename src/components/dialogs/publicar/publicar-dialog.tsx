@@ -102,10 +102,16 @@ export const PublishDialog = memo(() => {
     fileInputRef.current?.click()
   }
 
-  const uploadPromises = (id_publicacion: number) => photos.map(async (photo) => {
+  const uploadPromises = (id_publicacion: number) => photos.map(async (photo, index) => {
+    //Si es la primera foto,la agregamos como portada
+    let portada = false
+    if (index === 0) {
+      portada = true
+    }
     const formData = new FormData();
     formData.append("file", photo);
     formData.append("publicacionId", id_publicacion.toString());
+    formData.append("portada", portada.toString());
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/imagenes`, {
       method: "POST",
       body: formData,

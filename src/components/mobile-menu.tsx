@@ -176,17 +176,17 @@ export function MobileMenu() {
           {isAuthenticated && (
             <SheetClose asChild>
               <Link
-                href={`/perfil/${user?.id}`}
+                href={`/perfil/${user?.id}/publicaciones`}
                 className={cn(
                   "flex items-center justify-between px-4 py-3.5 text-base font-medium transition-colors",
-                  pathname === `/perfil/${user?.id}`
+                  pathname === `/perfil/${user?.id}/publicaciones`
                     ? "bg-muted/50 text-foreground"
                     : "hover:bg-muted/30 hover:text-foreground",
                 )}
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={cn("p-2 rounded-md", pathname === `/perfil/${user?.id}` ? "bg-primary/10" : "bg-muted")}
+                    className={cn("p-2 rounded-md", pathname === `/perfil/${user?.id}/publicaciones` ? "bg-primary/10" : "bg-muted")}
                   >
                     <User className="h-4 w-4" />
                   </div>

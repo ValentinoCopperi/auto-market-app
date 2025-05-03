@@ -95,8 +95,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: true, message: "Marca no encontrada" }, { status: 404 })
     }
 
-    const cantidadPublicaciones = marca.cantidad_publicaciones ? marca.cantidad_publicaciones - 1 : 0
-
+    let cantidadPublicaciones = marca.cantidad_publicaciones ? marca.cantidad_publicaciones - 1 : 0
+    if (cantidadPublicaciones < 0) {
+      cantidadPublicaciones = 0
+    }
     await prisma.marca.update({ where: { id: publicacion.id_marca }, data: { cantidad_publicaciones: cantidadPublicaciones } })
 
     const response = await deleleteAllImages(formattedId)

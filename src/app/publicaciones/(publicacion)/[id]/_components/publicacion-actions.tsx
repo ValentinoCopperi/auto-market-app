@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { DollarSign, Heart, Share2, Flag, Trash2, Pencil } from "lucide-react"
+import { DollarSign, Heart, Share2, Flag, Trash2, Pencil, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   AlertDialog,
@@ -21,6 +21,7 @@ import { Publicacion } from "@/types/publicaciones"
 import HacerOfertaBtn from "./hacer-oferta-btn"
 import { MensajesProvider } from "@/hooks/use-mensajes"
 import OfertaDialog from "./hacer-oferta-btn"
+import { changeVendido } from "@/actions/publicaciones-actions"
 
 interface PublicacionActionsProps {
   publicacion: Publicacion
@@ -36,6 +37,8 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
   const [isFavorito, setIsFavorito] = useState(esFavorito)
   const [loading, setLoading] = useState(false)
   const [showOfertaDialog, setShowOfertaDialog] = useState(false)
+  const[isVendido, setIsVendido] = useState(publicacion.vendido)
+
 
   const addFavorito = async () => {
     setLoading(true)
@@ -106,7 +109,20 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
       setShowDeleteDialog(false)
     }
   }
-  
+
+  const handleVender = async () => {
+    setLoading(true)
+    const response = await changeVendido(publicacion.id,publicacion.cliente.id, !isVendido)
+    if (response.error) {
+      toast.error(response.message)
+    } else {
+      toast.success(response.message)
+      setIsVendido(!isVendido)
+      router.refresh()
+    }
+    setLoading(false)
+  }
+
   return (
     <>
       <div className="bg-card rounded-lg border border-border p-4">
@@ -164,6 +180,11 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
               <Button disabled={isDeleting} variant="destructive" className="w-full cursor-pointer" onClick={() => setShowDeleteDialog(true)}>
                 <Trash2 className="h-4 w-4 mr-2" />
                 {isDeleting ? "Eliminando..." : "Eliminar"}
+              </Button>
+
+              <Button disabled={loading} variant="default" className="w-full cursor-pointer" onClick={handleVender}>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                {loading ? "Cambiando..." : isVendido ? "Sacar de vendidos" : "Agregar a vendidos"}
               </Button>
 
               <Button variant="outline" className="w-full cursor-pointer" onClick={handleShare}>

@@ -1,7 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { PublicacionesSkeleton } from "@/components/publicaciones/publicaciones-skeleton"
 import { PerfilHeaderSkeleton } from "./_components/perfil-header-skeleton"
-        
 export default function PerfilLoading() {
   return (
     <div className="min-h-screen bg-background pb-12">

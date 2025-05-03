@@ -41,9 +41,10 @@ export function PublicacionHeader({ publicacion }: PublicacionHeaderProps) {
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center gap-2">
           <h2 className="block md:hidden text-2xl md:text-3xl font-bold text-blue-600">${publicacion.precio.toLocaleString()}</h2>
           {publicacion.destacado && <Badge className="bg-blue-500 hover:bg-blue-600">Destacado</Badge>}
+          {publicacion.vendido && <Badge className="bg-red-500 hover:bg-green-600">Vendido</Badge>}
         </div>
 
         {publicacion.marca && (

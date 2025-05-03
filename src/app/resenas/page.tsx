@@ -293,25 +293,33 @@ export default function ResenasPage() {
                       <CardDescription>Desglose por número de estrellas</CardDescription>
                     </CardHeader>
                     <CardContent className="h-80">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                          data={[5, 4, 3, 2, 1].map((valor) => ({
-                            valoracion: valor,
-                            cantidad: userResenas.filter((resena) => resena.valoracion === valor).length,
-                          }))}
-                        >
-                          <XAxis dataKey="valoracion" />
-                          <YAxis allowDecimals={false}
-                            tickCount={userResenas.length} />
-                          <Bar
-                            dataKey="cantidad"
-                            fill="currentColor"
-                            className="fill-primary"
-                            radius={[4, 4, 0, 0]}
-                            label={{ position: "top" }}
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
+                      {
+                        userResenas.length > 0 ? (
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={[5, 4, 3, 2, 1].map((valor) => ({
+                                valoracion: valor,
+                                cantidad: userResenas.filter((resena) => resena.valoracion === valor).length,
+                              }))}
+                            >
+                              <XAxis dataKey="valoracion" />
+                              <YAxis allowDecimals={false}
+                                tickCount={userResenas.length} />
+                              <Bar
+                                dataKey="cantidad"
+                                fill="currentColor"
+                                className="fill-primary"
+                                radius={[4, 4, 0, 0]}
+                                label={{ position: "top" }}
+                              />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="flex items-center justify-center h-full">
+                            <p className="text-muted-foreground">No hay datos para mostrar</p>
+                          </div>
+                        )
+                      }
                     </CardContent>
                   </Card>
 
@@ -321,38 +329,46 @@ export default function ResenasPage() {
                       <CardTitle>Estadísticas detalladas</CardTitle>
                       <CardDescription>Análisis de tus reseñas</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Distribución por calificación</h4>
-                          <div className="space-y-2">
-                            {[5, 4, 3, 2, 1].map((stars) => {
-                              const count = userResenas.filter((r) => r.valoracion === stars).length
-                              const percentage = (count / totalResenas) * 100
-                              return (
-                                <div key={stars} className="flex items-center gap-2">
-                                  <div className="flex items-center w-12">
-                                    <span className="font-medium">{stars}</span>
-                                    <Star className="h-4 w-4 ml-1 text-yellow-400 fill-yellow-400" />
-                                  </div>
-                                  <div className="w-full bg-muted rounded-full h-2">
-                                    <div
-                                      className={cn(
-                                        "h-2 rounded-full",
-                                        stars >= 4 ? "bg-green-500" : stars === 3 ? "bg-yellow-500" : "bg-red-500",
-                                      )}
-                                      style={{ width: `${percentage}%` }}
-                                    ></div>
-                                  </div>
-                                  <span className="text-sm text-muted-foreground w-16 text-right">
-                                    {count} ({percentage.toFixed(0)}%)
-                                  </span>
-                                </div>
-                              )
-                            })}
+                    <CardContent className="h-80">
+                      {
+                        userResenas.length > 0 ? (
+                          <div className="space-y-6">
+                            <div>
+                              <h4 className="text-sm font-medium mb-2">Distribución por calificación</h4>
+                              <div className="space-y-2">
+                                {[5, 4, 3, 2, 1].map((stars) => {
+                                  const count = userResenas.filter((r) => r.valoracion === stars).length
+                                  const percentage = (count / totalResenas) * 100
+                                  return (
+                                    <div key={stars} className="flex items-center gap-2">
+                                      <div className="flex items-center w-12">
+                                        <span className="font-medium">{stars}</span>
+                                        <Star className="h-4 w-4 ml-1 text-yellow-400 fill-yellow-400" />
+                                      </div>
+                                      <div className="w-full bg-muted rounded-full h-2">
+                                        <div
+                                          className={cn(
+                                            "h-2 rounded-full",
+                                            stars >= 4 ? "bg-green-500" : stars === 3 ? "bg-yellow-500" : "bg-red-500",
+                                          )}
+                                          style={{ width: `${percentage}%` }}
+                                        ></div>
+                                      </div>
+                                      <span className="text-sm text-muted-foreground w-16 text-right">
+                                        {count} ({percentage.toFixed(0)}%)
+                                      </span>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        ) : (
+                          <div className="flex items-center justify-center h-full">
+                            <p className="text-muted-foreground">No hay datos para mostrar</p>
+                          </div>
+                        )
+                      }
                     </CardContent>
                   </Card>
                 </div>

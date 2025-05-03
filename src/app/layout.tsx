@@ -14,8 +14,18 @@ const inter = Inter({
   subsets: ['latin-ext']
 })
 export const metadata: Metadata = {
-  title: "Demo",
-  description: "Demo",
+  title: "Demo car market",
+  description: "Demo car market",
+  icons: {
+    icon: [
+      { url: "/logo.png", sizes: "16x16", type: "image/png" },
+      { url: "/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/logo.png", // Ícono para dispositivos Apple (opcional)
+    shortcut: "/logo.png", // Ícono para accesos directos (opcional)
+  },
 };
 
 export default function RootLayout({

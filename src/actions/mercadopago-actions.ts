@@ -55,19 +55,27 @@ export const suscribe = async (email: string, plan: Planes): Promise<ActionsResp
                 }
             }
         })
-
-        
+       
 
         if(existingSubscription?.tipo_suscripcion.nombre === plan){
             return {
                 error: true,
                 message: "Ya tienes una suscripción activa de tipo " + getPlan(plan).name,
             }
+        }else if(existingSubscription?.tipo_suscripcion.nombre === "plan_agencia" && (plan === "plan_vendedor" || plan === "plan_ocasion")){
+            return {
+                error: true,
+                message: "No puede cambiar a un plan menor al que tiene actualmente",
+            }
+        }else if(existingSubscription?.tipo_suscripcion.nombre === "plan_vendedor" && plan === "plan_ocasion"){
+            return {
+                error: true,
+                message: "No puede cambiar a un plan menor al que tiene actualmente",
+            }
         }
         
 
         const total_price = 15;
-        
         const suscription = await new PreApproval(mercadopago).create({
             body: {
                 back_url: `${process.env.APP_URL}/suscripcion/success`,

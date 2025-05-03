@@ -22,6 +22,7 @@ export default function SuscripcionesPage() {
   const [selectedPlan, setSelectedPlan] = useState<Planes | null>(null)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState(user?.email || "")
+  const [code, setCode] = useState<string | null>(null)
   // Función para manejar la selección de plan
   const handleSelectPlan = (planName: Planes) => {
     setSelectedPlan(planName)
@@ -36,7 +37,13 @@ export default function SuscripcionesPage() {
       return
     }
     setLoading(true)
-    const { data, error, message } = await suscribe(email, selectedPlan)
+    let codeToSend = code || null
+    if(!code || code === ""){
+      codeToSend = null
+    }else{
+      codeToSend = code
+    }
+    const { data, error, message } = await suscribe(email, selectedPlan, codeToSend)
     if (error) {
       toast.error(message)
     } else {
@@ -68,7 +75,7 @@ export default function SuscripcionesPage() {
 
           {
             planes.map((plan, index) => (
-              <SuscripcionCard key={index} plan={plan} selectedPlan={selectedPlan} handleSelectPlan={handleSelectPlan} />
+              <SuscripcionCard key={plan.id} plan={plan} selectedPlan={selectedPlan} handleSelectPlan={handleSelectPlan} />
             ))
           }
 
@@ -86,7 +93,7 @@ export default function SuscripcionesPage() {
                   Todos los pagos son procesados por Mercado Pago. Tu email debe existir en Mercado Pago.
                 </p>
               </div>
-              <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} />
+              <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} code={code} setCode={setCode} />
             </div>
           </div>
         )}

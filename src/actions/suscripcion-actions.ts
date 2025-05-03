@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma"
 import { ActionsResponse } from "@/types/actions-response"
-import { ResponseSuscripcionUsuario } from "@/types/suscriciones"
+import { Planes, ResponseSuscripcionUsuario } from "@/types/suscriciones"
 
 
 
@@ -119,6 +119,53 @@ export const puedeVerEstadisticas = async (id: number) : Promise<ActionsResponse
             error: true,
             message: "Error al verificar si puede ver estadisticas",
             data: false
+        }
+    }
+}
+
+export const suscribir_a_plan = async (id: number, plan: Planes) : Promise<ActionsResponse<string>> => {
+    try {
+        const tipo_suscripcion = await prisma.tipo_suscripcion.findFirst({
+            where: {
+                nombre: plan
+            }
+        })
+        if(!tipo_suscripcion) return {
+            error: true,
+            message: "Plan no encontrado",
+        }
+
+        const suscripcion_existente = await prisma.suscripcion.findFirst({
+            where: {
+                id_cliente: id
+            }
+        })
+        if(suscripcion_existente){
+            await prisma.suscripcion.delete({
+                where: {
+                    id: suscripcion_existente.id
+                },
+            })
+        }
+        const suscripcion = await prisma.suscripcion.create({
+            data: {
+                id_cliente: id,
+                id_tipo_suscripcion: tipo_suscripcion.id,
+                fecha_inicio: new Date(),
+                fecha_fin: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+                estado: "activa"
+            }
+        })
+        return {
+            error: false,
+            message: "Suscripción creada correctamente",
+        }
+    } catch (error) {
+        console.error("Error al suscribir a un plan", error)
+        return {
+            error: true,
+            message: "Error al suscribir a un plan",
+            data: ""
         }
     }
 }

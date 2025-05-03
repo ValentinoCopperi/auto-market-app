@@ -11,9 +11,11 @@ interface EmailDialogProps {
     handleProceedToPayment: (email: string) => void;
     email: string;
     setEmail: (email: string) => void;
+    code: string | null;
+    setCode: (code: string | null) => void;
 }
 
-const EmailDialog = ({ loading, handleProceedToPayment, email, setEmail }: EmailDialogProps) => {
+const EmailDialog = ({ loading, handleProceedToPayment, email, setEmail, code, setCode }: EmailDialogProps) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -31,13 +33,20 @@ const EmailDialog = ({ loading, handleProceedToPayment, email, setEmail }: Email
                 </DialogHeader>
                 <div className="grid gap-4 py-2">
                     <div className="grid grid-cols-4 items-center gap-2">
-                        <Label htmlFor="username" className="text-right">
+                        <Label >
                             Email
                         </Label>
                         <Input id="email" type='email' value={email} className="col-span-3" onChange={(e) => setEmail(e.target.value)} />
-
                     </div>
-                    <p className='text-xs text-muted-foreground'>Pedimos este email para que puedas recibir las notificaciones de tu suscripción y que puedas cancelarla en caso de que lo desees.</p>
+                    <p className='text-xs text-muted-foreground'>*Pedimos este email para que puedas recibir las notificaciones de tu suscripción y que puedas cancelarla en caso de que lo desees.</p>
+
+                    <div className="grid grid-cols-4 items-center gap-2">
+                        <Label>
+                            Codigo de activacion
+                        </Label>
+                        <Input id="code" type='text' value={code || ""} className="col-span-3" onChange={(e) => setCode(e.target.value)} />
+                    </div>
+                    <p className='text-xs text-muted-foreground'>*Si tiene el codigo de activacion, ingreselo aqui, sino deje el campo vacio</p>
                 </div>
                 <DialogFooter>
                     <Button disabled={loading} className="bg-blue-900 hover:bg-blue-800 text-white" type="submit" onClick={() => handleProceedToPayment(email)}>

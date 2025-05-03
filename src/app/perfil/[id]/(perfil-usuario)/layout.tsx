@@ -36,12 +36,7 @@ const PerfilLayout = async ({ children, params }: PerfilLayoutProps) => {
 
 
 
-  // Define the tabs with their respective routes
-  const tabs = [
-    { value: 'publicaciones', label: 'Publicaciones', href: `/perfil/${id}/publicaciones` },
-    { value: 'resenas', label: 'Reseñas', href: `/perfil/${id}/resenas` },
-    { value: 'vendidos', label: 'Vendidos', href: `/perfil/${id}/vendidos` },
-  ];
+ 
 
   return (
     <div className="min-h-screen bg-background pb-12">

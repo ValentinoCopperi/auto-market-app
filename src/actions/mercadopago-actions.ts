@@ -6,6 +6,7 @@ import { ActionsResponse } from "@/types/actions-response";
 import { getSession } from "@/lib/session/session";
 import prisma from "@/lib/prisma";
 import { Planes } from "@/types/suscriciones";
+import { suscribir_a_plan } from "./suscripcion-actions";
 
 
 const getPlan = (plan: Planes) => {
@@ -19,7 +20,9 @@ const getPlan = (plan: Planes) => {
     }
 }
 
-export const suscribe = async (email: string, plan: Planes): Promise<ActionsResponse<string>> => {
+const code_test = "123456"
+
+export const suscribe = async (email: string, plan: Planes, code: string | null): Promise<ActionsResponse<string>> => {
 
     try {
 
@@ -74,6 +77,25 @@ export const suscribe = async (email: string, plan: Planes): Promise<ActionsResp
             }
         }
         
+        if(code && code !== code_test){
+            return {
+                error: true,
+                message: "El codigo de activacion es incorrecto",
+            }
+        }else if(code && code === code_test){
+            const response = await suscribir_a_plan(Number(session.userId), plan)
+            if(response.error){
+                return {
+                    error: true,
+                    message: response.message
+                }
+            }
+            return {
+                error: false,
+                message: "Suscripción creada correctamente",
+                data: `${process.env.APP_URL}/suscripcion/success`
+            }
+        }
 
         const total_price = 15;
         const suscription = await new PreApproval(mercadopago).create({

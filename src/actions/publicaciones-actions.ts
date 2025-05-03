@@ -51,9 +51,16 @@ export const getPublicaciones = async (searchParams?: Record<string, any>, marca
       prisma.publicacion.count({ where }),
     ])
 
-
+    // Convert Decimal objects to regular numbers
+    const serializedPublicaciones = publicaciones.map((pub) => ({
+      ...pub,
+      precio: pub.precio ? Number.parseFloat(pub.precio.toString()) : null,
+      // Convert any other Decimal fields if they exist
+      // For example:
+      // kilometraje: pub.kilometraje ? parseFloat(pub.kilometraje.toString()) : null,
+    }))
     return {
-      data: publicaciones as unknown as Publicacion[],
+      data: serializedPublicaciones as unknown as Publicacion[],
       totalCount,
     }
   } catch (error) {
@@ -112,17 +119,16 @@ export const getPubliacionesDestacadas = unstable_cache(async () => {
           nombre: true,
         },
       },
-      publicacion_imagenes: {
-        select: {
-          id: true,
-          url: true,
-        },
-        take: 1,
-      },
     },
   })
-
-  return publicaciones as unknown as Publicacion[]
+  const serializedPublicaciones = publicaciones.map((pub) => ({
+    ...pub,
+    precio: pub.precio ? Number.parseFloat(pub.precio.toString()) : null,
+    // Convert any other Decimal fields if they exist
+    // For example:
+    // kilometraje: pub.kilometraje ? parseFloat(pub.kilometraje.toString()) : null,
+  }))
+  return serializedPublicaciones as unknown as Publicacion[]
 }, ["publicaciones-destacadas"], { revalidate: 100 })
 
 
@@ -154,7 +160,7 @@ export const getPublicacionesByUsuario = unstable_cache(async (id_usuario: numbe
             nombre: true,
           },
         },
-       
+
       },
     })
 
@@ -233,7 +239,7 @@ export const changeVendido = async (id_publicacion: number, id_cliente: number, 
     if (id_cliente !== parseInt(id_usuario)) {
       return { error: true, message: "No puedes cambiar el estado de vendido de una publicación que no es tuya" }
     }
-    
+
     await prisma.publicacion.update({
       where: { id: id_publicacion },
       data: { vendido },
@@ -305,7 +311,7 @@ export const changeVendido = async (id_publicacion: number, id_cliente: number, 
 //       color,
 //       descripcion,
 //     } = data
-    
+
 //     if (photos.length === 0) {
 //       return { error: true, message: "Debes subir al menos una foto" }
 //     }
@@ -432,7 +438,7 @@ export const changeVendido = async (id_publicacion: number, id_cliente: number, 
 //           console.error(`Error uploading image ${i + 1}/${photos.length}:`, response.message)
 //           continue // Continue with next photo instead of failing completely
 //         }
-        
+
 //         if (response.url) {
 //           uploadedPhotos.push(response.url)
 //         }
@@ -525,7 +531,7 @@ export async function editarPublicacion(editedPubliacion: Publicacion, newImages
     }
 
     const total_imagenes = publicacion.publicacion_imagenes.length + newImages.length
-    
+
     const suscripcion = await prisma.suscripcion.findFirst({
       where: {
         id_cliente: parseInt(id_cliente),
@@ -543,7 +549,7 @@ export async function editarPublicacion(editedPubliacion: Publicacion, newImages
       return { error: true, message: "No tienes una suscripción activa" }
     }
 
-  
+
     if (total_imagenes > suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo) {
       return { error: true, message: `Limite de fotos de tu plan: ${suscripcion.tipo_suscripcion.max_publicaciones_por_vehiculo}. Porfavor, elimina algunas fotos y vuelve a intentarlo` }
     }

@@ -54,7 +54,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: true, message: "Publicación no encontrada" }, { status: 404 })
     }
 
-    return NextResponse.json({ error: false, publicacion }, { status: 200 })
+    const serializedPrice = publicacion.precio ? Number.parseFloat(publicacion.precio.toString()) : null
+
+    return NextResponse.json({ error: false, publicacion: { ...publicacion, precio: serializedPrice } }, { status: 200 })
   } catch (error) {
     console.error(`Error fetching publicacion:`, error)
     return NextResponse.json({ error: true, message: "Error al obtener la publicación" }, { status: 500 })

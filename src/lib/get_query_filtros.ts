@@ -12,7 +12,7 @@ export const get_query_filtros = (searchParams?: Record<string, any>, marcaId?: 
   const skip = (page - 1) * pageSize
 
   // Construir objeto de filtros para Prisma
-  const where: any = {}
+  const where: any = {vendido: false}
 
   if (!searchParams || Object.keys(searchParams).length === 0) {
     // Si no hay parámetros, devolver consulta sin filtros

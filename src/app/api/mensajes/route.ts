@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
                         <h1>Felicidades! Has recibido un nuevo mensaje en unas de tus publicaciones</h1>
                         <p>Chequea tu conversacion con el usuario</p>
                         <p>Mensaje: ${message}</p>
-                        <a href="${process.env.NEXT_PUBLIC_APP_URL}/chat">Ir a la conversacion</a>
+                        <a href="${process.env.APP_URL}/chat">Ir a la conversacion</a>
                     </div>
                     `
                 })

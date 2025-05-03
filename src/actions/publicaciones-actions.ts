@@ -105,6 +105,7 @@ export const getPubliacionesDestacadas = unstable_cache(async () => {
     take: 9,
     where: {
       destacado: true,
+      vendido: false,
     },
     include: {
       marca: {

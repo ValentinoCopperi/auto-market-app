@@ -20,7 +20,7 @@ interface SuscripcionCardProps {
     handleSelectPlan: (plan: Planes) => void;
 }
 
-const SuscripcionCard = ({ plan, selectedPlan, handleSelectPlan }: SuscripcionCardProps) => {
+const SuscripcionCard = ({ plan, selectedPlan, handleSelectPlan}: SuscripcionCardProps) => {
 
     return (
         <div

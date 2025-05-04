@@ -108,17 +108,7 @@ const ConfigBtn = () => {
 
                
 
-                <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                    <Link href="/configuracion" className="cursor-pointer w-full">
-                        <div className="flex items-center gap-2">
-                            <Settings className="h-4 w-4" />
-                            <div className="flex flex-col">
-                                <span className="font-medium">Configuración</span>
-                                <span className="text-xs text-muted-foreground">Ajustes de la cuenta</span>
-                            </div>
-                        </div>
-                    </Link>
-                </DropdownMenuItem>
+              
 
                 <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
                     <Link href="/contacto" className="cursor-pointer w-full">

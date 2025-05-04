@@ -19,7 +19,7 @@ import { useAuth } from "@/hooks/use-auth"
 export default function SuscripcionesPage() {
   // Añadir estado para el plan seleccionado
   const {user} = useAuth();
-  const [selectedPlan, setSelectedPlan] = useState<Planes | null>(null)
+  const [selectedPlan, setSelectedPlan] = useState<Planes | null>("plan_vendedor")
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState(user?.email || "")
   const [code, setCode] = useState<string | null>(null)

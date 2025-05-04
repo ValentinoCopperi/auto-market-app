@@ -13,7 +13,7 @@ import EditarPerfilDialog from "@/components/dialogs/editar-perfil/editar-perfil
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop"
 import "react-image-crop/dist/ReactCrop.css"
-
+import { Badge } from "@/components/ui/badge"
 interface PerfilHeaderProps {
   usuario: Cliente
   editable?: boolean
@@ -41,7 +41,6 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
   const [crop, setCrop] = useState<Crop>()
   const [completedCrop, setCompletedCrop] = useState<Crop | null>(null)
   const imgRef = useRef<HTMLImageElement>(null)
-
   // Referencias a los inputs de tipo file
   const bannerInputRef = useRef<HTMLInputElement>(null)
   const avatarInputRef = useRef<HTMLInputElement>(null)
@@ -328,7 +327,17 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
               </div>
             </div>
 
-            <div className="flex flex-col items-end mt-4 md:mt-0">
+            <div className="flex flex-col items-end mt-4 md:mt-0 space-y-2">
+              {
+                usuario.suscripcion && usuario.suscripcion.tipo_suscripcion !== "plan_ocasion" && usuario.suscripcion.estado === "activa" && (
+                  <Badge  className="bg-green-500 text-white">
+                    {
+                      usuario.suscripcion.tipo_suscripcion === "plan_vendedor" ? "Vendedor Verificado" : "Vendedor Profesional"
+                    }
+                  </Badge>
+                )
+              }
+             
               {editable && (
                 <Button
                   variant="outline"

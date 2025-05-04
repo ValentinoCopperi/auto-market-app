@@ -24,7 +24,7 @@ export interface Tipo_Suscripcion {
     publicaciones_destacadas: boolean | null;
 }
 
-export type EstadoSuscripcion = "activo" | "vencido" | "cancelado"
+export type EstadoSuscripcion = "activa" | "vencida" | "cancelada"
 
 export const planes_precios = {
     "plan_ocasion": 100,
@@ -57,7 +57,7 @@ export const planes = [
         nombre: "Plan Ocasión",
         descripcion: "Perfecto para publicar un único vehículo",
         precio: planes_precios.plan_ocasion,
-        tipoPago: "Único pago",
+        tipoPago: "/mes",
         destacado: false,
         features: [
             "1 publicación activa en simultáneo",
@@ -67,7 +67,7 @@ export const planes = [
             "Chat con compradores",
             "Recibe ofertas directas",
             "Estadísticas básicas de visitas",
-            "Renovación manual",
+            "Renovación automática",
             "Soporte vía email",
             "Perfil de vendedor personalizado"
         ]
@@ -78,7 +78,7 @@ export const planes = [
         descripcion: "Ideal para vendedores frecuentes",
         precio: planes_precios.plan_vendedor,
         tipoPago: "/mes",
-        destacado: false,
+        destacado: true,
         features: [
             "Hasta 3 publicaciones simultáneas",
             "Duración ilimitada de publicaciones",
@@ -99,7 +99,7 @@ export const planes = [
         descripcion: "Solución completa para profesionales",
         precio: planes_precios.plan_agencia,
         tipoPago: "/mes",
-        destacado: true,
+        destacado: false,
         features: [
             "Publicaciones ilimitadas",
             "Duración ilimitada de publicaciones",

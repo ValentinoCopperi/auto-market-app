@@ -31,27 +31,44 @@ export default function ContactPage() {
         <div className="container mx-auto px-4 py-8 md:py-12">
           {/* Tabs de navegación */}
           <Tabs defaultValue="contacto" className="w-full mb-8">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-              <TabsTrigger value="contacto" className="flex items-center gap-2">
-                <MessageSquare className="h-4 w-4" />
-                <span>Contacto</span>
+            <TabsList className="flex flex-wrap w-full gap-2 bg-transparent p-2 rounded-lg">
+              <TabsTrigger
+                value="contacto"
+                className="flex-1 min-w-[100px] sm:min-w-[120px] flex items-center justify-center gap-2 py-4 px-3 text-xs sm:text-sm font-medium rounded-md bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-gray-200 transition-colors duration-200"
+                aria-label="Contacto"
+              >
+                <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="sm:inline">Contacto</span>
               </TabsTrigger>
-              <TabsTrigger value="reportar" className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4" />
-                <span>Reportar</span>
+              <TabsTrigger
+                value="reportar"
+                className="flex-1 min-w-[100px] sm:min-w-[120px] flex items-center justify-center gap-2 py-4 px-3 text-xs sm:text-sm font-medium rounded-md bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-gray-200 transition-colors duration-200"
+                aria-label="Reportar"
+              >
+                <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="sm:inline">Reportar</span>
               </TabsTrigger>
-              <TabsTrigger value="equipo" className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                <span>Equipo</span>
+              <TabsTrigger
+                value="equipo"
+                className="flex-1 min-w-[100px] sm:min-w-[120px] flex items-center justify-center gap-2 py-4 px-3 text-xs sm:text-sm font-medium rounded-md bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-gray-200 transition-colors duration-200"
+                aria-label="Equipo"
+              >
+                <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="sm:inline">Equipo</span>
               </TabsTrigger>
-              <TabsTrigger value="faq" className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4" />
-                <span>Preguntas frecuentes</span>
+              <TabsTrigger
+                value="faq"
+                className="flex-1 min-w-[100px] sm:min-w-[120px] flex items-center justify-center gap-2 py-4 px-3 text-xs sm:text-sm font-medium rounded-md bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-gray-200 transition-colors duration-200"
+                aria-label="Preguntas frecuentes"
+              >
+                <HelpCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="sm:inline">Preguntas frecuentes</span>
               </TabsTrigger>
             </TabsList>
 
+          
             {/* Contenido de la pestaña Contacto */}
-            <TabsContent value="contacto" className="pt-6">
+            <TabsContent value="contacto" className="mt-12">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <h2 className="text-2xl font-semibold mb-4">Ponte en contacto</h2>
@@ -153,7 +170,7 @@ export default function ContactPage() {
             </TabsContent>
 
             {/* Contenido de la pestaña Reportar */}
-            <TabsContent value="reportar" className="pt-6">
+            <TabsContent value="reportar" className="mt-12">
               <div className="max-w-3xl mx-auto">
                 <h2 className="text-2xl font-semibold mb-4">Reportar un problema</h2>
                 <p className="text-muted-foreground mb-6">
@@ -231,7 +248,7 @@ export default function ContactPage() {
             </TabsContent>
 
             {/* Contenido de la pestaña Equipo */}
-            <TabsContent value="equipo" className="pt-6">
+            <TabsContent value="equipo" className="mt-12">
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-2xl font-semibold mb-4">Nuestro equipo</h2>
                 <p className="text-muted-foreground mb-8">
@@ -245,7 +262,7 @@ export default function ContactPage() {
                     <CardHeader>
                       <div className="flex items-center gap-4">
                         <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                          <span className="text-xl font-bold text-blue-600">JR</span>
+                          <span className="text-xl font-bold text-blue-600">VC</span>
                         </div>
                         <div>
                           <CardTitle>Valentino Copperi</CardTitle>
@@ -269,7 +286,7 @@ export default function ContactPage() {
                         <div className="flex items-center gap-2">
                           <ExternalLink className="h-4 w-4 text-muted-foreground" />
                           <Link
-                            href="https://linkedin.com/in/juanrodriguez"
+                            href="https://www.linkedin.com/in/valentinocopperi/"
                             className="text-sm text-blue-600 hover:underline"
                           >
                             LinkedIn
@@ -295,7 +312,7 @@ export default function ContactPage() {
             </TabsContent>
 
             {/* Contenido de la pestaña FAQ */}
-            <TabsContent value="faq" className="pt-6">
+            <TabsContent value="faq" className="mt-12">
               <div className="max-w-3xl mx-auto">
                 <h2 className="text-2xl font-semibold mb-4">Preguntas frecuentes</h2>
                 <p className="text-muted-foreground mb-8">

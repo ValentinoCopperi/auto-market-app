@@ -27,9 +27,7 @@ const EmailDialog = ({ loading, handleProceedToPayment, email, setEmail, code, s
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Ingrese su email</DialogTitle>
-                    <DialogDescription>
-                        <h1 className='text-sm text-muted-foreground'>Si tu email no es el que esta asociado a tu cuenta de Mercado Pago, debes ingresar el que esta asociado a tu cuenta de Mercado Pago.</h1>
-                    </DialogDescription>
+                    
                 </DialogHeader>
                 <div className="grid gap-4 py-2">
                     <div className="grid grid-cols-4 items-center gap-2">
@@ -38,7 +36,9 @@ const EmailDialog = ({ loading, handleProceedToPayment, email, setEmail, code, s
                         </Label>
                         <Input id="email" type='email' value={email} className="col-span-3" onChange={(e) => setEmail(e.target.value)} />
                     </div>
-                    <p className='text-xs text-muted-foreground'>*Pedimos este email para que puedas recibir las notificaciones de tu suscripción y que puedas cancelarla en caso de que lo desees.</p>
+                    <p className="text-xs text-muted-foreground">
+                        *Usa el email asociado a tu cuenta de Mercado Pago para recibir notificaciones de tu suscripción y gestionar su cancelación.
+                    </p>
 
                     <div className="grid grid-cols-4 items-center gap-2">
                         <Label>

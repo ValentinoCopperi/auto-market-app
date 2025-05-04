@@ -89,6 +89,7 @@ export const puedeVerEstadisticas = async (id: number) : Promise<ActionsResponse
                 id_cliente: id
             },
             select: {
+                estado: true,
                 tipo_suscripcion: {
                     select: {
                         nombre: true
@@ -102,9 +103,15 @@ export const puedeVerEstadisticas = async (id: number) : Promise<ActionsResponse
             data: false
         }
 
+        if(suscripcion.estado === "vencida") return {
+            error:true,
+            message: "Tu suscripción ha expirado. Por favor actualiza tu plan",
+            data: false
+        }
+
         if(suscripcion.tipo_suscripcion.nombre === "plan_ocasion") return {
             error:true,
-            message: "No tiene acceso a ver estadisticas.Por favor actualice su plan",
+            message: "No tienes acceso a ver estadisticas. Por favor actualiza tu plan",
             data: false
         }
 

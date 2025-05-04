@@ -12,8 +12,26 @@ import { EditarPerfilFormSchema } from "@/types/auth/editar-perfil"
 
 export const getClienteById = cache(async (id: string) => {
   try {
-    const cliente = await prisma.cliente.findUnique({ where: { id: parseInt(id) } })
-    return cliente as unknown as Cliente
+    const cliente = await prisma.cliente.findUnique({ where: { id: parseInt(id) }, include: {
+      suscripcion: {
+        select: {
+          estado:true,
+          tipo_suscripcion: {
+            select: {
+              nombre: true,
+            }
+          }
+        }
+      }
+    } })
+    const serializedCliente = {
+      ...cliente,
+      suscripcion: {
+        ...cliente?.suscripcion[0],
+        tipo_suscripcion: cliente?.suscripcion[0]?.tipo_suscripcion?.nombre
+      }
+    }
+    return serializedCliente as unknown as Cliente
   } catch (error) {
     console.error("Error fetching cliente:", error)
     return null

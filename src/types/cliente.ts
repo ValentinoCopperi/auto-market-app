@@ -1,3 +1,5 @@
+import { EstadoSuscripcion, Planes } from "./suscriciones"
+
 export interface Cliente {
   id: number
   nombre: string
@@ -11,5 +13,9 @@ export interface Cliente {
   banner_img_url: string
   admin: boolean
   descripcion: string
+  suscripcion : {
+    estado: EstadoSuscripcion
+    tipo_suscripcion: Planes
+  } | null
 }
 

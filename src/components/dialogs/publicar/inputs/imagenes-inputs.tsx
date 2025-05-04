@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { X, Camera, Loader2 } from "lucide-react"
+import { X, Camera, Loader2, ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { compressImage } from "@/lib/images/imagenes-comprension"
 import { toast } from "sonner"
@@ -100,13 +100,45 @@ const ImagenesInput = ({
     }
   }
 
+  // Función para mover una imagen a la izquierda
+  const moveImageLeft = (index: number) => {
+    if (index > 0) {
+      const newPhotos = [...photos]
+      const temp = newPhotos[index]
+      newPhotos[index] = newPhotos[index - 1]
+      newPhotos[index - 1] = temp
+      setPhotos(newPhotos)
+    }
+  }
+
+  // Función para mover una imagen a la derecha
+  const moveImageRight = (index: number) => {
+    if (index < photos.length - 1) {
+      const newPhotos = [...photos]
+      const temp = newPhotos[index]
+      newPhotos[index] = newPhotos[index + 1]
+      newPhotos[index + 1] = temp
+      setPhotos(newPhotos)
+    }
+  }
+
   return (
     <>
       <label className="text-sm font-medium flex items-center">
         Fotos <span className="text-red-500 ml-1">*</span>
       </label>
+      <p className="text-xs text-muted-foreground">* El limite de imagenes depende del plan que tengas contratado</p>
+      <p className="text-xs text-muted-foreground">
+        * Puedes ordenar las imágenes de manera manual para que se muestren en ese orden.
+      </p>
+      <p className="text-xs text-muted-foreground">
+        * Si hay un error trata de subir menos imagenes . Luego puedes añadirlas desde editar.
+      </p>
+      <p className="text-xs text-muted-foreground">
+        * Las imágenes se comprimen automáticamente para optimizar la carga
+      </p>
       <div
-        className={`border border-dashed ${error ? "border-red-500" : "border-border"} rounded-md p-4 ${error ? "bg-red-50" : ""}`}
+        className={`border border-dashed ${error ? "border-red-500" : "border-border"} rounded-md p-4 `}
       >
         <input
           disabled={loading || compressingImages}
@@ -140,6 +172,35 @@ const ImagenesInput = ({
               >
                 <X className="h-3 w-3" />
               </Button>
+
+              {/* Indicador de portada para la primera imagen */}
+              {index === 0 && (
+                <div className="absolute top-1 left-1 bg-blue-900 text-white text-xs px-2 py-1 rounded-md">Portada</div>
+              )}
+
+              {/* Controles de flechas siempre visibles */}
+              <div className="absolute bottom-0 right-0 flex space-x-1 p-1 bg-black/50 rounded-tl">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 bg-black/30 hover:bg-black/50 text-white"
+                  onClick={() => moveImageLeft(index)}
+                  disabled={index === 0 || loading || compressingImages}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 bg-black/30 hover:bg-black/50 text-white"
+                  onClick={() => moveImageRight(index)}
+                  disabled={index === photos.length - 1 || loading || compressingImages}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           ))}
 
@@ -178,13 +239,7 @@ const ImagenesInput = ({
         {/* Display form validation error */}
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
-        <p className="text-xs text-muted-foreground">* El limite de imagenes depende del plan que tengas contratado</p>
-        <p className="text-xs text-muted-foreground">
-          * Podrias cambiar la portada de tu publicación en el apartado de editar publicación, una vez publicada
-        </p>
-        <p className="text-xs text-muted-foreground">
-          * Las imágenes se comprimen automáticamente para optimizar la carga
-        </p>
+
       </div>
     </>
   )

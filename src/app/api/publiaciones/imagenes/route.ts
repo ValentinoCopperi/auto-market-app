@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get("file") as File
     const publicacionId = formData.get("publicacionId") as string
-    const portada = formData.get("portada") as string
+    const index = formData.get("index") as string
 
     if (!file) {
       return NextResponse.json({ error: true, message: "No se ha enviado ningún archivo" }, { status: 400 })
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     const {
       data: { publicUrl },
     } = supabase.storage.from("auto-market").getPublicUrl(uploadResult.data.path)
-    if (portada === "true") {
+    if (index === "0") {
       await prisma.publicacion.update({
         where: { id: Number(publicacionId) },
         data: { url_portada: publicUrl },
@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
       data: {
         publicacion_id: Number(publicacionId),
         url: publicUrl,
+        index : Number(index)
       },
     })
 

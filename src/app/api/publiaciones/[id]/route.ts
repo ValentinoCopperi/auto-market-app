@@ -34,7 +34,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           },
           orderBy: {
             //Las q se crearon primero seran las primeras
-            created_at: "asc",
+            index: "asc",
           },
         },
         cliente: {

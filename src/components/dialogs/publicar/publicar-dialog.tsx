@@ -11,7 +11,7 @@ import { Form } from "@/components/ui/form"
 import { CATEOGORIAS, COLORES, TRANSMISION, COMBUSTIBLE, TIPO_MONEDA, MARCAS, CIUDADES } from "@/types/filtros"
 import { type PublicarFormSchemaValues, type PublicarFormValues, publicarFormSchema } from "@/types/publicar"
 import { FormSections } from "./inputs/form-inputs"
-import ImagenesInput from "./inputs/imagenes-inputs"
+import ImagenesInput  from "./inputs/imagenes-inputs"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAuth } from "@/hooks/use-auth"
@@ -52,7 +52,7 @@ export const PublishDialog = memo(() => {
     },
     mode: "onChange", // Validar al cambiar para mostrar errores más rápido
   })
-
+  
   // Get form state for error display
   const { formState } = form
   const { errors } = formState
@@ -103,15 +103,11 @@ export const PublishDialog = memo(() => {
   }
 
   const uploadPromises = (id_publicacion: number) => photos.map(async (photo, index) => {
-    //Si es la primera foto,la agregamos como portada
-    let portada = false
-    if (index === 0) {
-      portada = true
-    }
+
     const formData = new FormData();
     formData.append("file", photo);
     formData.append("publicacionId", id_publicacion.toString());
-    formData.append("portada", portada.toString());
+    formData.append("index", index.toString());
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/imagenes`, {
       method: "POST",
       body: formData,
@@ -132,7 +128,7 @@ export const PublishDialog = memo(() => {
         setLoading(false)
         return
       }
-
+     
 
       //Numero random para la publicacion entre 1 y 300000
       // Create a new FormData instance
@@ -163,7 +159,6 @@ export const PublishDialog = memo(() => {
       }
 
       const id_publicacion = result.data
-
 
       const uploadedImages = await Promise.all(uploadPromises(id_publicacion));
 

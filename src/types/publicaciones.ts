@@ -42,6 +42,7 @@ export interface ClienteVendedor {
 export interface PublicacionImagen {
     id: number;
     url: string;
+    index?: number;
 }
 
 

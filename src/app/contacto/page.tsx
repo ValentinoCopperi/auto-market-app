@@ -9,8 +9,17 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export const metadata: Metadata = {
-  title: "Contacto | AutoMarket",
-  description: "Contacta con el equipo de AutoMarket para cualquier consulta, soporte técnico o información adicional.",
+  title: "Contacto | CarMarket",
+  description: "Ponte en contacto con nuestro equipo de soporte. Estamos aquí para ayudarte con cualquier consulta sobre compra, venta o uso de nuestra plataforma.",
+  keywords: ["contacto", "ayuda", "soporte", "atención al cliente", "consultas"],
+  alternates: {
+    canonical: "https://carmarket.com.ar/contacto",
+  },
+  openGraph: {
+    title: "Contacto | CarMarket",
+    description: "Ponte en contacto con nuestro equipo de soporte. Estamos aquí para ayudarte.",
+    url: "https://carmarket.com.ar/contacto",
+  },
 }
 
 export default function ContactPage() {

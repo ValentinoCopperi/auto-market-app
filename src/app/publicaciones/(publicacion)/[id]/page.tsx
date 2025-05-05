@@ -1,4 +1,3 @@
-
 import { notFound } from "next/navigation"
 import { getSession } from "@/lib/session/session"
 import { PublicacionHeader } from "./_components/publicacion-header"
@@ -8,145 +7,272 @@ import { PublicacionActions } from "./_components/publicacion-actions"
 import { PublicacionContacto } from "./_components/publicacion-contacto"
 import { VendedorCard } from "./_components/vendedor-card"
 import { MensajesProvider } from "@/hooks/use-mensajes"
-import { Marca, Publicacion, PublicacionCompleto } from "@/types/publicaciones"
-import { unstable_cache } from "next/cache"
-import { EditPublicationDialog } from "@/components/dialogs/editar-publicacion/editar-publicacion-dialog"
+import type { PublicacionCompleto } from "@/types/publicaciones"
 import { agregarVista } from "@/actions/publicaciones-actions"
 import PublicacionEstadisticas from "./_components/publicacion-estadisticas"
 import { puedeVerEstadisticas } from "@/actions/suscripcion-actions"
+import { Breadcrumbs } from "./_components/breadcrumbs"
+import { PublicacionJsonLd } from "./_components/publicacion-json-id"
+import type { Metadata } from "next"
 
+// Función para obtener la publicación con caché
+const getPublicacion = async (id: string): Promise<PublicacionCompleto> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/${id}`, {
+    next: { revalidate: 3600 }, // Revalidar cada hora
+  })
 
-const getPublicacion =async   (id: string) : Promise<PublicacionCompleto> => {
+  if (!response.ok) {
+    notFound()
+  }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/${id}`)
+  const data = await response.json()
 
-    if(!response.ok){
-        notFound()
-    }
+  if (data.error) {
+    notFound()
+  }
 
-    const data = await response.json()
-
-    if(data.error){
-        notFound()
-    }
-
-    return data.publicacion;
+  return data.publicacion
 }
 
-const esPublicacionFavorita = async (id: string, userId: string | undefined) : Promise<boolean> => {
+// Función para verificar si es favorito
+const esPublicacionFavorita = async (id: string, userId: string | undefined): Promise<boolean> => {
+  if (!userId) {
+    return false
+  }
 
-    if(!userId){
-        return false;
-    }
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/favoritos`, {
+    method: "POST",
+    body: JSON.stringify({ publicacionId: id, userId }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/favoritos`, {
-        method: "POST",
-        body: JSON.stringify({ publicacionId: id, userId })
-    })
-    if(!response.ok){
-        return false;
-    }
-    const data = await response.json()
-    return data.esFavorito
+  if (!response.ok) {
+    return false
+  }
+
+  const data = await response.json()
+  return data.esFavorito
 }
 
+// Generación de metadatos dinámicos
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  try {
+    const { id } = await params
+    const publicacion = await getPublicacion(id)
+
+    // Acceder a las propiedades de manera segura
+    const marca = publicacion.marca.nombre
+    const modelo = publicacion.modelo
+    const año = publicacion.anio || ""
+
+    const precio = new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+      maximumFractionDigits: 0,
+    }).format(publicacion.precio)
+
+    const title = `${publicacion.titulo} | CarMarket`
+
+    // Acceder a las propiedades de manera segura para la descripción
+    const kilometraje = publicacion.kilometraje || ""
+    const combustible = publicacion.tipo_combustible || ""
+    const transmision = publicacion.tipo_transmision || ""
+
+    const description = publicacion.descripcion
+      ? publicacion.descripcion.substring(0, 155)
+      : `${año} ${marca} ${modelo} en venta. ${kilometraje} km, ${combustible}, ${transmision}. Excelente estado.`
+
+    // Construir URL de imagen principal
+    const imagenPrincipal =
+      publicacion.publicacion_imagenes && publicacion.publicacion_imagenes.length > 0
+        ? publicacion.publicacion_imagenes[0].url
+        : "/placeholder-car.jpg"
+
+    return {
+      title,
+      description,
+      keywords: [
+        marca,
+        modelo,
+        `${marca} ${modelo}`,
+        `${año} ${marca} ${modelo}`,
+        "autos usados",
+        "autos en venta",
+        "comprar auto",
+        combustible,
+        transmision,
+      ].filter(Boolean), // Filtrar valores vacíos o nulos
+      alternates: {
+        canonical: `https://carmarket.com.ar/publicaciones/${id}`,
+      },
+      openGraph: {
+        title,
+        description,
+        url: `https://carmarket.com.ar/publicaciones/${id}`,
+        type: "website",
+        images: [
+          {
+            url: imagenPrincipal,
+            width: 1200,
+            height: 630,
+            alt: `${año} ${marca} ${modelo}`,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [imagenPrincipal],
+      },
+    }
+  } catch (error) {
+    console.error("Error generando metadatos:", error)
+    return {
+      title: "Publicación no encontrada | CarMarket",
+      description: "Lo sentimos, la publicación que estás buscando no existe o ha sido eliminada.",
+    }
+  }
+}
+
+// Generación estática para rutas populares - Comentado para evitar errores iniciales
+// export async function generateStaticParams() {
+//   try {
+//     // Obtener IDs de publicaciones populares
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/populares`, {
+//       next: { revalidate: 86400 }, // Revalidar cada día
+//     })
+
+//     if (!response.ok) {
+//       return []
+//     }
+
+//     const data = await response.json()
+
+//     // Devolver los IDs para pre-renderizar
+//     return data.publicaciones.map((publicacion: { id: string }) => ({
+//       id: publicacion.id,
+//     }))
+//   } catch (error) {
+//     console.error("Error al generar parámetros estáticos:", error)
+//     return []
+//   }
+// }
 
 const PublicacionPage = async ({
-    params,
+  params,
 }: {
-    params: Promise<{ id: string }>
+  params: Promise<{ id: string }>
 }) => {
+  const { id } = await params
 
-    const { id } = await params;
+  const session = await getSession()
 
-    const session = await getSession()
-    
-    // Obtener la publicación con sus relaciones
-    const [publicacion] = await Promise.all([getPublicacion(id)]);
+  // Obtener la publicación con sus relaciones
+  const publicacion = await getPublicacion(id)
 
-    if (!publicacion) {
-        notFound();
-    }
+  if (!publicacion) {
+    notFound()
+  }
 
+  let esFavorito = false
+  let verEstadisticas = false
 
-    let esFavorito = false
-    let verEstadisticas = false
-    // Verificar si el usuario actual es el propietario de la publicación
-    const esEditable = session?.userId.toString() === publicacion.cliente.id.toString()
+  // Verificar si el usuario actual es el propietario de la publicación
+  const esEditable = session?.userId.toString() === publicacion.cliente.id.toString()
 
-    if(!esEditable && session?.userId){
-        await agregarVista(publicacion.id,parseInt(session?.userId))
-        esFavorito = await esPublicacionFavorita(id,session?.userId)
-    }
-    
-    if(esEditable && session?.userId){
-        const {data} = await puedeVerEstadisticas(Number(session?.userId))
-        verEstadisticas = data || false
-    }
-   
-    return (
-        <div className="min-h-screen bg-background pb-12">
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Columna principal (2/3) */}
-                    <div className="lg:col-span-2 space-y-6">
-                   
-                        {/* Encabezado móvil (visible solo en móvil) */}
-                        <div className="block lg:hidden">
-                            <PublicacionHeader publicacion={publicacion}/>
-                        </div>
+  if (!esEditable && session?.userId) {
+    await agregarVista(publicacion.id, Number.parseInt(session?.userId))
+    esFavorito = await esPublicacionFavorita(id, session?.userId)
+  }
 
-                        {/* Carrusel de imágenes */}
-                        <ImageCarousel imagenes={publicacion.publicacion_imagenes} titulo={publicacion.titulo} />
+  if (esEditable && session?.userId) {
+    const { data } = await puedeVerEstadisticas(Number(session?.userId))
+    verEstadisticas = data || false
+  }
 
-                        {/* Encabezado desktop (visible solo en desktop) */}
-                        <div className="hidden lg:block">
-                            <PublicacionHeader publicacion={publicacion}/>
-                            
-                        </div>
+  // Extraer marca y modelo de manera segura
+  const marcaNombre = publicacion.marca.nombre
+  const modeloNombre = publicacion.modelo
 
-                        {/* Detalles de la publicación visible en desktop*/}
-                        <div className="hidden lg:block">
-                            <PublicacionDetails publicacion={publicacion} />
-                        </div>
-                        
+  return (
+    <div className="min-h-screen bg-background pb-12">
+      {/* JSON-LD para datos estructurados */}
+      <PublicacionJsonLd publicacion={publicacion} />
 
-                        {/* Acciones de publicación (solo visible en móvil) */}
-                        <div className="block lg:hidden space-y-4">
-                            <PublicacionActions publicacion={publicacion} esEditable={esEditable} esFavorito={esFavorito} />
-                            <PublicacionDetails publicacion={publicacion} />
-                            {
-                                (esEditable) && (
-                                    <PublicacionEstadisticas id_publicacion={publicacion.id} verEstadisticas={verEstadisticas} />
-                                )
-                            }
-                        </div>
-                    </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Breadcrumbs mejorados */}
+        <Breadcrumbs marca={marcaNombre} modelo={modeloNombre} titulo={publicacion.titulo} />
 
-                    {/* Columna lateral (1/3) */}
-                    <div className="space-y-6">
-                        {/* Acciones de publicación (solo visible en desktop) */}
-                        <div className="hidden lg:block space-y-4">
-                            <PublicacionActions publicacion={publicacion} esEditable={esEditable} esFavorito={esFavorito} />
-                            {
-                                esEditable && (
-                                    <PublicacionEstadisticas id_publicacion={publicacion.id} verEstadisticas={verEstadisticas} />
-                                )
-                            }
-                        </div>
-
-                        {/* Información de contacto */}
-                        <MensajesProvider>
-                            <PublicacionContacto telefono={publicacion.cliente.telefono} vendedorId={publicacion.cliente.id} esEditable={esEditable} />
-                        </MensajesProvider>
-
-                        {/* Tarjeta del vendedor */}
-                        <VendedorCard vendedor={publicacion.cliente} />
-                    </div>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Columna principal (2/3) */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Encabezado móvil (visible solo en móvil) */}
+            <div className="block lg:hidden">
+              <PublicacionHeader publicacion={publicacion} />
             </div>
+
+            {/* Carrusel de imágenes */}
+            <ImageCarousel imagenes={publicacion.publicacion_imagenes} titulo={publicacion.titulo} />
+
+            {/* Encabezado desktop (visible solo en desktop) */}
+            <div className="hidden lg:block">
+              <PublicacionHeader publicacion={publicacion} />
+            </div>
+
+            {/* Detalles de la publicación visible en desktop*/}
+            <div className="hidden lg:block">
+              <PublicacionDetails publicacion={publicacion} />
+            </div>
+
+            {/* Acciones de publicación (solo visible en móvil) */}
+            <div className="block lg:hidden space-y-4">
+              <PublicacionActions publicacion={publicacion} esEditable={esEditable} esFavorito={esFavorito} />
+              <PublicacionDetails publicacion={publicacion} />
+              {esEditable && (
+                <PublicacionEstadisticas id_publicacion={publicacion.id} verEstadisticas={verEstadisticas} />
+              )}
+            </div>
+
+            {/* Publicaciones similares - Comentado para implementar después */}
+            {/* <Suspense fallback={<div className="mt-8 animate-pulse h-64 bg-gray-100 rounded-lg"></div>}>
+              <div className="mt-8">
+                <h2 className="text-xl font-bold mb-4">Publicaciones similares</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  Aquí irá el componente de publicaciones similares
+                </div>
+              </div>
+            </Suspense> */}
+          </div>
+
+          {/* Columna lateral (1/3) */}
+          <div className="space-y-6">
+            {/* Acciones de publicación (solo visible en desktop) */}
+            <div className="hidden lg:block space-y-4">
+              <PublicacionActions publicacion={publicacion} esEditable={esEditable} esFavorito={esFavorito} />
+              {esEditable && (
+                <PublicacionEstadisticas id_publicacion={publicacion.id} verEstadisticas={verEstadisticas} />
+              )}
+            </div>
+
+            {/* Información de contacto */}
+            <MensajesProvider>
+              <PublicacionContacto
+                telefono={publicacion.cliente.telefono}
+                vendedorId={publicacion.cliente.id}
+                esEditable={esEditable}
+              />
+            </MensajesProvider>
+
+            {/* Tarjeta del vendedor */}
+            <VendedorCard vendedor={publicacion.cliente} />
+          </div>
         </div>
-    )   
+      </div>
+    </div>
+  )
 }
 
-export default PublicacionPage;
+export default PublicacionPage

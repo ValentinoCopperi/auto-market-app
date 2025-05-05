@@ -9,7 +9,60 @@ import { Home } from "lucide-react"
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { SearchBar } from "@/components/search-bar"
+import { Metadata } from "next"
+
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+
+// 1. Metadata dinámico para mejorar SEO
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const params = await searchParams
+  const marca = params.marca ? String(params.marca) : null
+  const modelo = params.modelo ? String(params.modelo) : null
+  const año = params.año ? String(params.año) : null
+
+  let title = "Publicaciones de autos"
+  let description = "Encuentra los mejores autos nuevos y usados. Amplio catálogo con todas las marcas y modelos."
+
+  if (marca) {
+    title = `Autos ${marca}${modelo ? ` ${modelo}` : ""}${año ? ` ${año}` : ""} en venta`
+    description = `Explora nuestra selección de autos ${marca}${modelo ? ` ${modelo}` : ""}${año ? ` del año ${año}` : ""} en venta. Encuentra el vehículo perfecto para ti.`
+  }
+
+  return {
+    title,
+    description,
+    keywords: [
+      "autos en venta",
+      "vehículos usados",
+      "comprar auto",
+      "argentina",
+      "autos en argentina",
+      "autos en venta en argentina",
+      "buenos aires",
+      "buenos aires autos",
+      "buenos aires autos en venta",
+      "buenos aires autos usados",
+      "buenos aires autos nuevos",
+      "buenos aires autos baratos",
+      "buenos aires autos baratos",
+      marca,
+      modelo,
+      `${marca} ${modelo}`,
+      "catálogo de autos",
+    ].filter((keyword): keyword is string => keyword !== null),
+    alternates: {
+      canonical: `https://tudominio.com/publicaciones${new URLSearchParams(params as Record<string, string>).toString() ? `?${new URLSearchParams(params as Record<string, string>).toString()}` : ""}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://tudominio.com/publicaciones${new URLSearchParams(params as Record<string, string>).toString() ? `?${new URLSearchParams(params as Record<string, string>).toString()}` : ""}`,
+    },
+  }
+}
+
 
 export default async function PublicacionesPage(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams

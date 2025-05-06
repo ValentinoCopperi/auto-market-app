@@ -22,52 +22,52 @@ export const metadata: Metadata = {
     "autos baratos",
     "mejores ofertas de autos",
   ],
-  alternates: {
-    canonical: "https://carmarket.com.ar",
-  },
-  openGraph: {
-    title: "CarMarket | El marketplace líder de autos en Argentina",
-    description:
-      "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios.",
-    url: "https://carmarket.com.ar",
-    siteName: "CarMarket Argentina",
-    images: [
-      {
-        url: "/og-home-image.jpg", // Asegúrate de tener esta imagen
-        width: 1200,
-        height: 630,
-        alt: "CarMarket - Compra y venta de autos en Argentina",
-      },
-    ],
-    locale: "es_AR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "CarMarket | Compra y venta de autos en Argentina",
-    description:
-      "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios.",
-    images: ["/twitter-home-image.jpg"], // Asegúrate de tener esta imagen
-    creator: "@carmarket",
-    site: "@carmarket",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  // alternates: {
+  //   canonical: "https://carmarket.com.ar",
+  // },
+  // openGraph: {
+  //   title: "CarMarket | El marketplace líder de autos en Argentina",
+  //   description:
+  //     "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios.",
+  //   url: "https://carmarket.com.ar",
+  //   siteName: "CarMarket Argentina",
+  //   images: [
+  //     {
+  //       url: "/og-home-image.jpg", // Asegúrate de tener esta imagen
+  //       width: 1200,
+  //       height: 630,
+  //       alt: "CarMarket - Compra y venta de autos en Argentina",
+  //     },
+  //   ],
+  //   locale: "es_AR",
+  //   type: "website",
+  // },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "CarMarket | Compra y venta de autos en Argentina",
+  //   description:
+  //     "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios.",
+  //   images: ["/twitter-home-image.jpg"], // Asegúrate de tener esta imagen
+  //   creator: "@carmarket",
+  //   site: "@carmarket",
+  // },
+  // robots: {
+  //   index: true,
+  //   follow: true,
+  //   googleBot: {
+  //     index: true,
+  //     follow: true,
+  //     "max-image-preview": "large",
+  //     "max-snippet": -1,
+  //   },
+  // },
 }
 
 const HomePage = async () => {
   return (
     <div>
       {/* JSON-LD para la página de inicio */}
-      <HomeJsonLd />
+      {/* <HomeJsonLd /> */}
 
       <LandingPage />
       <div className="bg-[#F9FAFB] dark:bg-[#00000063]">

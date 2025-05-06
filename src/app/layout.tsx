@@ -17,7 +17,6 @@ const inter = Inter({
   style: "normal",
   display: "swap",
   subsets: ["latin-ext"],
-  variable: "--font-inter",
   preload: true,
 })
 
@@ -57,73 +56,73 @@ export const metadata: Metadata = {
     "comprar auto en buenos aires",
     "comprar auto en argentina",
   ],
-  authors: [{ name: "CarMarket" }],
-  creator: "CarMarket",
-  publisher: "CarMarket Argentina",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/logo.png", sizes: "16x16", type: "image/png" },
-      { url: "/logo.png", sizes: "32x32", type: "image/png" },
-      { url: "/logo.png", sizes: "192x192", type: "image/png" },
-      { url: "/logo.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: "/logo.png",
-  },
-  manifest: "/manifest.json",
-  openGraph: {
-    type: "website",
-    locale: "es_AR",
-    url: "https://carmarket.com.ar",
-    siteName: "CarMarket Argentina",
-    title: "CarMarket - Compra y venta de autos en Argentina",
-    description:
-      "Encuentra los mejores autos nuevos y usados en Argentina. Amplio catálogo con todas las marcas y modelos a los mejores precios.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "CarMarket - Compra y venta de autos en Argentina",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "CarMarket - Compra y venta de autos en Argentina",
-    description:
-      "Encuentra los mejores autos nuevos y usados en Argentina. Amplio catálogo con todas las marcas y modelos a los mejores precios.",
-    images: ["/twitter-image.jpg"],
-    creator: "@carmarket",
-    site: "@carmarket",
-  },
-  verification: {
-    google: "tu-código-de-verificación-de-google", // Reemplaza con tu código real
-    yandex: "tu-código-de-verificación-de-yandex", // Opcional
-  },
-  alternates: {
-    canonical: "https://carmarket.com.ar",
-    languages: {
-      "es-AR": "https://carmarket.com.ar",
-      "en-US": "https://carmarket.com.ar/en", // Si tienes versión en inglés
-    },
-  },
+  // authors: [{ name: "CarMarket" }],
+  // creator: "CarMarket",
+  // publisher: "CarMarket Argentina",
+  // formatDetection: {
+  //   email: false,
+  //   address: false,
+  //   telephone: false,
+  // },
+  // robots: {
+  //   index: true,
+  //   follow: true,
+  //   googleBot: {
+  //     index: true,
+  //     follow: true,
+  //     "max-image-preview": "large",
+  //     "max-snippet": -1,
+  //   },
+  // },
+  // icons: {
+  //   icon: [
+  //     { url: "/favicon.ico", sizes: "any" },
+  //     { url: "/logo.png", sizes: "16x16", type: "image/png" },
+  //     { url: "/logo.png", sizes: "32x32", type: "image/png" },
+  //     { url: "/logo.png", sizes: "192x192", type: "image/png" },
+  //     { url: "/logo.png", sizes: "512x512", type: "image/png" },
+  //   ],
+  //   apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  //   shortcut: "/logo.png",
+  // },
+  // manifest: "/manifest.json",
+  // openGraph: {
+  //   type: "website",
+  //   locale: "es_AR",
+  //   url: "https://carmarket.com.ar",
+  //   siteName: "CarMarket Argentina",
+  //   title: "CarMarket - Compra y venta de autos en Argentina",
+  //   description:
+  //     "Encuentra los mejores autos nuevos y usados en Argentina. Amplio catálogo con todas las marcas y modelos a los mejores precios.",
+  //   images: [
+  //     {
+  //       url: "/og-image.jpg",
+  //       width: 1200,
+  //       height: 630,
+  //       alt: "CarMarket - Compra y venta de autos en Argentina",
+  //     },
+  //   ],
+  // },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "CarMarket - Compra y venta de autos en Argentina",
+  //   description:
+  //     "Encuentra los mejores autos nuevos y usados en Argentina. Amplio catálogo con todas las marcas y modelos a los mejores precios.",
+  //   images: ["/twitter-image.jpg"],
+  //   creator: "@carmarket",
+  //   site: "@carmarket",
+  // },
+  // verification: {
+  //   google: "tu-código-de-verificación-de-google", // Reemplaza con tu código real
+  //   yandex: "tu-código-de-verificación-de-yandex", // Opcional
+  // },
+  // alternates: {
+  //   canonical: "https://carmarket.com.ar",
+  //   languages: {
+  //     "es-AR": "https://carmarket.com.ar",
+  //     "en-US": "https://carmarket.com.ar/en", // Si tienes versión en inglés
+  //   },
+  // },
 }
 
 export default function RootLayout({
@@ -132,9 +131,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es-AR" className={inter.variable}>
+    <html lang="es-AR" className={`${inter.className} antialiased`}>
       <body className={`${inter.className} antialiased`}>
-        <div className="min-h-screen bg-background text-foreground flex flex-col">
+        <div className="min-h-screen bg-background  flex flex-col">
           <Providers>
             <NavBar />
             <main className="flex-grow">
@@ -146,29 +145,29 @@ export default function RootLayout({
             <Footer />
           </Providers>
         </div>
-        <WebsiteJsonLd />
+        <Analytics />
       </body>
     </html>
   )
 }
 
-// Componente para agregar datos estructurados JSON-LD
-function WebsiteJsonLd() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "CarMarket Argentina",
-    url: "https://carmarket.com.ar",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: "https://carmarket.com.ar/publicaciones?q={search_term_string}",
-      },
-      "query-input": "required name=search_term_string",
-    },
-    sameAs: ["https://facebook.com/carmarket", "https://twitter.com/carmarket", "https://instagram.com/carmarket"],
-  }
+// // Componente para agregar datos estructurados JSON-LD
+// function WebsiteJsonLd() {
+//   const jsonLd = {
+//     "@context": "https://schema.org",
+//     "@type": "WebSite",
+//     name: "CarMarket Argentina",
+//     url: "https://carmarket.com.ar",
+//     potentialAction: {
+//       "@type": "SearchAction",
+//       target: {
+//         "@type": "EntryPoint",
+//         urlTemplate: "https://carmarket.com.ar/publicaciones?q={search_term_string}",
+//       },
+//       "query-input": "required name=search_term_string",
+//     },
+//     sameAs: ["https://facebook.com/carmarket", "https://twitter.com/carmarket", "https://instagram.com/carmarket"],
+//   }
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-}
+//   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+// }

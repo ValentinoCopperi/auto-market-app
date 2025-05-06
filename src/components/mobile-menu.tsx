@@ -129,7 +129,7 @@ export function MobileMenu() {
               </AccordionTrigger>
               <AccordionContent className="pb-0 pt-1">
                 <div className="flex flex-col border-l-2 border-muted ml-9 pl-4">
-                  <SheetClose asChild>
+                  {/* <SheetClose asChild>
                     <Link
                       href="/impulsamos-juntos/motorpoint"
                       className={cn(
@@ -154,7 +154,7 @@ export function MobileMenu() {
                     >
                       Rstronic
                     </Link>
-                  </SheetClose>
+                  </SheetClose> */}
                   <SheetClose asChild>
                     <Link
                       href="/impulsamos-juntos/esp-off-performance"

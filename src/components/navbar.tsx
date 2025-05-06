@@ -172,7 +172,7 @@ const NavBar = () => {
                 <DropdownMenuContent align="center" className="w-56" sideOffset={8}>
                   <div className="p-2 text-xs font-medium text-muted-foreground">Nuestros aliados</div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
+                  {/* <DropdownMenuItem asChild>
                     <Link
                       href="/impulsamos-juntos/motorpoint"
                       className="cursor-pointer w-full flex items-center gap-2"
@@ -186,7 +186,7 @@ const NavBar = () => {
                       <div className="h-2 w-2 rounded-full bg-green-500" />
                       Rstronic
                     </Link>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem asChild>
                     <Link
                       href="/impulsamos-juntos/esp-off-performance"

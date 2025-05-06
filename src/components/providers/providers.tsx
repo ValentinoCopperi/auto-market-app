@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/sonner"
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <AuthProvider>
                     {children}
                     <Toaster />

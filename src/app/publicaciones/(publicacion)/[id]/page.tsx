@@ -17,9 +17,7 @@ import type { Metadata } from "next"
 
 // Función para obtener la publicación con caché
 const getPublicacion = async (id: string): Promise<PublicacionCompleto> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/${id}`, {
-    next: { revalidate: 3600 }, // Revalidar cada hora
-  })
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/${id}`)
 
   if (!response.ok) {
     notFound()

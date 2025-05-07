@@ -36,7 +36,7 @@ const SuscripcionAdministrar = async () => {
     const session = await getSession()
 
     if (!session || !session.userId) {
-        redirect("/")
+        redirect("/suscripcion")
     }
     const id = Number(session.userId)
     const { data: suscripcion, error } = await getSuscripcionByUsuario(id)
@@ -93,8 +93,8 @@ const SuscripcionAdministrar = async () => {
                                             <p className="text-muted-foreground">
                                                 {suscripcion.tipo_suscripcion.nombre === "plan_ocasion"
                                                     ? "1 publicación"
-                                                    : suscripcion.tipo_suscripcion.nombre === "plan_basico"
-                                                        ? "Hasta 3   publicaciones"
+                                                    : suscripcion.tipo_suscripcion.nombre === "plan_vendedor"
+                                                        ? "Hasta 3 publicaciones"
                                                         : "Publicaciones ilimitadas"}
                                             </p>
                                         </div>
@@ -128,11 +128,13 @@ const SuscripcionAdministrar = async () => {
                                                 <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium">Fecha de renovación</h3>
+                                                <h3 className="font-medium">
+                                                    {suscripcion.estado === "activa" ? "Fecha de renovación" : "Fecha de vencimiento"}
+                                                </h3>
                                                 <p className="text-sm text-muted-foreground">
-                                                    {suscripcion.estado === "activa"
-                                                        ? suscripcion.fecha_fin.toLocaleDateString()
-                                                        : "No disponible"}
+                                                    {suscripcion.estado === "activa" ?
+                                                        suscripcion.fecha_fin.toLocaleDateString()
+                                                        : suscripcion.fecha_fin.toLocaleDateString()}
                                                 </p>
                                             </div>
                                         </div>
@@ -145,7 +147,9 @@ const SuscripcionAdministrar = async () => {
                                                 variant="outline"
                                                 className="w-full sm:w-auto"
                                             >
-                                                Renovar suscripción
+                                                <Link href={"/suscripcion"}>
+                                                    Renovar suscripción
+                                                </Link>
                                             </Button>
                                             <BtnCancelar />
                                         </>
@@ -153,8 +157,10 @@ const SuscripcionAdministrar = async () => {
                                         <Button
                                             className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 text-white"
                                         >
-                                            Reactivar suscripción
-                                            <ArrowRight className="ml-2 h-4 w-4" />
+                                            <Link href={"/suscripcion"} className="flex items-center justify-center">
+                                                Reactivar suscripción
+                                                <ArrowRight className="ml-2 h-4 w-4" />
+                                            </Link>
                                         </Button>
                                     )}
                                 </CardFooter>
@@ -165,8 +171,12 @@ const SuscripcionAdministrar = async () => {
                         <div>
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Beneficios de tu plan</CardTitle>
-                                    <CardDescription>Plan {getPlanName(suscripcion.tipo_suscripcion.nombre as Planes)}</CardDescription>
+                                    <CardTitle>
+                                        {
+                                            suscripcion.estado === "activa" ? "Beneficios de tu plan" : "Reactivar para aprovechar los beneficios"
+                                        }
+                                    </CardTitle>
+                                    <CardDescription>{getPlanName(suscripcion.tipo_suscripcion.nombre as Planes)}</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div className="space-y-2">
@@ -187,11 +197,11 @@ const SuscripcionAdministrar = async () => {
                                             </>
                                         )}
 
-                                        {suscripcion.tipo_suscripcion.nombre === "plan_basico" && (
+                                        {suscripcion.tipo_suscripcion.nombre === "plan_vendedor" && (
                                             <>
                                                 <div className="flex items-center gap-2">
                                                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                                                    <span className="text-sm">Hasta 5 publicaciones</span>
+                                                    <span className="text-sm">Hasta 3 publicaciones</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
@@ -205,10 +215,14 @@ const SuscripcionAdministrar = async () => {
                                                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
                                                     <span className="text-sm">Soporte prioritario</span>
                                                 </div>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                                                    <span className="text-sm">Badge de vendedor verificado</span>
+                                                </div>
                                             </>
                                         )}
 
-                                        {suscripcion.tipo_suscripcion.nombre === "plan_profesional" && (
+                                        {suscripcion.tipo_suscripcion.nombre === "plan_agencia" && (
                                             <>
                                                 <div className="flex items-center gap-2">
                                                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
@@ -232,7 +246,7 @@ const SuscripcionAdministrar = async () => {
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                                                    <span className="text-sm">Badge de vendedor verificado</span>
+                                                    <span className="text-sm">Badge de vendedor profesional</span>
                                                 </div>
                                             </>
                                         )}

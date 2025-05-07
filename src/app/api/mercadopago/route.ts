@@ -28,7 +28,6 @@ export async function POST(request: Request) {
                 plan = parts[0]
                 identifier = parts[1]
 
-                console.log("Plan:", plan, "Identifier:", identifier)
 
                 // Determine if identifier is an email or user ID
                 const user = await prisma.cliente.findUnique({
@@ -85,6 +84,7 @@ export async function POST(request: Request) {
                                 id_tipo_suscripcion: tipo_suscripcion.id,
                                 fecha_fin: endDate,
                                 estado: "activa",
+                                fecha_inicio: startDate,
                                 // Keep it active
                             },
                             select:{

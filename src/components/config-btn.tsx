@@ -36,7 +36,7 @@ const ConfigBtn = () => {
                     isAuthenticated && (
                         <>
                             <DropdownMenuItem asChild className="py-2 flex flex-col items-start">
-                                <Link href={`/perfil/${user?.id}`} className="cursor-pointer w-full">
+                                <Link href={`/perfil/${user?.id}/publicaciones`} className="cursor-pointer w-full">
                                     <div className="flex items-center gap-2">
                                         <User className="h-4 w-4" />
                                         <div className="flex flex-col">

@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import ContactoForm from "./contacto-form"
 
 export const metadata: Metadata = {
   title: "Contacto | CarMarket",
@@ -50,14 +51,6 @@ export default function ContactPage() {
                 <span className="sm:inline">Contacto</span>
               </TabsTrigger>
               <TabsTrigger
-                value="reportar"
-                className="flex-1 min-w-[100px] sm:min-w-[120px] flex items-center justify-center gap-2 py-4 px-3 text-xs sm:text-sm font-medium rounded-md bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-gray-200 transition-colors duration-200"
-                aria-label="Reportar"
-              >
-                <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span className="sm:inline">Reportar</span>
-              </TabsTrigger>
-              <TabsTrigger
                 value="equipo"
                 className="flex-1 min-w-[100px] sm:min-w-[120px] flex items-center justify-center gap-2 py-4 px-3 text-xs sm:text-sm font-medium rounded-md bg-gray-100 data-[state=active]:bg-blue-500 data-[state=active]:text-white hover:bg-gray-200 transition-colors duration-200"
                 aria-label="Equipo"
@@ -78,183 +71,10 @@ export default function ContactPage() {
           
             {/* Contenido de la pestaña Contacto */}
             <TabsContent value="contacto" className="mt-12">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h2 className="text-2xl font-semibold mb-4">Ponte en contacto</h2>
-                  <p className="text-muted-foreground mb-6">
-                    Completa el formulario y nos pondremos en contacto contigo lo antes posible. También puedes
-                    contactarnos directamente a través de los canales que aparecen a continuación.
-                  </p>
-
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
-                        <Mail className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Email</p>
-                        <p className="font-medium">contacto@automarket.com</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
-                        <Phone className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Teléfono</p>
-                        <p className="font-medium">+54 11 5555-5555</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
-                        <MapPin className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Dirección</p>
-                        <p className="font-medium">Av. Corrientes 1234, Buenos Aires, Argentina</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-muted p-4 rounded-lg">
-                    <h3 className="font-medium mb-2">Horario de atención</h3>
-                    <p className="text-sm text-muted-foreground mb-2">Lunes a Viernes: 9:00 - 18:00</p>
-                    <p className="text-sm text-muted-foreground">Sábados: 10:00 - 14:00</p>
-                  </div>
-                </div>
-
-                <div>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Formulario de contacto</CardTitle>
-                      <CardDescription>Completa el formulario y te responderemos a la brevedad.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <form className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label htmlFor="nombre" className="text-sm font-medium">
-                              Nombre
-                            </label>
-                            <Input id="nombre" placeholder="Tu nombre" />
-                          </div>
-                          <div className="space-y-2">
-                            <label htmlFor="apellido" className="text-sm font-medium">
-                              Apellido
-                            </label>
-                            <Input id="apellido" placeholder="Tu apellido" />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <label htmlFor="email" className="text-sm font-medium">
-                            Email
-                          </label>
-                          <Input id="email" type="email" placeholder="tu@email.com" />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label htmlFor="asunto" className="text-sm font-medium">
-                            Asunto
-                          </label>
-                          <Input id="asunto" placeholder="Asunto de tu mensaje" />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label htmlFor="mensaje" className="text-sm font-medium">
-                            Mensaje
-                          </label>
-                          <Textarea id="mensaje" placeholder="Escribe tu mensaje aquí..." rows={5} />
-                        </div>
-                      </form>
-                    </CardContent>
-                    <CardFooter>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700">Enviar mensaje</Button>
-                    </CardFooter>
-                  </Card>
-                </div>
-              </div>
+              <ContactoForm  />
             </TabsContent>
 
-            {/* Contenido de la pestaña Reportar */}
-            <TabsContent value="reportar" className="mt-12">
-              <div className="max-w-3xl mx-auto">
-                <h2 className="text-2xl font-semibold mb-4">Reportar un problema</h2>
-                <p className="text-muted-foreground mb-6">
-                  Si has encontrado algún problema en nuestra plataforma, una publicación inadecuada o quieres reportar
-                  alguna incidencia, por favor completa el siguiente formulario.
-                </p>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Formulario de reporte</CardTitle>
-                    <CardDescription>
-                      Todos los reportes son revisados por nuestro equipo en un plazo de 24-48 horas.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form className="space-y-4">
-                      <div className="space-y-2">
-                        <label htmlFor="report-email" className="text-sm font-medium">
-                          Tu email
-                        </label>
-                        <Input id="report-email" type="email" placeholder="tu@email.com" />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label htmlFor="report-type" className="text-sm font-medium">
-                          Tipo de reporte
-                        </label>
-                        <select
-                          id="report-type"
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          <option value="">Selecciona un tipo de reporte</option>
-                          <option value="publicacion">Publicación inadecuada</option>
-                          <option value="usuario">Usuario sospechoso</option>
-                          <option value="error">Error técnico</option>
-                          <option value="fraude">Intento de fraude</option>
-                          <option value="otro">Otro</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label htmlFor="report-url" className="text-sm font-medium">
-                          URL del problema (opcional)
-                        </label>
-                        <Input id="report-url" placeholder="https://automarket.com/publicacion/..." />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label htmlFor="report-description" className="text-sm font-medium">
-                          Descripción detallada
-                        </label>
-                        <Textarea
-                          id="report-description"
-                          placeholder="Describe el problema con el mayor detalle posible..."
-                          rows={5}
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label htmlFor="report-file" className="text-sm font-medium">
-                          Adjuntar capturas (opcional)
-                        </label>
-                        <Input id="report-file" type="file" multiple />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Puedes adjuntar hasta 3 imágenes (PNG, JPG) de máximo 5MB cada una.
-                        </p>
-                      </div>
-                    </form>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">Enviar reporte</Button>
-                  </CardFooter>
-                </Card>
-              </div>
-            </TabsContent>
+           
 
             {/* Contenido de la pestaña Equipo */}
             <TabsContent value="equipo" className="mt-12">
@@ -312,7 +132,7 @@ export default function ContactPage() {
                     ¿Interesado en colaborar con AutoMarket? Estamos abiertos a asociaciones estratégicas, integraciones
                     técnicas y oportunidades de crecimiento conjunto.
                   </p>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Button className="bg-blue-600 hover:bg-blue-600 pointer-events-none">
                     <Mail className="h-4 w-4 mr-2" />
                     Contactar para colaboraciones
                   </Button>

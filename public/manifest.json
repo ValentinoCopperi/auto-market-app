@@ -1,0 +1,19 @@
+{
+  "name": "CarMarket Argentina - Comprar y Vender Autos",
+  "short_name": "CarMarket",
+  "description": "El marketplace líder de autos en Argentina. Compra y vende vehículos nuevos y usados.",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

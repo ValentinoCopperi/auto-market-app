@@ -252,32 +252,7 @@ const SuscripcionAdministrar = async () => {
                                         )}
                                     </div>
 
-                                    <div className="pt-4 border-t border-border">
-                                        <h4 className="font-medium mb-2">Acciones rápidas</h4>
-                                        <div className="space-y-2">
-                                            <Button
-                                                variant="outline"
-                                                className="w-full justify-start"
-                                            >
-                                                <ArrowRight className="mr-2 h-4 w-4" />
-                                                Crear nueva publicación
-                                            </Button>
-                                            <Button
-                                                variant="outline"
-                                                className="w-full justify-start"
-                                            >
-                                                <ArrowRight className="mr-2 h-4 w-4" />
-                                                Ver mis publicaciones
-                                            </Button>
-                                            <Button
-                                                variant="outline"
-                                                className="w-full justify-start"
-                                            >
-                                                <ArrowRight className="mr-2 h-4 w-4" />
-                                                Ver estadísticas
-                                            </Button>
-                                        </div>
-                                    </div>
+                                    
                                 </CardContent>
                             </Card>
                         </div>
@@ -299,11 +274,9 @@ const SuscripcionAdministrar = async () => {
                         </div>
                         <div className="flex flex-col space-y-4">
                             <Button variant="outline" className="w-full sm:w-auto">
-                                Contactar con soporte
+                                <Link href="/contacto"> Contactar con soporte </Link>
                             </Button>
-                            <Button variant="link" className="w-full sm:w-auto">
-                                Ver preguntas frecuentes
-                            </Button>
+                            
                         </div>
                     </div>
                 </div>

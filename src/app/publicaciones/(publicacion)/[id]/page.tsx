@@ -14,6 +14,8 @@ import { puedeVerEstadisticas } from "@/actions/suscripcion-actions"
 import { Breadcrumbs } from "./_components/breadcrumbs"
 import { PublicacionJsonLd } from "./_components/publicacion-json-id"
 import type { Metadata } from "next"
+import { Suspense } from "react"
+import { PublicacionesGrid } from "@/components/publicaciones/publicaciones-grid"
 
 // Función para obtener la publicación con caché
 const getPublicacion = async (id: string): Promise<PublicacionCompleto> => {
@@ -31,6 +33,8 @@ const getPublicacion = async (id: string): Promise<PublicacionCompleto> => {
 
   return data.publicacion
 }
+
+
 
 // Función para verificar si es favorito
 const esPublicacionFavorita = async (id: string, userId: string | undefined): Promise<boolean> => {
@@ -135,29 +139,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-// Generación estática para rutas populares - Comentado para evitar errores iniciales
-// export async function generateStaticParams() {
-//   try {
-//     // Obtener IDs de publicaciones populares
-//     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/populares`, {
-//       next: { revalidate: 86400 }, // Revalidar cada día
-//     })
 
-//     if (!response.ok) {
-//       return []
-//     }
-
-//     const data = await response.json()
-
-//     // Devolver los IDs para pre-renderizar
-//     return data.publicaciones.map((publicacion: { id: string }) => ({
-//       id: publicacion.id,
-//     }))
-//   } catch (error) {
-//     console.error("Error al generar parámetros estáticos:", error)
-//     return []
-//   }
-// }
 
 const PublicacionPage = async ({
   params,
@@ -198,7 +180,7 @@ const PublicacionPage = async ({
   return (
     <div className="min-h-screen bg-background pb-12">
       {/* JSON-LD para datos estructurados */}
-      {/* <PublicacionJsonLd publicacion={publicacion} /> */}
+      <PublicacionJsonLd publicacion={publicacion} />
 
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumbs mejorados */}
@@ -233,16 +215,6 @@ const PublicacionPage = async ({
                 <PublicacionEstadisticas id_publicacion={publicacion.id} verEstadisticas={verEstadisticas} />
               )}
             </div>
-
-            {/* Publicaciones similares - Comentado para implementar después */}
-            {/* <Suspense fallback={<div className="mt-8 animate-pulse h-64 bg-gray-100 rounded-lg"></div>}>
-              <div className="mt-8">
-                <h2 className="text-xl font-bold mb-4">Publicaciones similares</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  Aquí irá el componente de publicaciones similares
-                </div>
-              </div>
-            </Suspense> */}
           </div>
 
           {/* Columna lateral (1/3) */}

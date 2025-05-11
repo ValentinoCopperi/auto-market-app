@@ -7,9 +7,9 @@ import type { Metadata } from "next"
 
 // Metadatos optimizados para la página de inicio
 export const metadata: Metadata = {
-  title: "CarMarket | Compra y venta de autos en Argentina",
+  title: "CarMarket Argentina | Marketplace Líder de Compra y Venta de Autos",
   description:
-    "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios. ¡Publica gratis o encuentra tu próximo auto hoy!",
+    "El marketplace #1 de autos en Argentina. Miles de vehículos nuevos y usados de todas las marcas. Compra, vende y financia tu auto de forma segura y rápida. ¡Publica gratis!",
   keywords: [
     "compra de autos",
     "venta de autos",
@@ -21,53 +21,59 @@ export const metadata: Metadata = {
     "vender mi auto",
     "autos baratos",
     "mejores ofertas de autos",
+    "financiación de autos",
+    "tasación de vehículos",
+    "concesionarios",
+    "particulares",
+    "carmarketarg",
   ],
-  // alternates: {
-  //   canonical: "https://carmarket.com.ar",
-  // },
-  // openGraph: {
-  //   title: "CarMarket | El marketplace líder de autos en Argentina",
-  //   description:
-  //     "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios.",
-  //   url: "https://carmarket.com.ar",
-  //   siteName: "CarMarket Argentina",
-  //   images: [
-  //     {
-  //       url: "/og-home-image.jpg", // Asegúrate de tener esta imagen
-  //       width: 1200,
-  //       height: 630,
-  //       alt: "CarMarket - Compra y venta de autos en Argentina",
-  //     },
-  //   ],
-  //   locale: "es_AR",
-  //   type: "website",
-  // },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "CarMarket | Compra y venta de autos en Argentina",
-  //   description:
-  //     "Encuentra los mejores autos nuevos y usados en Argentina. Miles de vehículos de todas las marcas y modelos a los mejores precios.",
-  //   images: ["/twitter-home-image.jpg"], // Asegúrate de tener esta imagen
-  //   creator: "@carmarket",
-  //   site: "@carmarket",
-  // },
-  // robots: {
-  //   index: true,
-  //   follow: true,
-  //   googleBot: {
-  //     index: true,
-  //     follow: true,
-  //     "max-image-preview": "large",
-  //     "max-snippet": -1,
-  //   },
-  // },
+  alternates: {
+    canonical: "https://carmarketarg.com",
+  },
+  openGraph: {
+    title: "CarMarket Argentina | El Marketplace Líder de Autos",
+    description:
+      "El marketplace #1 de autos en Argentina. Miles de vehículos nuevos y usados de todas las marcas. Compra, vende y financia tu auto de forma segura y rápida.",
+    url: "https://carmarketarg.com",
+    siteName: "CarMarket Argentina",
+    images: [
+      {
+        url: "https://carmarketarg.com/og-home-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "CarMarket Argentina - Marketplace líder de autos",
+      },
+    ],
+    locale: "es_AR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CarMarket Argentina | Marketplace Líder de Autos",
+    description:
+      "El marketplace #1 de autos en Argentina. Miles de vehículos nuevos y usados de todas las marcas. Compra, vende y financia tu auto de forma segura y rápida.",
+    images: ["https://carmarketarg.com/twitter-home-image.jpg"],
+    creator: "@carmarket",
+    site: "@carmarket",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 }
 
 const HomePage = async () => {
   return (
     <div>
       {/* JSON-LD para la página de inicio */}
-      {/* <HomeJsonLd /> */}
+      <HomeJsonLd />
 
       <LandingPage />
       <div className="bg-[#F9FAFB] dark:bg-[#00000063]">

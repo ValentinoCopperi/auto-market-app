@@ -61,33 +61,28 @@ export function Footer() {
             <h3 className="font-semibold text-base">Enlaces rápidos</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Inicio
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/publicaciones" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Publicaciones
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/suscripcion" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Suscripción
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/chat" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Chat
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/impulsamos-juntos/esp-off-permormance" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Impulsamos Juntos
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Vender mi Auto
                 </Link>
               </li>
             </ul>
@@ -98,33 +93,23 @@ export function Footer() {
             <h3 className="font-semibold text-base">Categorías</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/publicaciones?categoria=automovil" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Automóviles
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/publicaciones?categoria=camioneta" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Camionetas
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/publicaciones?categoria=motocicleta" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Motocicletas
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/publicaciones?categoria=comercial" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Vehículos Comerciales
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Repuestos
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Accesorios
                 </Link>
               </li>
             </ul>
@@ -136,20 +121,14 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               Suscríbete para recibir las últimas novedades y ofertas especiales.
             </p>
-            <div className="flex space-x-2">
-              <Input type="email" placeholder="Tu correo electrónico" className="max-w-[220px]" />
-              <Button variant="default" className="bg-blue-600 hover:bg-blue-700">
-                Suscribir
-              </Button>
-            </div>
             <div className="space-y-2 pt-2">
               <div className="flex items-center">
                 <Phone size={16} className="mr-2 text-muted-foreground" />
-                <span className="text-sm">+54 11 5555-5555</span>
+                <span className="text-sm">+54 9 2494628279</span>
               </div>
               <div className="flex items-center">
                 <Mail size={16} className="mr-2 text-muted-foreground" />
-                <span className="text-sm">contacto@automarket.com</span>
+                <span className="text-sm">carmarketarg@gmail.com</span>
               </div>
               <div className="flex items-center">
                 <MapPin size={16} className="mr-2 text-muted-foreground" />
@@ -167,13 +146,13 @@ export function Footer() {
             © {new Date().getFullYear()} CarMarket. Todos los derechos reservados.
           </p>
           <div className="flex space-x-6">
-            <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/contacto" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Términos y condiciones
             </Link>
-            <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/contacto" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Política de privacidad
             </Link>
-            <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/contacto" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Ayuda
             </Link>
           </div>

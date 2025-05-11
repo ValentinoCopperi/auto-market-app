@@ -153,7 +153,7 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
         }
 
         if (!message) {
-            toast.error("Error al enviar el mensaje")
+            toast.error("Debes escribir un mensaje")
             setIsSending(false)
             return
         }
@@ -163,6 +163,8 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
             setIsSending(false)
             return
         }
+
+       
 
         if (message) {
 

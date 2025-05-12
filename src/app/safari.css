@@ -1,0 +1,22 @@
+/* Soluciones específicas para Safari */
+@supports (-webkit-touch-callout: none) {
+    /* Corrige problemas de flexbox en Safari */
+    .safari-flex-fix {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+    }
+  
+    /* Corrige problemas de grid en Safari */
+    .safari-grid-fix {
+      display: -webkit-grid;
+      display: grid;
+    }
+  
+    /* Corrige problemas con position: sticky en Safari */
+    .safari-sticky-fix {
+      position: -webkit-sticky;
+      position: sticky;
+    }
+  }
+  

@@ -124,3 +124,11 @@
 .container {
   @apply max-w-[90rem] mx-auto;
 }
+
+/* Añade esto para solucionar problemas específicos de Safari */
+@supports (-webkit-touch-callout: none) {
+  html,
+  body {
+    height: -webkit-fill-available;
+  }
+}

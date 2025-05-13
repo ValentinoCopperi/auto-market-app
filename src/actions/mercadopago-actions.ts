@@ -101,7 +101,7 @@ export const suscribe = async (email: string, plan: Planes, code: string | null)
         const suscription = await new PreApproval(mercadopago).create({
             body: {
                 back_url: `${process.env.APP_URL}/suscripcion/success`,
-                payer_email: email,
+                payer_email: "test_user_314333475@testuser.com",
                 reason: "Suscripción a auto market - " + getPlan(plan).name,
                 auto_recurring: {
                     frequency_type: "months",

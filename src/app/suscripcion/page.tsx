@@ -5,7 +5,7 @@ import { Check, Crown, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { suscribe } from "@/actions/mercadopago-actions"
-import { redirect, RedirectType } from "next/navigation"
+import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
@@ -47,9 +47,7 @@ export default function SuscripcionesPage() {
     if (error) {
       toast.error(message)
     } else {
-      console.log(data)
-      redirect(data!,RedirectType.replace)
-      
+      redirect(data!)
     }
     setLoading(false)
   }
@@ -165,4 +163,3 @@ export default function SuscripcionesPage() {
     </div>
   )
 }
-

@@ -96,12 +96,12 @@ export const suscribe = async (email: string, plan: Planes, code: string | null)
                 data: `${process.env.APP_URL}/suscripcion/success`
             }
         }
-        console.log("Email",email)
+
         const total_price = 15;
         const suscription = await new PreApproval(mercadopago).create({
             body: {
                 back_url: `${process.env.APP_URL}/suscripcion/success`,
-                payer_email:"mjmorazzo@gmail.com",
+                payer_email: email,
                 reason: "Suscripción a auto market - " + getPlan(plan).name,
                 auto_recurring: {
                     frequency_type: "months",

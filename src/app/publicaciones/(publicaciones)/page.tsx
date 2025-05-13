@@ -109,7 +109,7 @@ export default async function PublicacionesPage(props: { searchParams: SearchPar
   return (
     <div className="min-h-screen bg-background">
       {/* Structured data para la página de listados */}
-      <PublicacionesJsonLd publicaciones={publicaciones} />
+      {/* <PublicacionesJsonLd publicaciones={publicaciones} /> */}
 
       <main className="px-3 md:px-12 lg:px-5 py-8">
         {/* Breadcrumbs mejorados con microdata */}

@@ -2,11 +2,52 @@
 
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
 import React, { useState } from 'react'
+import { toast } from 'sonner'
 
-const BtnCancelar = () => {
+const BtnCancelar = ({ id_suscripcion }: { id_suscripcion: number }) => {
+    const { user } = useAuth()
+    const [loading, setLoading] = useState(false)
 
+    const cancelar = async () => {
+        setLoading(true)
+        if (!user) {
+            toast.error("Debes estar autenticado para cancelar tu suscripcion", {
+                description: "Porfavor, inicia sesión para continuar.",
+            })
+            setLoading(false)
+            return
+        }
+        try {
+            const response = await fetch('/api/cancel-suscripcion', {
+                method: 'POST',
+                body: JSON.stringify({ subscriptionId: id_suscripcion, userId: user.id }),
+            })
 
+            if (!response.ok) {
+                throw new Error("Error al cancelar la suscripcion")
+            }
+
+            const data = await response.json()
+
+            if (data.error) {
+                throw new Error(data.message)
+            }
+
+            toast.success("Suscripcion cancelada correctamente", {
+                description: "Tu suscripcion ha sido cancelada correctamente.",
+            })
+
+        } catch (error) {
+            console.error(error)
+            toast.error("Error al cancelar tu suscripcion", {
+                description: "Porfavor, intenta nuevamente.",
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <>
             <AlertDialog>
@@ -26,7 +67,9 @@ const BtnCancelar = () => {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel>
+                            <Button variant="outline" onClick={cancelar} disabled={loading}>Cancelar</Button>
+                        </AlertDialogCancel>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

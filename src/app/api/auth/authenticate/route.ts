@@ -27,7 +27,7 @@ export async function GET() {
       },
     })
   } catch (error) {
-    console.error("Error al obtener la sesión:", error)
+    console.error("Error al obtener la sesión")
     return NextResponse.json({ error: true, message: "Error al obtener la información de la sesión" }, { status: 500 })
   }
 }

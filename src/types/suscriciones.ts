@@ -66,7 +66,6 @@ export const planes = [
             "Hasta 10 fotos por vehículo",
             "Chat con compradores",
             "Recibe ofertas directas",
-            "Estadísticas básicas de visitas",
             "Renovación automática",
             "Soporte vía email",
             "Perfil de vendedor personalizado"
@@ -104,7 +103,7 @@ export const planes = [
             "Publicaciones ilimitadas",
             "Duración ilimitada de publicaciones",
             "Máxima visibilidad en búsquedas",
-            "Ilimitado fotos + video por vehículo",
+            "Ilimitado fotos por vehículo",
             "Todas las publicaciones destacadas",
             "Panel de administración profesional",
             "Perfil de concesionaria personalizado",

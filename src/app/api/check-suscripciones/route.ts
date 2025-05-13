@@ -36,7 +36,7 @@ export async function GET() {
             message: `Verificación completada. ${expiredSubscriptions.length} suscripciones actualizadas.`,
         })
     } catch (error) {
-        console.error("Error al verificar suscripciones:", error)
+        console.error("Error al verificar suscripciones")
         return NextResponse.json({ success: false, error: "Error al verificar suscripciones" }, { status: 500 })
     }
 }

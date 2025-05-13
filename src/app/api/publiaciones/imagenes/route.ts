@@ -41,16 +41,15 @@ export async function POST(request: NextRequest) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         uploadAttempt++
       } catch (e) {
-        console.error(`Upload attempt ${uploadAttempt + 1} failed:`, e)
+        console.error(`Upload attempt ${uploadAttempt + 1} failed:`)
         uploadAttempt++
         await new Promise((resolve) => setTimeout(resolve, 1000))
       }
     }
 
     if (!uploadResult || uploadResult.error) {
-      console.error("Error al subir imagen después de intentos:", uploadResult?.error)
       return NextResponse.json(
-        { error: true, message: uploadResult?.error?.message || "Error al subir imagen" },
+        { error: true, message: "Error al subir imagen" },
         { status: 500 },
       )
     }
@@ -79,7 +78,7 @@ export async function POST(request: NextRequest) {
       url: publicUrl,
     })
   } catch (error) {
-    console.error("Error al subir imagen:", error)
+    console.error("Error al subir imagen")
     return NextResponse.json({ error: true, message: "Error al subir imagen" }, { status: 500 })
   }
 }

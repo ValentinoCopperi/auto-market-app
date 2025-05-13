@@ -58,7 +58,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ error: false, publicacion: { ...publicacion, precio: serializedPrice } }, { status: 200 })
   } catch (error) {
-    console.error(`Error fetching publicacion:`, error)
+    console.error(`Error fetching publicacion:`)
     return NextResponse.json({ error: true, message: "Error al obtener la publicación" }, { status: 500 })
   }
 }
@@ -113,7 +113,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ error: false, message: "Publicación eliminada correctamente" }, { status: 200 })
   } catch (error) {
-    console.error(`Error fetching publicacion:`, error)
     return NextResponse.json({ error: true, message: "Error al eliminar la publicación" }, { status: 500 })
   }
 }
@@ -272,7 +271,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             uploadedPhotos.push(response.url)
           }
         } catch (error) {
-          console.error("Error processing image:", error)
+          console.error("Error processing image")
           // Continue with next photo
         }
       }
@@ -297,18 +296,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         },
       })
     } catch (error) {
-      console.error("Error updating publication:", error)
+      console.error("Error updating publication")
       return NextResponse.json(
         { error: true, message: "Error al actualizar la publicación. Intenta nuevamente." },
         { status: 500 },
       )
     }
   } catch (error) {
-    console.error("Error in API route:", error)
+    console.error("Error in API route")
     return NextResponse.json(
       {
         error: true,
-        message: error instanceof Error ? error.message : "Error al actualizar la publicación. Intenta nuevamente.",
+        message: "Error al actualizar la publicación. Intenta nuevamente.",
       },
       { status: 500 },
     )
@@ -345,15 +344,15 @@ async function uploadImage({ file, fileName, publicacionId, contentType }: Uploa
         await new Promise((resolve) => setTimeout(resolve, 1000))
         uploadAttempt++
       } catch (e) {
-        console.error(`Upload attempt ${uploadAttempt + 1} failed:`, e)
+        console.error(`Upload attempt ${uploadAttempt + 1} failed:`)
         uploadAttempt++
         await new Promise((resolve) => setTimeout(resolve, 1000))
       }
     }
 
     if (!uploadResult || uploadResult.error) {
-      console.error("Error al subir imagen después de intentos:", uploadResult?.error)
-      return { error: true, message: uploadResult?.error?.message || "Error al subir imagen" }
+      console.error("Error al subir imagen después de intentos:")
+      return { error: true, message:"Error al subir imagen" }
     }
 
     // Get public URL
@@ -371,7 +370,7 @@ async function uploadImage({ file, fileName, publicacionId, contentType }: Uploa
 
     return { error: false, message: "Imagen subida correctamente", url: publicUrl }
   } catch (error) {
-    console.error("Error al subir imagen:", error)
+    console.error("Error al subir imagen")
     return { error: true, message: "Error al subir imagen" }
   }
 }
@@ -386,22 +385,20 @@ const deleteImage = async (publicacionId: number, url: string) => {
     };
 
     const filePath = getPathFromUrl(url);
-    console.log("filePath", filePath)
     const { error: deleteError } = await supabase
       .storage
       .from("auto-market")
       .remove([filePath]);
 
     if (deleteError) {
-      console.error("Error al eliminar la imagen:", deleteError);
-      return { error: true, message: `Error al eliminar la imagen: ${deleteError.message}` };
+      console.error("Error al eliminar la imagen");
+      return { error: true, message: `Error al eliminar la imagen` };
     }
 
    
 
     return { error: false, message: "Imagen eliminada correctamente" };
   } catch (error) {
-    console.error("Error inesperado:", error);
-    return { error: true, message: `Error inesperado: ${error instanceof Error ? error.message : String(error)}` };
+    return { error: true, message: `Error inesperado` };
   }
 };

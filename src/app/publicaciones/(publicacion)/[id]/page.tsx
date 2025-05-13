@@ -180,7 +180,7 @@ const PublicacionPage = async ({
   return (
     <div className="min-h-screen bg-background pb-12">
       {/* JSON-LD para datos estructurados */}
-      <PublicacionJsonLd publicacion={publicacion} />
+      {/* <PublicacionJsonLd publicacion={publicacion} /> */}
 
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumbs mejorados */}

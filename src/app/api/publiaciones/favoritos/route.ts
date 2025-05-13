@@ -39,7 +39,6 @@ export async function POST(request: NextRequest){
     return NextResponse.json({ error: false, esFavorito }, { status: 200 });
     
   } catch (error) {
-    console.error("Error al obtener favoritos:", error);
     return NextResponse.json({ error: true, message: "Error interno al obtener favoritos" }, { status: 500 });
   }
 

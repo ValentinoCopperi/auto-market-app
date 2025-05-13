@@ -80,7 +80,6 @@ export async function GET() {
         }, error: false, message: "Conversaciones obtenidas correctamente" }, { status: 200 });
 
     } catch (error) {
-        console.log(error)
         return NextResponse.json({data: null, error: true, message: "Error al obtener las conversaciones" }, { status: 500 });
     }
         

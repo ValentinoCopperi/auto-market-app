@@ -151,7 +151,7 @@ const SuscripcionAdministrar = async () => {
                                                     Renovar suscripción
                                                 </Link>
                                             </Button>
-                                            <BtnCancelar />
+                                            <BtnCancelar id_suscripcion={suscripcion.id} />
                                         </>
                                     ) : (
                                         <Button

@@ -147,19 +147,25 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
         setIsSending(true)
 
         if (!isAuthenticated) {
-            toast.error("Debes estar autenticado para enviar un mensaje")
+            toast.error("Debes estar autenticado para enviar un mensaje",{
+                description: "Porfavor, inicia sesión para continuar.",
+            })
             setIsSending(false)
             return
         }
 
         if (!message) {
-            toast.error("Debes escribir un mensaje")
+            toast.error("Debes escribir un mensaje",{
+                description: "Porfavor, escribe un mensaje para continuar.",
+            })
             setIsSending(false)
             return
         }
 
         if(!id_vendedor && !id_cliente_vendedor){
-            toast.error("Error al enviar el mensaje")
+            toast.error("Error al enviar el mensaje",{
+                description: "Porfavor, intenta nuevamente.",
+            })
             setIsSending(false)
             return
         }
@@ -180,11 +186,15 @@ export const MensajesProvider = ({ children }: { children: React.ReactNode }) =>
             const data = await response.json()
 
             if (data.error) {
-                toast.error(data.message)
+                toast.error(data.message,{
+                    description: "Porfavor, intenta nuevamente.",
+                })
                 setIsSending(false)
                 return
             }
-            toast.success("Mensaje enviado correctamente")
+            toast.success("Mensaje enviado correctamente",{
+                description: "El mensaje se ha enviado correctamente.",
+            })
             //Agregamos a la el array de mensajes el nuevo mensaje devuelto por la API
             setMensajes([...mensajes, data.data])
             setMensajesTemporales([...mensajesTemporales, data.data])

@@ -38,7 +38,6 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ data: publicaciones, error: false, message: "Publicaciones obtenidas correctamente" }, { status: 200 });
     } catch (error) {
-        console.log(error)
         return NextResponse.json({ error: true, message: "Error al obtener las publicaciones" }, { status: 500 });
     }
 
@@ -240,7 +239,6 @@ export async function POST(request: NextRequest) {
 
             newPublicacionId = result
         } catch (error) {
-            console.error("Error creating publication:", error)
             return NextResponse.json(
                 { error: true, message: "Error al crear la publicación. Intenta nuevamente." },
                 { status: 500 },
@@ -252,11 +250,10 @@ export async function POST(request: NextRequest) {
             error: false, message: "Publicación creada correctamente", data: newPublicacionId,}, { status: 200 })
 
     } catch (error) {
-        console.error("Error in API route:", error)
         return NextResponse.json(
             {
                 error: true,
-                message: error instanceof Error ? error.message : "Error al publicar el vehículo. Porfavor, intenta nuevamente",
+                message: "Error al publicar el vehículo. Porfavor, intenta nuevamente",
             },
             { status: 500 },
         )
@@ -300,15 +297,13 @@ async function uploadImage({ file, publicacionId, tx }: UploadImageData) {
                 await new Promise((resolve) => setTimeout(resolve, 1000))
                 uploadAttempt++
             } catch (e) {
-                console.error(`Upload attempt ${uploadAttempt + 1} failed:`, e)
                 uploadAttempt++
                 await new Promise((resolve) => setTimeout(resolve, 1000))
             }
         }
 
         if (!uploadResult || uploadResult.error) {
-            console.error("Error al subir imagen después de intentos:", uploadResult?.error)
-            return { error: true, message: uploadResult?.error?.message || "Error al subir imagen" }
+            return { error: true, message: "Error al subir imagen" }
         }
 
         // Get public URL
@@ -327,7 +322,6 @@ async function uploadImage({ file, publicacionId, tx }: UploadImageData) {
 
         return { error: false, message: "Imagen subida correctamente", url: publicUrl }
     } catch (error) {
-        console.error("Error al subir imagen:", error)
         return { error: true, message: "Error al subir imagen" }
     }
 }

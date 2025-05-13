@@ -67,17 +67,23 @@ export function ChatDialog({
     const sendOfferAmount = () => {
         
         if (!offerAmount || offerAmount <= 0 ) {
-            toast.error("El monto de la oferta debe ser mayor a 0")
+            toast.error("El monto de la oferta debe ser mayor a 0",{
+                description: "Porfavor, ingresa un monto válido.",
+            })
             return
         }
 
         if(!user){
-            toast.error("Debes estar autenticado para enviar un mensaje")
+            toast.error("Debes estar autenticado para enviar un mensaje",{
+                description: "Porfavor, inicia sesión para continuar.",
+            })
             return
         }
 
         if(Number(user.id) === vendedorId)  {
-            toast.error("No puedes enviar un mensaje a ti mismo")
+            toast.error("No puedes enviar un mensaje a ti mismo",{
+                description: "Porfavor, selecciona otro vehiculo.",
+            })
             return
         }
 

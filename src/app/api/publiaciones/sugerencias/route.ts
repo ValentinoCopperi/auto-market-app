@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ suggestions })
 
   } catch (error) {
-    console.error("Error al obtener sugerencias:", error)
+    console.error("Error al obtener sugerencias")
     return NextResponse.json({ suggestions: [] }, { status: 500 })
   }
 }

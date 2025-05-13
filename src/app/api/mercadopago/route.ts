@@ -11,11 +11,13 @@ export async function POST(request: Request) {
         // Obtenemos el cuerpo de la petición que incluye el tipo de notificación
         const body: { data: { id: string }; type: string } = await request.json();
 
+        console.log(body)
         // Solo nos interesan las notificaciones de suscripciones
         if (body.type === "subscription_preapproval") {
             // Obtenemos la suscripción
             const preapproval = await new PreApproval(mercadopago).get({ id: body.data.id });
 
+            console.log(preapproval)
             // Si se aprueba, actualizamos el usuario con el id de la suscripción
             if (preapproval.status === "authorized") {
 
@@ -28,6 +30,8 @@ export async function POST(request: Request) {
                 plan = parts[0]
                 identifier = parts[1]
 
+                console.log(plan)
+                console.log(identifier)
 
                 // Determine if identifier is an email or user ID
                 const user = await prisma.cliente.findUnique({

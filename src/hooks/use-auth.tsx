@@ -62,7 +62,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(false)
       }
     } catch (err) {
-      console.error("Error al verificar autenticación:", err)
       setUser(null)
       setIsAuthenticated(false)
     } finally {
@@ -95,14 +94,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(false)
         return false
       }
-      toast.success("Inicio de sesión exitoso")
+      toast.success("Inicio de sesión exitoso",{
+        description: "Bienvenido de nuevo.",
+      })
       closeDialog()
       setUser(data.cliente)
       setIsAuthenticated(true)
       router.refresh()
       return true
     } catch (err) {
-      setError("Error al iniciar sesión")
+      setError("Error al iniciar sesión. Porfavor, intenta nuevamente.")
       setIsAuthenticated(false)
       return false
     } finally {
@@ -126,13 +127,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setError(res.message)
         return
       }
-      toast.success("Usuario creado correctamente")
+      toast.success("Usuario creado correctamente",{
+        description: "Bienvenido a nuestra plataforma.",
+      })
       setUser(res.user)
       setIsAuthenticated(true)
       closeDialog()
     } catch (error) {
-      console.error("Error al registrar:", error)
-      setError("Error al registrar")
+      setError("Error al registrar. Porfavor, intenta nuevamente.")
     } finally {
       setLoading(false)
     }
@@ -147,7 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(false)
       router.refresh()
     } catch (err) {
-      console.error("Error al cerrar sesión:", err)
+      console.log("No se pudo cerrar sesión")
     } finally {
       setLoading(false)
     }

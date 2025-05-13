@@ -11,7 +11,6 @@ export async function POST() {
       message: "Sesión cerrada correctamente",
     })
   } catch (error) {
-    console.error("Error al cerrar sesión:", error)
     return NextResponse.json({ error: "Error al cerrar sesión" }, { status: 500 })
   }
 }

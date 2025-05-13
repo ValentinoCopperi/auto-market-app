@@ -75,13 +75,17 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
   const onSave = async () => {
     setIsLoading(true)
     if (!user) {
-      toast.error("Debes estar autenticado para editar una publicación")
+      toast.error("Inicia sesion para editar una publicacion", {
+        description: "Porfavor, inicia sesión para continuar.",
+      })
       setIsLoading(false)
       return
     }
 
     if (editedPublication.cliente.id !== Number(user.id)) {
-      toast.error("No puedes editar una publicación que no es tuya")
+      toast.error("No puedes editar una publicación que no es tuya", {
+        description: "Porfavor, verifica que estás editando la publicación correcta.",
+      })
       setIsLoading(false)
       return
     }
@@ -90,12 +94,16 @@ export function EditPublicationDialog({ publicacion }: EditPublicationDialogProp
     const { error, message } = await editarPublicacion(editedPublication, newImages)
 
     if (error) {
-      toast.error(message)
+      toast.error(message, {
+        description: "Porfavor, intenta nuevamente.",
+      })
       setIsLoading(false)
       return
     }
 
-    toast.success(message)
+    toast.success(message, {
+      description: "Los cambios se han guardado correctamente.",
+    })
     setOpen(false)
     setIsLoading(false)
     router.refresh()

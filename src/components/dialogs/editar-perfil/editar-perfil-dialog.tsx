@@ -249,12 +249,16 @@ const EditarPerfilDialog = ({ isEditModalOpen, setIsEditModalOpen, cliente }: Ed
       const response = await editarPerfil(cliente.id, new_data)
 
       if (response.error) {
-        toast.error(response.message)
+        toast.error(response.message, {
+          description: "Porfavor, intenta nuevamente.",
+        })
         setIsSubmitting(false)
         return
       } else {
         router.refresh()
-        toast.success("Perfil actualizado")
+        toast.success("Perfil actualizado", {
+          description: "Los cambios se han guardado correctamente.",
+        })
       }
       setIsEditModalOpen(false)
     } catch (error) {

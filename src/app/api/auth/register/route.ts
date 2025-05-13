@@ -61,7 +61,6 @@ export async function POST(req: Request) {
       suscripcion:null,
     } }, { status: 200 })
   } catch (error) {
-    console.log(error)
     return NextResponse.json({ error: true, message: "Error al crear el cliente" }, { status: 500 })
   }
 }

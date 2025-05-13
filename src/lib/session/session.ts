@@ -101,7 +101,7 @@ export async function isAdmin(): Promise<boolean> {
 /**
  * Actualiza el campo "suscripcion" de la cookie de sesión
  */
-export async function updateSuscripcion(newSuscripcion: string) {
+export async function updateSuscripcion(newSuscripcion: string | null) {
   const cookieStore = await cookies()
   const sessionCookie = cookieStore.get("session")?.value
 

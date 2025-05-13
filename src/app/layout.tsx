@@ -166,10 +166,7 @@ export default function RootLayout({
             <Footer />
           </Providers>
         </div>
-        <WebsiteJsonLd />
-        <OrganizationJsonLd />
-        <LocalBusinessJsonLd />
-        <Analytics />
+       
       </body>
     </html>
   )

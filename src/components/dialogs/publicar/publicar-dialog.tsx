@@ -166,7 +166,9 @@ export const PublishDialog = memo(() => {
         throw new Error("Error al subir algunas imagenes. Puedes editar la publicación para subir las que falten.")
       }
       // Show success message
-      toast.success(result.message || "Vehículo publicado correctamente")
+      toast.success(result.message || "Vehículo publicado correctamente", {
+        description: "Los cambios se han guardado correctamente.",
+      })
 
       // Redirect to the publication page
       if (id_publicacion) {
@@ -175,8 +177,9 @@ export const PublishDialog = memo(() => {
         router.refresh()
       }
     } catch (error) {
-      console.error("Error al publicar:", error)
-      toast.error(error instanceof Error ? error.message : "Error al publicar el vehículo. Inténtalo de nuevo.")
+      toast.error(error instanceof Error ? error.message : "Error al publicar el vehículo. Inténtalo de nuevo.", {
+        description: "Porfavor, intenta nuevamente.",
+      })
     } finally {
       setLoading(false)
     }

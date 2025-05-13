@@ -18,7 +18,7 @@ export async function POST(request: Request) {
             // Si se aprueba, actualizamos el usuario con el id de la suscripción
             if (preapproval.status === "authorized") {
                 
-                console.log("Preapproval (despues de autorizar)",preapproval)
+                console.log("Preapproval (despues de autorizars)",preapproval)
                 const external_reference = preapproval.external_reference as string
                 let plan: string
                 let identifier: string

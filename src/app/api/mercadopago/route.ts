@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
             console.log("Preapproval (antes de autorizar)",preapproval)
             // Si se aprueba, actualizamos el usuario con el id de la suscripción
-            if (preapproval.status !== "authorized") {
+            if (preapproval.status === "authorized") {
                 
                 console.log("Preapproval (despues de autorizar)",preapproval)
                 const external_reference = preapproval.external_reference as string

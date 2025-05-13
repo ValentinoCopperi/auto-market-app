@@ -81,7 +81,7 @@ model pago {
   id_suscripcion Int?
   monto          Int
   metodo_pago    String       @db.VarChar(100)
-  transaccion_id String?      @unique @db.VarChar(350)
+  transaccion_id String?      @db.VarChar(350)
   estado         String       @db.VarChar(60)
   id_cliente     Int
   id_pago_mp     Int?

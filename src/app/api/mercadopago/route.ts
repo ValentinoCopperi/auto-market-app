@@ -56,7 +56,7 @@ export async function POST(request: Request) {
                     console.error("Subscription type not found:", plan)
                     return new Response(null, { status: 404 })
                 }
-    
+                console.log("Tipo de suscripcion",tipo_suscripcion)
                 // Calculate end date from preapproval data
                 const startDate = new Date()
                 let endDate
@@ -98,6 +98,7 @@ export async function POST(request: Request) {
                                 }
                             }
                         })
+                        console.log("Updated existing subscription:", updated_suscripcion)
                         subscriptionId = updated_suscripcion.id
                         await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
                         console.log("Updated existing subscription:", existingSubscription.id)
@@ -120,6 +121,7 @@ export async function POST(request: Request) {
                                 }
                             }
                         })
+                        console.log("Created new subscription:", nueva_suscripcion)
                         subscriptionId = nueva_suscripcion.id
                         await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
                         console.log("Created new subscription:", nueva_suscripcion.id)
@@ -136,7 +138,7 @@ export async function POST(request: Request) {
                             id_cliente: user.id,
                         },
                     })
-    
+                    console.log("Created payment record:", nuevo_pago)
                     console.log("Created payment record:", nuevo_pago.id)
                 
             })

@@ -68,7 +68,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "CarMarket Argentina" }],
   creator: "CarMarket Argentina",
-  publisher: "CarMarket Argentina",
+  publisher: "CarMarket Argentinaa",
   formatDetection: {
     email: false,
     address: false,

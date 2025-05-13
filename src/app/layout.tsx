@@ -166,7 +166,11 @@ export default function RootLayout({
             <Footer />
           </Providers>
         </div>
-       
+        <script src="https://www.mercadopago.com/v2/security.js"></script>
+        <WebsiteJsonLd />
+        <OrganizationJsonLd />
+        <LocalBusinessJsonLd />
+        <Analytics />
       </body>
     </html>
   )

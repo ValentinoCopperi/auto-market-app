@@ -70,7 +70,8 @@ export async function POST(request: Request) {
                     // Fallback to 30 days if next_payment_date is not available
                     endDate = new Date(startDate.getTime() + 30 * 24 * 60 * 60 * 1000)
                 }
-    
+                console.log("Start Date:", startDate)
+                console.log("End Date:", endDate)
                 // Use a transaction to ensure data consistency
                 await prisma.$transaction(async (tx) => {
                     // Check for existing active subscription

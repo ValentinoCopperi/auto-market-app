@@ -100,7 +100,7 @@ export async function POST(request: Request) {
                         })
                         console.log("Updated existing subscription:", updated_suscripcion)
                         subscriptionId = updated_suscripcion.id
-                        await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
+                        //await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
                         console.log("Updated existing subscription:", existingSubscription.id)
                     } else {
                         // Create new subscription
@@ -123,7 +123,7 @@ export async function POST(request: Request) {
                         })
                         console.log("Created new subscription:", nueva_suscripcion)
                         subscriptionId = nueva_suscripcion.id
-                        await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
+                        //await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
                         console.log("Created new subscription:", nueva_suscripcion.id)
                     }
     

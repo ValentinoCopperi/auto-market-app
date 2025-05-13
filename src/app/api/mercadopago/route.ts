@@ -7,12 +7,15 @@ export async function POST(request: Request) {
     try {
         // Obtenemos el cuerpo de la petición que incluye el tipo de notificación
         const body: { data: { id: string }; type: string } = await request.json();
-
         console.log("Body",body)
         // Solo nos interesan las notificaciones de suscripciones
         if (body.type === "subscription_preapproval") {
             // Obtenemos la suscripción
             const preapproval = await new PreApproval(mercadopago).get({ id: body.data.id });
+      
+            console.log("Preapproval ID:", preapproval.id);
+            console.log("Status:", preapproval.status);
+            console.log("External Reference:", preapproval.external_reference);
 
             console.log("Preapproval (antes de autorizar)",preapproval)
             // Si se aprueba, actualizamos el usuario con el id de la suscripción
@@ -100,7 +103,7 @@ export async function POST(request: Request) {
                         })
                         console.log("Updated existing subscription:", updated_suscripcion)
                         subscriptionId = updated_suscripcion.id
-                        //await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
+                        await updateSuscripcion(updated_suscripcion.tipo_suscripcion.nombre)
                         console.log("Updated existing subscription:", existingSubscription.id)
                     } else {
                         // Create new subscription
@@ -123,7 +126,7 @@ export async function POST(request: Request) {
                         })
                         console.log("Created new subscription:", nueva_suscripcion)
                         subscriptionId = nueva_suscripcion.id
-                        //await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
+                        await updateSuscripcion(nueva_suscripcion.tipo_suscripcion.nombre)
                         console.log("Created new subscription:", nueva_suscripcion.id)
                     }
     

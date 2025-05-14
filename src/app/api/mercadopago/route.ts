@@ -10,15 +10,16 @@ export async function POST(request: Request) {
     try {
         // Obtenemos el cuerpo de la petición que incluye el tipo de notificación
         const body: { data: { id: string }; type: string } = await request.json();
-
+        console.log("Body:", body)
         // Solo nos interesan las notificaciones de suscripciones
         if (body.type === "subscription_preapproval") {
             // Obtenemos la suscripción
             const preapproval = await new PreApproval(mercadopago).get({ id: body.data.id });
-
+            console.log("Preapproval:", preapproval)
+            console.log("Preapproval status:", preapproval.status)
             // Si se aprueba, actualizamos el usuario con el id de la suscripción
             if (preapproval.status === "authorized") {
-
+                console.log("Preapproval authorized",preapproval)
                 const external_reference = preapproval.external_reference as string
                 let plan: string
                 let identifier: string
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
                         ],
                     },
                 })
-
+                console.log("Tipo de suscripcion:", tipo_suscripcion)
                 if (!tipo_suscripcion) {
                     console.error("Subscription type not found:", plan)
                     return new Response(null, { status: 404 })
@@ -59,14 +60,14 @@ export async function POST(request: Request) {
                 // Calculate end date from preapproval data
                 const startDate = new Date()
                 let endDate
-
+                
                 if (preapproval.next_payment_date) {
                     endDate = new Date(preapproval.next_payment_date)
                 } else {
                     // Fallback to 30 days if next_payment_date is not available
                     endDate = new Date(startDate.getTime() + 30 * 24 * 60 * 60 * 1000)
                 }
-
+                console.log("End date:", endDate)
                 // Use a transaction to ensure data consistency
                 await prisma.$transaction(async (tx) => {
                     // Check for existing active subscription
@@ -134,7 +135,7 @@ export async function POST(request: Request) {
                             id_cliente: user.id,
                         },
                     })
-
+                    
                     console.log("Created payment record:", nuevo_pago.id)
 
 

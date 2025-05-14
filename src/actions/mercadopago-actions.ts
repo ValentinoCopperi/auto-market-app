@@ -96,7 +96,7 @@ export const suscribe = async (email: string, plan: Planes, code: string | null)
                 data: `${process.env.APP_URL}/suscripcion/success`
             }
         }
-
+        console.log("Suscribiendo a plan:", plan)
         const total_price = 15;
         const suscription = await new PreApproval(mercadopago).create({
             body: {

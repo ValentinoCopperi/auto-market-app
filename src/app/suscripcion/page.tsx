@@ -45,9 +45,11 @@ export default function SuscripcionesPage() {
     }
     const response = await init_point(selectedPlan)
     if(response.error) {
+      setLoading(false)
       toast.error(response.message)
       return
     }
+    setLoading(false)
     redirect(response.data!)
   }
 
@@ -93,7 +95,9 @@ export default function SuscripcionesPage() {
                 </p>
               </div>
               {/* <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} code={code} setCode={setCode} /> */}
-              <Button onClick={() => handleProceedToPayment()}>Proceder al pago</Button>
+              <Button onClick={() => handleProceedToPayment()} disabled={loading}>
+                {loading ? "Procesando..." : "Proceder al pago"}
+              </Button>
             </div>
           </div>
         )}

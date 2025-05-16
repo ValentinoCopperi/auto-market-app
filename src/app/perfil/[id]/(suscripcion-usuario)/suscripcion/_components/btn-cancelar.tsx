@@ -63,14 +63,10 @@ const BtnCancelar = ({ id_suscripcion }: { id_suscripcion: number }) => {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Cancelar suscripción</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Para cancelar tu suscripcion debes ir a mercado pago y cancelar la suscripcion desde el panel de control de suscripciones.
+                            Tu suscripcion se cancelara cuando se acabe el periodo de la suscripcion.No se renovara automaticamente.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>
-                            <Button variant="outline" onClick={cancelar} disabled={loading}>Cancelar</Button>
-                        </AlertDialogCancel>
-                    </AlertDialogFooter>
+                   
                 </AlertDialogContent>
             </AlertDialog>
 

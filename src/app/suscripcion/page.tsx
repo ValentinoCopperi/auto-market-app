@@ -4,13 +4,13 @@ import { useEffect, useState } from "react"
 import { Check, Crown, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { suscribe } from "@/actions/mercadopago-actions"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
 import EmailDialog from "./_components/email-dialog"
 import { useAuth } from "@/hooks/use-auth"
+import { init_point } from "@/actions/mercadopago-actions"
 
 
 
@@ -18,7 +18,7 @@ import { useAuth } from "@/hooks/use-auth"
 
 export default function SuscripcionesPage() {
   // Añadir estado para el plan seleccionado
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<Planes | null>("plan_vendedor")
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState(user?.email || "")
@@ -32,24 +32,23 @@ export default function SuscripcionesPage() {
 
   // Función para proceder al pago
   const handleProceedToPayment = async () => {
-    if(!selectedPlan) {
+    if (!selectedPlan) {
       toast.error("Debes seleccionar un plan")
       return
     }
     setLoading(true)
     let codeToSend = code || null
-    if(!code || code === ""){
+    if (!code || code === "") {
       codeToSend = null
-    }else{
+    } else {
       codeToSend = code
     }
-    const { data, error, message } = await suscribe(email, selectedPlan, codeToSend)
-    if (error) {
-      toast.error(message)
-    } else {
-      redirect(data!)
+    const response = await init_point(selectedPlan)
+    if(response.error) {
+      toast.error(response.message)
+      return
     }
-    setLoading(false)
+    redirect(response.data!)
   }
 
   return (
@@ -93,7 +92,8 @@ export default function SuscripcionesPage() {
                   Todos los pagos son procesados por Mercado Pago. Tu email debe existir en Mercado Pago.
                 </p>
               </div>
-              <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} code={code} setCode={setCode} />
+              {/* <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} code={code} setCode={setCode} /> */}
+              <Button onClick={() => handleProceedToPayment()}>Proceder al pago</Button>
             </div>
           </div>
         )}

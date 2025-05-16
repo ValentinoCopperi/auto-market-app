@@ -1,130 +1,81 @@
 "use server"
 
-import { MercadoPagoConfig, PreApproval } from "mercadopago";
-import { mercadopago } from "@/lib/mercadopago";
+import { MercadoPagoConfig, Preference } from "mercadopago";
 import { ActionsResponse } from "@/types/actions-response";
 import { getSession } from "@/lib/session/session";
-import prisma from "@/lib/prisma";
 import { Planes } from "@/types/suscriciones";
-import { suscribir_a_plan } from "./suscripcion-actions";
 
 
-const getPlan = (plan: Planes) => {
-    switch (plan) {
-        case "plan_ocasion":
-            return { name: "Plan Ocasional", price: 100 };
+const getPlanName = (plan: Planes) => {
+    switch(plan) {
         case "plan_vendedor":
-            return { name: "Plan Vendedor", price: 200 };
+            return "Plan Vendedor - Car Market"
+        case "plan_ocasion":
+            return "Plan Ocasional - Car Market"
         case "plan_agencia":
-            return { name: "Plan Agencia", price: 300 };
+            return "Plan Agencia - Car Market"
+            
     }
 }
 
-const code_test = "123456"
+const mercado_pago_config = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN!,
+});
 
-export const suscribe = async (email: string, plan: Planes, code: string | null): Promise<ActionsResponse<string>> => {
 
+
+export const init_point = async (plan: Planes): Promise<ActionsResponse<string>> => {
+    const session = await getSession();
+    if(!session) {
+        return {
+            error: true,
+            message: "Debes iniciar sesión para suscribirte",
+        }
+    }
+    
+    console.log(process.env.MP_ACCESS_TOKEN)
+    // Creamos la preferencia incluyendo el precio, titulo y metadata. La información de `items` es standard de Mercado Pago. La información que nosotros necesitamos para nuestra DB debería vivir en `metadata`.
     try {
-
-        const session = await getSession();
-
-        if(!session) {
-            return {
-                error: true,
-                message: "Debes iniciar sesión para suscribirte",
-            }
-        }
-
-        if(!email || !email.includes("@")) {
-            return {
-                error: true,
-                message: "El email es requerido",
-            }
-        }
-
-
-
-        const existingSubscription = await prisma.suscripcion.findFirst({
-            where: {
-                id_cliente: Number(session.userId),
-                estado: "activa",
-            },
-            select: {
-                tipo_suscripcion: {
-                    select: {
-                        nombre: true,
-                        precio: true,
-                    }
-                }
-            }
-        })
-       
-
-        if(existingSubscription?.tipo_suscripcion.nombre === plan){
-            return {
-                error: true,
-                message: "Ya tienes una suscripción activa de tipo " + getPlan(plan).name,
-            }
-        }else if(existingSubscription?.tipo_suscripcion.nombre === "plan_agencia" && (plan === "plan_vendedor" || plan === "plan_ocasion")){
-            return {
-                error: true,
-                message: "No puede cambiar a un plan menor al que tiene actualmente",
-            }
-        }else if(existingSubscription?.tipo_suscripcion.nombre === "plan_vendedor" && plan === "plan_ocasion"){
-            return {
-                error: true,
-                message: "No puede cambiar a un plan menor al que tiene actualmente",
-            }
-        }
-        
-        if(code && code !== code_test){
-            return {
-                error: true,
-                message: "El codigo de activacion es incorrecto",
-            }
-        }else if(code && code === code_test){
-            const response = await suscribir_a_plan(Number(session.userId), plan)
-            if(response.error){
-                return {
-                    error: true,
-                    message: response.message
-                }
-            }
-            return {
-                error: false,
-                message: "Suscripción creada correctamente",
-                data: `${process.env.APP_URL}/suscripcion/success`
-            }
-        }
-        console.log("Suscribiendo a plan:", plan)
-        const total_price = 15;
-        const suscription = await new PreApproval(mercadopago).create({
+        const preference = await new Preference(mercado_pago_config).create({
             body: {
-                back_url: `${process.env.APP_URL}/suscripcion/success`,
-                payer_email: email,
-                reason: "Suscripción a auto market - " + getPlan(plan).name,
-                auto_recurring: {
-                    frequency_type: "months",
-                    frequency: 1,
-                    transaction_amount: total_price,
-                    currency_id: "ARS",
+                items: [
+                    {
+                        id: plan,
+                        unit_price: 100,
+                        quantity: 1,
+                        title: getPlanName(plan),
+                    },
+                ],
+                metadata: {
+                    user:{
+                        id: Number(session.userId),
+                        email: session.email!,
+                    },
+                    plan: plan,
+                    fecha_inicio: new Date(),
+                    fecha_fin: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+
                 },
-                status: "pending",
-                external_reference: plan + "|" + session.userId,
+                back_urls: {
+                    success: "https://potato-deer-maker-emerging.trycloudflare.com/suscripcion/success",
+                },
+                auto_return: "approved",
+                
             },
-        })
-
-
+        });
+    
+    
+        // Devolvemos el init point (url de pago) para que el usuario pueda pagar
         return {
             error: false,
             message: "Url generada correctamente",
-            data: suscription.init_point!
+            data: preference.init_point!
         }
     } catch (error) {
-        console.log("Error: ", error)
+        console.log(error)
         return {
             error: true,
-            message: "Error al crear la suscripción",
+            message: "Error al crear la preferencia",
         }
     }
 }

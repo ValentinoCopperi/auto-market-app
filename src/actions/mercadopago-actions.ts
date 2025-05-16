@@ -41,7 +41,7 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
                 items: [
                     {
                         id: plan,
-                        unit_price: 100,
+                        unit_price: 15,
                         quantity: 1,
                         title: getPlanName(plan),
                     },
@@ -57,7 +57,7 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
 
                 },
                 back_urls: {
-                    success: "https://potato-deer-maker-emerging.trycloudflare.com/suscripcion/success",
+                    success: `${process.env.NEXT_PUBLIC_APP_URL}/suscripcion/success`,
                 },
                 auto_return: "approved",
                 

@@ -27,7 +27,7 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
   const [isLoadingBanner, setIsLoadingBanner] = useState(false)
   const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
   const [banner_img_url, setBanner_img_url] = useState(
-    usuario.banner_img_url ? usuario.banner_img_url : "/not_image.webp",
+    usuario.banner_img_url ? usuario.banner_img_url : "/fondo-negro.webp",
   )
   const [profile_img_url, setProfile_img_url] = useState(
     usuario.profile_img_url ? usuario.profile_img_url : "/not_image.webp",

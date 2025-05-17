@@ -4,7 +4,7 @@ import { MercadoPagoConfig, Preference } from "mercadopago";
 import { ActionsResponse } from "@/types/actions-response";
 import { getSession } from "@/lib/session/session";
 import { Planes } from "@/types/suscriciones";
-
+import prisma from "@/lib/prisma";
 
 const getPlanName = (plan: Planes) => {
     switch(plan) {
@@ -33,7 +33,25 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
         }
     }
     
-    console.log(process.env.MP_ACCESS_TOKEN)
+    const suscripcion = await prisma.suscripcion.findFirst({
+        where: {
+            id_cliente: Number(session.userId),
+        },select : {
+            tipo_suscripcion: {
+                select: {
+                    nombre: true,
+                }
+            },
+        }
+    })
+
+    if(plan === suscripcion?.tipo_suscripcion?.nombre) {
+        return {
+            error: true,
+            message: "Ya tienes una suscripción de el plan seleccionado",
+        }
+    }
+
     // Creamos la preferencia incluyendo el precio, titulo y metadata. La información de `items` es standard de Mercado Pago. La información que nosotros necesitamos para nuestra DB debería vivir en `metadata`.
     try {
         const preference = await new Preference(mercado_pago_config).create({

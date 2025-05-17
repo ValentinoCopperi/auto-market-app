@@ -56,6 +56,7 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
                     fecha_fin: new Date(new Date().setMonth(new Date().getMonth() + 1)),
 
                 },
+                purpose : `Suscripción a ${getPlanName(plan)}`,
                 back_urls: {
                     success: `${process.env.NEXT_PUBLIC_APP_URL}/suscripcion/success`,
                     pending: `${process.env.NEXT_PUBLIC_APP_URL}/suscripcion`,
@@ -66,6 +67,7 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
                     pending: `${process.env.NEXT_PUBLIC_APP_URL}/suscripcion`,
                     failure: `${process.env.NEXT_PUBLIC_APP_URL}/suscripcion`,
                 },
+
                 auto_return: "approved",
                 
             },

@@ -3,12 +3,9 @@
 import prisma from "@/lib/prisma"
 import { getSession } from "@/lib/session/session"
 import { ActionsResponse } from "@/types/actions-response"
-import { RegistroFormSchema } from "@/types/auth/registro"
 import { Cliente } from "@/types/cliente"
-import { Action } from "@prisma/client/runtime/library"
 import { cache } from "react"
 import { uploadProfileImage, uploadProfileBannerImage } from "./images-actions"
-import { EditarPerfilFormSchema } from "@/types/auth/editar-perfil"
 
 export const getClienteById = cache(async (id: string) => {
   try {

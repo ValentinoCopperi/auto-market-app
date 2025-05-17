@@ -1,7 +1,6 @@
 "use server"
 
 
-import { unstable_cache } from "next/cache"
 import { getSession } from "@/lib/session/session"
 import { Publicacion } from "@/types/publicaciones"
 import prisma from "@/lib/prisma"
@@ -156,24 +155,3 @@ export const eliminarFavorito = async (publicacionId: number): Promise<ActionsRe
     return { error: true, message: "Error al eliminar favorito" }
   }
 }
-
-// export const esPublicacionFavorita = async (publicacionId: number, userId: string | undefined) => {
-//   try {
-
-//     if (!userId) {
-//       return false;
-//     }
-
-//     const favorito = await prisma.favorito.findFirst({
-//       where: {
-//         cliente_id: parseInt(userId),
-//         publicacion_id: publicacionId,
-//       },
-//     });
-
-//     return favorito !== null;
-//   } catch (error) {
-//     console.error("Error al verificar si la publicación es favorita");
-//     return false;
-//   }
-// }

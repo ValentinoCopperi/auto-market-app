@@ -36,6 +36,7 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
     const suscripcion = await prisma.suscripcion.findFirst({
         where: {
             id_cliente: Number(session.userId),
+            estado: "activa",
         },select : {
             tipo_suscripcion: {
                 select: {

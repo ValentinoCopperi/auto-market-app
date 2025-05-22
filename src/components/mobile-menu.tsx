@@ -129,32 +129,7 @@ export function MobileMenu() {
               </AccordionTrigger>
               <AccordionContent className="pb-0 pt-1">
                 <div className="flex flex-col border-l-2 border-muted ml-9 pl-4">
-                  {/* <SheetClose asChild>
-                    <Link
-                      href="/impulsamos-juntos/motorpoint"
-                      className={cn(
-                        "py-3 text-base hover:text-primary transition-colors",
-                        pathname === "/impulsamos-juntos/motorpoint"
-                          ? "text-primary font-medium"
-                          : "text-muted-foreground",
-                      )}
-                    >
-                      MotorPoint
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href="/impulsamos-juntos/rstronic"
-                      className={cn(
-                        "py-3 text-base hover:text-primary transition-colors",
-                        pathname === "/impulsamos-juntos/rstronic"
-                          ? "text-primary font-medium"
-                          : "text-muted-foreground",
-                      )}
-                    >
-                      Rstronic
-                    </Link>
-                  </SheetClose> */}
+
                   <SheetClose asChild>
                     <Link
                       href="/impulsamos-juntos/esp-off-performance"
@@ -166,6 +141,19 @@ export function MobileMenu() {
                       )}
                     >
                       Esp Off Performance
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link
+                      href="/impulsamos-juntos/dynaco-consulting"
+                      className={cn(
+                        "py-3 text-base hover:text-primary transition-colors",
+                        pathname === "/impulsamos-juntos/dynaco-consulting"
+                          ? "text-primary font-medium"
+                          : "text-muted-foreground",
+                      )}
+                    >
+                      Dynaco Consulting
                     </Link>
                   </SheetClose>
                 </div>

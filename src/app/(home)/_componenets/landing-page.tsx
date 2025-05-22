@@ -201,7 +201,7 @@ const LandingPage = () => {
             </motion.h1>
 
             <motion.p
-              className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8"
+              className="text-lg md:text-xl hidden md:block text-white/80 max-w-2xl mx-auto mb-8"
               variants={childVariants}
               style={{ textShadow: "0 1px 3px rgba(0, 0, 0, 0.3)" }}
             >

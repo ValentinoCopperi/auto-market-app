@@ -107,7 +107,7 @@ export const metadata: Metadata = {
       "Encuentra los mejores autos nuevos y usados en Argentina. Amplio catálogo con todas las marcas y modelos a los mejores precios.",
     images: [
       {
-        url: "https://carmarketarg.com/og-image.jpg",
+        url: "https://carmarketarg.com/logo.png",
         width: 1200,
         height: 630,
         alt: "CarMarket Argentina - Marketplace de autos",
@@ -119,7 +119,7 @@ export const metadata: Metadata = {
     title: "CarMarket Argentina - El marketplace líder de autos",
     description:
       "Encuentra los mejores autos nuevos y usados en Argentina. Amplio catálogo con todas las marcas y modelos a los mejores precios.",
-    images: ["https://carmarketarg.com/favicon.ico"],
+    images: ["https://carmarketarg.com/logo.png"],
     creator: "@carmarket",
     site: "@carmarket",
   },

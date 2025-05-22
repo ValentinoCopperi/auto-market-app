@@ -6,6 +6,29 @@ import DynacoSlug from './_components/dynaco-slug'
 import PhotoGallery from './_components/galery-photos'
 const validPages = ["esp-off-performance", "dynaco-consulting"]
 
+export const generateMetadata = async ({
+    params,
+}: {
+    params: Promise<{ slug: string }>
+}) => {
+    const slug = (await params).slug;
+
+    if (!validPages.includes(slug)) {
+        notFound()
+    }
+
+    const { data_slug } = IMPULSEMOS_JUNTOS_CONTENT[slug]
+
+    return {
+        title: data_slug.title,
+        description: data_slug.description,
+        openGraph: {
+            title: data_slug.title,
+            description: data_slug.description,
+        }
+    }
+}
+
 const ImpulsamosJuntosPage = async ({
     params,
 }: {

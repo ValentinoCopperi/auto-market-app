@@ -93,7 +93,7 @@ export const metadata: Metadata = {
       // { url: "/logo.png", sizes: "192x192", type: "image/png" },
       // { url: "/logo.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     shortcut: "/favicon.ico",
   },
   manifest: "/manifest.json",

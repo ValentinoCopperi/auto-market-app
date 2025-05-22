@@ -72,6 +72,16 @@ export const getPublicaciones = async (searchParams?: Record<string, any>, marca
   }
 };
 
+export const getIdPublicaciones = async () => {
+  const publicaciones = await prisma.publicacion.findMany({
+    select: {
+      id: true,
+      created_at: true,
+    },
+  })
+  return publicaciones;
+}
+
 // export const getPublicacionById = unstable_cache(async (id: number) => {
 //   const publicacion = await prisma.publicacion.findUnique({
 //     where: { id },

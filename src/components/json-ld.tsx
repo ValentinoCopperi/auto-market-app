@@ -62,7 +62,7 @@ export function LocalBusinessJsonLd() {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
     name: "CarMarket Argentina",
-    image: "https://carmarketarg.com/favicon.ico",
+    image: "https://carmarketarg.com/apple-touch-icon.png",
     "@id": "https://carmarketarg.com",
     url: "https://carmarketarg.com",
     telephone: "+54 9 2494628279",

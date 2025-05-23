@@ -75,23 +75,20 @@ export async function POST(request: NextRequest) {
                 }
             })
 
-            
             if(clienteReceptor){
-                const response = await sendEmail({
+                await sendEmail({
                     to: clienteReceptor.email,
                     subject: "Felicidades! Has recibido un nuevo mensaje en unas de tus publicaciones",
                     html: `
-                    <div>
-                        <h1>Felicidades! Has recibido un nuevo mensaje en unas de tus publicaciones</h1>
-                        <p>Chequea tu conversacion con el usuario</p>
-                        <p>Mensaje: ${message}</p>
-                        <a href="${process.env.APP_URL}/chat">Ir a la conversacion</a>
-                    </div>
+                <div>
+                    <h1>Felicidades! Has recibido un nuevo mensaje en unas de tus publicaciones</h1>
+                    <p>Chequea tu conversacion con el usuario</p>
+                    <p>Mensaje: ${message}</p>
+                    <a href="${process.env.APP_URL}/chat">Ir a la conversacion</a>
+                </div>
                     `
                 })
             }
-
-           
 
             return NextResponse.json({ error: false, message: "Mensaje enviado correctamente", data: newMensaje }, { status: 200 })
 
@@ -105,9 +102,29 @@ export async function POST(request: NextRequest) {
                     contenido: message,
                 }
             })
+            const clienteReceptor = await prisma.cliente.findUnique({
+                where: {
+                    id: parsedId_cliente_receptor
+                },
+                select: {
+                    email: true
+                }
+            })
 
-           
-
+            if(clienteReceptor){
+                await sendEmail({
+                    to: clienteReceptor.email,
+                    subject: "Felicidades! Has recibido un nuevo mensaje en unas de tus publicaciones",
+                    html: `
+                <div>
+                    <h1>Felicidades! Has recibido un nuevo mensaje en unas de tus publicaciones</h1>
+                    <p>Chequea tu conversacion con el usuario</p>
+                    <p>Mensaje: ${message}</p>
+                    <a href="${process.env.APP_URL}/chat">Ir a la conversacion</a>
+                </div>
+                `
+                })
+            }
             return NextResponse.json({ error: false, message: "Mensaje enviado correctamente", data: newMensaje }, { status: 200 })
         }
 

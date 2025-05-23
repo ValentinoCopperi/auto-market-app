@@ -131,6 +131,7 @@ export async function POST(request: NextRequest) {
 
 
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: true, message: "Error al enviar el mensaje" }, { status: 500 })
     }
 

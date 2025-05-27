@@ -22,7 +22,15 @@ const COLORES = [
 
 const TRANSMISION = ["Manual", "Automático"]
 
-const COMBUSTIBLE = ["Gasolina", "Diesel", "Electrico", "Híbrido", "Otro"]
+const COMBUSTIBLE = [
+  "Nafta",
+  "Diesel",
+  "Híbrido",
+  "Eléctrico",
+  "Diésel",
+  "Gas",
+  "Otro"
+]
 
 const TIPO_MONEDA = ["USD", "ARG"]
 

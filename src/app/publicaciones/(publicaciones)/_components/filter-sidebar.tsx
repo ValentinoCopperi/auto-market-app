@@ -9,7 +9,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import type { Marca } from "@/types/publicaciones"
-import { CIUDADES } from "@/types/filtros"
+import { CIUDADES, COMBUSTIBLE } from "@/types/filtros"
 
 interface FilterSidebarProps {
   currentFilters: Record<string, any>
@@ -309,11 +309,11 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value="nafta">Nafta</SelectItem>
-                  <SelectItem value="diesel">Diésel</SelectItem>
-                  <SelectItem value="hibrido">Híbrido</SelectItem>
-                  <SelectItem value="electrico">Eléctrico</SelectItem>
+                  {COMBUSTIBLE.map((combustible) => (
+                    <SelectItem key={combustible} value={combustible}>
+                      {combustible}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

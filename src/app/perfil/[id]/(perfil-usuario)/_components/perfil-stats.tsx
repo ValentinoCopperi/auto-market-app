@@ -12,13 +12,13 @@ export const PerfilStats = ({ calificacion, numResenas, editable }: PerfilStatsP
   const stats = [
     {
       name: 'Calificación',
-      value: calificacion.toFixed(1),
+      value: (isNaN(calificacion) || !calificacion ) ? 0 : calificacion.toFixed(1),
       icon: Star,
       color: 'text-yellow-500'
     },
     {
       name: 'Reseñas',
-      value: numResenas,
+      value: (isNaN(numResenas) || !numResenas) ? 0 : numResenas,
       icon: MessageSquare,
       color: 'text-blue-500'
     },

@@ -22,7 +22,7 @@ async function getSuggestions(query: string): Promise<Suggestion[]> {
   try {
     // Aquí deberías hacer una llamada a tu API o usar una Server Action
     // para obtener las sugerencias desde la base de datos
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/sugerencias?query=${encodeURIComponent(query)}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/sugerencias/buscador?query=${encodeURIComponent(query)}`)
     const data = await response.json()
     return data.suggestions || []
   } catch (error) {

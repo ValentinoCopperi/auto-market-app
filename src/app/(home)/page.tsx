@@ -26,6 +26,7 @@ export const metadata: Metadata = {
     "concesionarios",
     "particulares",
     "carmarketarg",
+    "carmarket",
   ],
   alternates: {
     canonical: "https://carmarketarg.com",

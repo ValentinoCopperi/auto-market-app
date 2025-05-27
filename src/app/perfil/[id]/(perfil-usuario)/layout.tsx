@@ -32,39 +32,45 @@ const PerfilLayout = async ({ children, params }: PerfilLayoutProps) => {
   const session = await getSession();
   const editable = session?.email === cliente.email && cliente.id.toString() === session?.userId;
 
-
-
- 
-
   return (
-    <div className="min-h-screen bg-background pb-12">
+    <div className="min-h-screen bg-background">
       {/* Banner y perfil */}
       <PerfilHeader usuario={cliente} editable={editable} />
 
       {/* Contenido principal */}
-      <div className="container mx-auto px-4 mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Columna lateral - Información del perfil */}
-          <div className="space-y-6">
-            <PerfilInfo usuario={cliente} />
-            <PerfilStats calificacion={calificaciones.promedio_valoracion} numResenas={calificaciones.total_resenas} favoritos={0} />
-            {editable && <SuscripcionInfo id_cliente={cliente.id} />}
-            {!editable && (
-              <div className="bg-card rounded-lg border border-border p-4 space-y-3">
-                <h3 className="text-lg font-semibold mb-2">Acciones</h3>
-                <MensajesProvider>
-                  <SendMessage id_cliente_perfil={cliente.id} />
-                </MensajesProvider>
-                <BtnCalificar nombre={cliente.nombre} id_cliente={cliente.id} />
-              </div>
-            )}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="sticky top-4 space-y-6">
+              <PerfilInfo usuario={cliente} />
+              <PerfilStats 
+                calificacion={calificaciones.promedio_valoracion} 
+                numResenas={calificaciones.total_resenas} 
+                editable={editable}
+              />
+              {editable && <SuscripcionInfo id_cliente={cliente.id} />}
+              {!editable && (
+                <div className="bg-card rounded-lg border border-border p-6 space-y-4 shadow-sm">
+                  <h3 className="text-lg font-semibold">Acciones</h3>
+                  <div className="space-y-3">
+                    <MensajesProvider>
+                      <SendMessage id_cliente_perfil={cliente.id} />
+                    </MensajesProvider>
+                    <BtnCalificar nombre={cliente.nombre} id_cliente={cliente.id} />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Columna principal - Tabs con publicaciones y reseñas */}
-          <div className="lg:col-span-2">
-            <div className="w-full">
+          <div className="lg:col-span-8">
+            <div className="bg-card rounded-lg border border-border shadow-sm">
               <TabLinks id={id} />
-              {children}
+              <div className="p-6">
+                {children}
+              </div>
             </div>
           </div>
         </div>

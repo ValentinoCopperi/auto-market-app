@@ -14,6 +14,9 @@ import { puedeVerEstadisticas } from "@/actions/suscripcion-actions"
 import { Breadcrumbs } from "./_components/breadcrumbs"
 import { PublicacionJsonLd } from "./_components/publicacion-json-id"
 import type { Metadata } from "next"
+import { Separator } from "@/components/ui/separator"
+import { PublicacionesGrid } from "@/components/publicaciones/publicaciones-grid"
+import Sugerencias from "./_components/sugerencias"
 
 // Función para obtener la publicación con caché
 const getPublicacion = async (id: string): Promise<PublicacionCompleto> => {
@@ -55,6 +58,8 @@ const esPublicacionFavorita = async (id: string, userId: string | undefined): Pr
   const data = await response.json()
   return data.esFavorito
 }
+
+
 
 // Generación de metadatos dinámicos
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -171,6 +176,7 @@ const PublicacionPage = async ({
     verEstadisticas = data || false
   }
 
+
   // Extraer marca y modelo de manera segura
   const marcaNombre = publicacion.marca.nombre
   const modeloNombre = publicacion.modelo
@@ -238,6 +244,7 @@ const PublicacionPage = async ({
           </div>
         </div>
       </div>
+      <Sugerencias marca={marcaNombre} id={id} />
     </div>
   )
 }

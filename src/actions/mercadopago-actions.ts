@@ -7,14 +7,14 @@ import { Planes } from "@/types/suscriciones";
 import prisma from "@/lib/prisma";
 
 const getPlanName = (plan: Planes) => {
-    switch(plan) {
+    switch (plan) {
         case "plan_vendedor":
             return "Plan Vendedor - Car Market"
         case "plan_ocasion":
             return "Plan Ocasional - Car Market"
         case "plan_agencia":
             return "Plan Agencia - Car Market"
-            
+
     }
 }
 
@@ -26,18 +26,18 @@ const mercado_pago_config = new MercadoPagoConfig({
 
 export const init_point = async (plan: Planes): Promise<ActionsResponse<string>> => {
     const session = await getSession();
-    if(!session) {
+    if (!session) {
         return {
             error: true,
             message: "Debes iniciar sesión para suscribirte",
         }
     }
-    
+
     const suscripcion = await prisma.suscripcion.findFirst({
         where: {
             id_cliente: Number(session.userId),
             estado: "activa",
-        },select : {
+        }, select: {
             tipo_suscripcion: {
                 select: {
                     nombre: true,
@@ -46,11 +46,27 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
         }
     })
 
-    if(plan === suscripcion?.tipo_suscripcion?.nombre) {
+    if (plan === suscripcion?.tipo_suscripcion?.nombre) {
         return {
             error: true,
             message: "Ya tienes una suscripción de el plan seleccionado",
         }
+    }
+
+    const planDetails = await prisma.tipo_suscripcion.findUnique({
+        where: {
+            nombre: plan, // Asumiendo que 'nombre' es único y mapea a 'Planes'
+        },
+        select: {
+            precio: true,
+        },
+    });
+
+    if (!planDetails || typeof planDetails.precio === 'undefined') {
+        return {
+            error: true,
+            message: "No se pudo obtener el precio del plan.",
+        };
     }
 
     // Creamos la preferencia incluyendo el precio, titulo y metadata. La información de `items` es standard de Mercado Pago. La información que nosotros necesitamos para nuestra DB debería vivir en `metadata`.
@@ -60,13 +76,13 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
                 items: [
                     {
                         id: plan,
-                        unit_price: 15,
+                        unit_price: planDetails.precio,
                         quantity: 1,
                         title: getPlanName(plan),
                     },
                 ],
                 metadata: {
-                    user:{
+                    user: {
                         id: Number(session.userId),
                         email: session.email!,
                     },
@@ -88,8 +104,8 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
                 auto_return: "approved",
             },
         });
-    
-    
+
+
         // Devolvemos el init point (url de pago) para que el usuario pueda pagar
         return {
             error: false,

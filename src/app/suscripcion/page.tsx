@@ -1,6 +1,6 @@
 "use client"
 
-import {  useState } from "react"
+import { useState } from "react"
 import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { redirect } from "next/navigation"
@@ -9,6 +9,8 @@ import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
 import { useAuth } from "@/hooks/use-auth"
 import { init_point } from "@/actions/mercadopago-actions"
+import PagarMobileDialog from "./_components/pagar-mobile-dialog"
+import { Input } from "@/components/ui/input"
 
 
 
@@ -49,7 +51,7 @@ export default function SuscripcionesPage() {
       codeToSend = code
     }
     const response = await init_point(selectedPlan)
-    if(response.error) {
+    if (response.error) {
       setLoading(false)
       toast.error(response.message, {
         description: "Por favor, intenta nuevamente"
@@ -78,7 +80,7 @@ export default function SuscripcionesPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Plan Ocasión */}
 
           {
@@ -97,14 +99,25 @@ export default function SuscripcionesPage() {
                 <h2 className="text-xl font-semibold">
                   {getPlanName(selectedPlan)} seleccionado
                 </h2>
-                <p className="text-muted-foreground mt-2">
-                  Todos los pagos son procesados por Mercado Pago. Tu email debe existir en Mercado Pago.
+                <p className="text-sm text-muted-foreground mt-2">
+                  *Todos los pagos son procesados por Mercado Pago.
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  *Si tienes un codigo de descuento, ingresalo en el campo y presiona el boton de proceder al pago.
                 </p>
               </div>
-              {/* <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} code={code} setCode={setCode} /> */}
-              <Button onClick={() => handleProceedToPayment()} disabled={loading}>
-                {loading ? "Procesando..." : "Proceder al pago"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder="Codigo descuento..."
+                  type="text"
+                  value={code || ""}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+                {/* <EmailDialog loading={loading} handleProceedToPayment={handleProceedToPayment} email={email} setEmail={setEmail} code={code} setCode={setCode} /> */}
+                <Button onClick={() => handleProceedToPayment()} disabled={loading}>
+                  {loading ? "Procesando..." : "Proceder al pago"}
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -171,6 +184,14 @@ export default function SuscripcionesPage() {
           </Button>
         </div>
       </main>
+      <PagarMobileDialog
+        open={selectedPlan !== null}
+        handleProceedToPayment={handleProceedToPayment}
+        loading={loading}
+        selectedPlan={selectedPlan ? getPlanName(selectedPlan) : null}
+        code={code}
+        setCode={setCode}
+      />
     </div>
   )
 }

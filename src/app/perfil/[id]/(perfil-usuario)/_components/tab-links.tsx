@@ -50,7 +50,7 @@ const TabLinks = ({ id }: TabLinksProps) => {
                   : 'text-muted-foreground hover:text-primary'
               )}
             >
-              <tab.icon className="h-4 w-4" />
+              <tab.icon className="hidden md:block h-4 w-4" />
               {tab.name}
             </Link>
           );

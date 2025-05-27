@@ -30,7 +30,7 @@ export function PerfilReviews({ resenas, calificacion, numResenas}: PerfilReview
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Reseñas recibidas</h2>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center gap-2">
           <div className="flex">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star

@@ -15,9 +15,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: true, message: "El nombre debe tener entre 2 y 50 caracteres" }, { status: 400 });
   }
 
-  if (apellido.trim().length < 2 || apellido.trim().length > 50) { // Ejemplo de longitud
-    return NextResponse.json({ error: true, message: "El apellido debe tener entre 2 y 50 caracteres" }, { status: 400 });
-  }
+  
 
   
 

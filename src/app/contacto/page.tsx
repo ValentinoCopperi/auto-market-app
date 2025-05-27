@@ -66,13 +66,13 @@ export default function ContactPage() {
               </TabsTrigger>
             </TabsList>
 
-          
+
             {/* Contenido de la pestaña Contacto */}
             <TabsContent value="contacto" className="mt-12">
-              <ContactoForm  />
+              <ContactoForm />
             </TabsContent>
 
-           
+
 
             {/* Contenido de la pestaña Equipo */}
             <TabsContent value="equipo" className="mt-12">
@@ -143,20 +143,20 @@ export default function ContactPage() {
               <div className="max-w-3xl mx-auto">
                 <h2 className="text-2xl font-semibold mb-4">Preguntas frecuentes</h2>
                 <p className="text-muted-foreground mb-8">
-                  Encuentra respuestas a las preguntas más comunes sobre AutoMarket, nuestros servicios y cómo funciona
+                  Encuentra respuestas a las preguntas más comunes sobre CarMarket, nuestros servicios y cómo funciona
                   nuestra plataforma.
                 </p>
 
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="item-1">
-                    <AccordionTrigger>¿Cómo puedo publicar mi vehículo en AutoMarket?</AccordionTrigger>
+                    <AccordionTrigger>¿Cómo puedo publicar mi vehículo en CarMarket?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground mb-2">Para publicar tu vehículo, sigue estos pasos:</p>
                       <ol className="list-decimal pl-5 space-y-1 text-muted-foreground">
                         <li>Inicia sesión en tu cuenta (o crea una si aún no tienes)</li>
                         <li>Haz clic en el botón "Publicar" en la barra superior</li>
                         <li>Completa todos los detalles de tu vehículo</li>
-                        <li>Sube fotos de buena calidad (mínimo 3 fotos)</li>
+                        <li>Sube al menos una foto de buena calidad</li>
                         <li>Establece un precio y revisa tu publicación</li>
                         <li>Haz clic en "Publicar" y ¡listo!</li>
                       </ol>
@@ -164,10 +164,9 @@ export default function ContactPage() {
                   </AccordionItem>
 
                   <AccordionItem value="item-2">
-                    <AccordionTrigger>¿Cuánto cuesta publicar en AutoMarket?</AccordionTrigger>
+                    <AccordionTrigger>¿Cuánto cuesta publicar en CarMarket?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground">
-                        Publicar un vehículo en AutoMarket es completamente gratuito para publicaciones básicas.
                         Ofrecemos planes premium que incluyen mayor visibilidad, destacados en búsquedas y más fotos por
                         publicación. Puedes ver todos nuestros planes y precios en la sección "Suscripción".
                       </p>
@@ -205,7 +204,7 @@ export default function ContactPage() {
                     <AccordionTrigger>¿Cómo puedo verificar que un vendedor es confiable?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground">
-                        En AutoMarket contamos con un sistema de verificación de vendedores. Los perfiles verificados
+                        En **CarMarket** contamos con un sistema de verificación de vendedores. Los perfiles verificados
                         muestran una insignia azul. Además, puedes revisar las calificaciones y comentarios de otros
                         compradores. Siempre recomendamos verificar la documentación del vehículo antes de realizar
                         cualquier pago.
@@ -214,10 +213,10 @@ export default function ContactPage() {
                   </AccordionItem>
 
                   <AccordionItem value="item-6">
-                    <AccordionTrigger>¿AutoMarket cobra comisión por las ventas?</AccordionTrigger>
+                    <AccordionTrigger>¿CarMarket cobra comisión por las ventas?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground">
-                        No, AutoMarket no cobra comisión por las ventas realizadas. Nuestro modelo de negocio se basa en
+                        No, **CarMarket** no cobra comisión por las ventas realizadas. Nuestro modelo de negocio se basa en
                         los servicios premium y publicaciones destacadas. La transacción se realiza directamente entre
                         comprador y vendedor sin nuestra intervención.
                       </p>
@@ -225,6 +224,17 @@ export default function ContactPage() {
                   </AccordionItem>
 
                   <AccordionItem value="item-7">
+                    <AccordionTrigger>¿Las suscripciones se renuevan automáticamente?</AccordionTrigger>
+                    <AccordionContent>
+                      <p className="text-muted-foreground">
+                        No, nuestras suscripciones **no se renuevan automáticamente**. Tú tendrás control total y deberás
+                        renovarlas manualmente si deseas continuar disfrutando de los beneficios. Te enviaremos recordatorios
+                        antes de que tu suscripción expire para que puedas decidir.
+                      </p>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="item-8">
                     <AccordionTrigger>¿Cómo puedo eliminar mi publicación?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground">Para eliminar una publicación, sigue estos pasos:</p>
@@ -238,7 +248,7 @@ export default function ContactPage() {
                     </AccordionContent>
                   </AccordionItem>
 
-                  <AccordionItem value="item-8">
+                  <AccordionItem value="item-9">
                     <AccordionTrigger>¿Puedo editar mi publicación después de publicarla?</AccordionTrigger>
                     <AccordionContent>
                       <p className="text-muted-foreground">

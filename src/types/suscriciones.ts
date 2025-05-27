@@ -66,7 +66,7 @@ export const planes = [
             "Hasta 10 fotos por vehículo",
             "Chat con compradores",
             "Recibe ofertas directas",
-            "Renovación automática",
+            "Renovación manual",
             "Soporte vía email",
             "Perfil de vendedor personalizado"
         ]
@@ -82,13 +82,12 @@ export const planes = [
             "Hasta 3 publicaciones simultáneas",
             "Duración ilimitada de publicaciones",
             "30 fotos por vehículo",
-            "Publicaciones destacadas",
             "Chat y ofertas",
             "Estadísticas detalladas",
             "Posicionamiento máximo preferencial",
             "Soporte prioritario",
             "Badge de Vendedor Verificado",
-            "Renovación automática opcional",
+            "Renovación manual",
             "Perfil de concesionaria personalizado"
         ]
     },
@@ -111,7 +110,6 @@ export const planes = [
             "Soporte 24/7 prioritario",
             "Badge de Vendedor Profesional",
             "Herramientas de marketing incluidas",
-            "Acceso a datos de mercado"
         ]
     }
 ];

@@ -18,11 +18,16 @@ interface SendEmailProps {
 }
 
 export const sendEmail = async ({to, subject, html}: SendEmailProps) => {
-    let info = await transporter.sendMail({
-        from: `CarMarket <${process.env.EMAIL_USER}>`,
-        to: to,
-        subject: subject,
-        html: html
-    })
-    return info
+    try {
+        let info = await transporter.sendMail({
+            from: `CarMarket <${process.env.EMAIL_USER}>`,
+            to: to,
+            subject: subject,
+            html: html
+        })
+        return info
+    } catch (error) {
+        console.error("Error al enviar el correo:", error)
+        throw error
+    }
 }

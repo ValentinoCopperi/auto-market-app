@@ -1,14 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Check, Crown, ArrowRight } from "lucide-react"
+import {  useState } from "react"
+import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { getPlanName, planes, Planes } from "@/types/suscriciones"
 import SuscripcionCard from "./_components/suscripcion-card"
-import EmailDialog from "./_components/email-dialog"
 import { useAuth } from "@/hooks/use-auth"
 import { init_point } from "@/actions/mercadopago-actions"
 
@@ -21,7 +19,6 @@ export default function SuscripcionesPage() {
   const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<Planes | null>("plan_vendedor")
   const [loading, setLoading] = useState(false)
-  const [email, setEmail] = useState(user?.email || "")
   const [code, setCode] = useState<string | null>(null)
   // Función para manejar la selección de plan
   const handleSelectPlan = (planName: Planes) => {
@@ -32,8 +29,16 @@ export default function SuscripcionesPage() {
 
   // Función para proceder al pago
   const handleProceedToPayment = async () => {
+    if (!user) {
+      toast.error("Debes estar autenticado para suscribirte", {
+        description: "Por favor, inicia sesión para continuar"
+      })
+      return
+    }
     if (!selectedPlan) {
-      toast.error("Debes seleccionar un plan")
+      toast.error("Debes seleccionar un plan", {
+        description: "Por favor, selecciona un plan para continuar"
+      })
       return
     }
     setLoading(true)
@@ -46,7 +51,9 @@ export default function SuscripcionesPage() {
     const response = await init_point(selectedPlan)
     if(response.error) {
       setLoading(false)
-      toast.error(response.message)
+      toast.error(response.message, {
+        description: "Por favor, intenta nuevamente"
+      })
       return
     }
     setLoading(false)

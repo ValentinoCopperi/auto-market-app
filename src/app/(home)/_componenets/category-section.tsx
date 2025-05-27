@@ -1,6 +1,5 @@
 import type React from "react"
 import Link from "next/link"
-import { Categoria } from "@/types/publicaciones"
 import { Bike, Bus, Car, Truck, } from "lucide-react"
 
 

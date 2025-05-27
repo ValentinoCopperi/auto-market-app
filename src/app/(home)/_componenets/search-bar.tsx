@@ -26,7 +26,7 @@ async function getSuggestions(query: string): Promise<Suggestion[]> {
     const data = await response.json()
     return data.suggestions || []
   } catch (error) {
-    console.error("Error al obtener sugerencias:", error)
+    console.error("Error al obtener sugerencias:")
     return []
   }
 }

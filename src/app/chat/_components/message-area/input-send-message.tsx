@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Send, SendHorizonal } from 'lucide-react'
+import { SendHorizonal } from 'lucide-react'
 import React, { useState }  from 'react'
 import { useMensajes } from '@/hooks/use-mensajes'
 

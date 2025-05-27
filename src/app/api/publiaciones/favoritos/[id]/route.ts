@@ -73,6 +73,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })), message: "Favoritos obtenidos correctamente" }, { status: 200 });
 
     } catch (error) {
+        console.error("Error al obtener los favoritos")
         return NextResponse.json({ error: true, favoritos: [], message: "Error interno al obtener favoritos" }, { status: 500 });
     }
 }

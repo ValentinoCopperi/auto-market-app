@@ -13,7 +13,6 @@ export default function ChatPage() {
 
   const { user } = useAuth()
   const { isMenuOpen, setIsMenuOpen } = useMensajes()
-  console.log(isMenuOpen)
 
   return (
     <div className="flex  lg:mt-1 flex-col h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] w-full md:w-[95%] lg:w-[90%] xl:w-[85%] mx-auto overflow-hidden">

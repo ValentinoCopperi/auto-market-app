@@ -40,7 +40,6 @@ const BtnCancelar = ({ id_suscripcion }: { id_suscripcion: number }) => {
             })
 
         } catch (error) {
-            console.error(error)
             toast.error("Error al cancelar tu suscripcion", {
                 description: "Porfavor, intenta nuevamente.",
             })

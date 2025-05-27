@@ -113,6 +113,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({ error: false, message: "Publicación eliminada correctamente" }, { status: 200 })
   } catch (error) {
+    console.error("Error al eliminar la publicación")
     return NextResponse.json({ error: true, message: "Error al eliminar la publicación" }, { status: 500 })
   }
 }

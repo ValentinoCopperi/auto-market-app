@@ -1,11 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Mail, Phone, MapPin, ExternalLink, MessageSquare, AlertTriangle, HelpCircle } from "lucide-react"
+import { Mail, Phone, ExternalLink, MessageSquare, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ContactoForm from "./contacto-form"
 

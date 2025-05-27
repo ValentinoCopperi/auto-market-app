@@ -14,7 +14,6 @@ export const getMarcas = unstable_cache(async () => {
     return marcas as Marca[];
 
   } catch (error) {
-    console.error(error);
     return [];
   }
 }, ["marcas"], {revalidate: 3600})
@@ -74,7 +73,6 @@ export const getMarcasByCantidadPublicaciones = unstable_cache(async () => {
     });
     return marcas as Marca[];
   } catch (error) {
-    console.error(error);
     return [];
   }
 }, ["marcas"], {revalidate: 600})

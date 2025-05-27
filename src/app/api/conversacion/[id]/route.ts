@@ -20,6 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({ error: false, message: "Mensajes obtenidos correctamente", data: mensajes }, { status: 200 })
 
     } catch (error) {
+        console.error("Error al obtener los mensajes")
         return NextResponse.json({ error: true, message: "Error al obtener los mensajes" }, { status: 500 })
     }
 }

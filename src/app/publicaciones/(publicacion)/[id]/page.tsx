@@ -14,8 +14,6 @@ import { puedeVerEstadisticas } from "@/actions/suscripcion-actions"
 import { Breadcrumbs } from "./_components/breadcrumbs"
 import { PublicacionJsonLd } from "./_components/publicacion-json-id"
 import type { Metadata } from "next"
-import { Suspense } from "react"
-import { PublicacionesGrid } from "@/components/publicaciones/publicaciones-grid"
 
 // Función para obtener la publicación con caché
 const getPublicacion = async (id: string): Promise<PublicacionCompleto> => {
@@ -179,8 +177,7 @@ const PublicacionPage = async ({
 
   return (
     <div className="min-h-screen bg-background pb-12">
-      {/* JSON-LD para datos estructurados */}
-      {/* <PublicacionJsonLd publicacion={publicacion} /> */}
+      <PublicacionJsonLd publicacion={publicacion} />
 
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumbs mejorados */}

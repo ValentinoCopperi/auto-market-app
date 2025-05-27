@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { DollarSign, Heart, Share2, Flag, Trash2, Pencil, CheckCircle } from "lucide-react"
+import { DollarSign, Heart, Share2, Trash2, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   AlertDialog,
@@ -18,7 +18,6 @@ import { toast } from "sonner"
 import { agregarFavorito, eliminarFavorito } from "@/actions/favoritos-actions"
 import { EditPublicationDialog } from "@/components/dialogs/editar-publicacion/editar-publicacion-dialog"
 import { Publicacion } from "@/types/publicaciones"
-import HacerOfertaBtn from "./hacer-oferta-btn"
 import { MensajesProvider } from "@/hooks/use-mensajes"
 import OfertaDialog from "./hacer-oferta-btn"
 import { changeVendido } from "@/actions/publicaciones-actions"
@@ -101,7 +100,7 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
       }
 
     } catch (error) {
-      console.error("Error al eliminar publicación:", error)
+      console.error("Error al eliminar publicación:")
       toast.error("No se pudo eliminar la publicación. Intenta nuevamente.")
 
     } finally {

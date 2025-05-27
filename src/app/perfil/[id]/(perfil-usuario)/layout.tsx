@@ -9,8 +9,6 @@ import { BtnCalificar } from './_components/calificar/btn-calificar';
 import SuscripcionInfo from './_components/suscripcion-info';
 import { MensajesProvider } from '@/hooks/use-mensajes';
 import SendMessage from './_components/send-message';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
 import TabLinks from './_components/tab-links';
 import { getResenasByUsuarioStats } from '@/actions/resenas-actions';
 

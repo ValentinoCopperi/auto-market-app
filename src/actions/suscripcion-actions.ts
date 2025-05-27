@@ -37,7 +37,7 @@ export const getSuscripcionByUsuario = async (id: number) : Promise<ActionsRespo
             data: suscripcion
         }
     } catch (error) {
-        console.error("Error al obtener la suscripción del usuario", error)
+        console.error("Error al obtener la suscripción del usuario")
         return {
             error: true,
             message: "Error al obtener la suscripción del usuario",
@@ -73,7 +73,7 @@ export const getPagosByUsuario = async (id: number) : Promise<ActionsResponse<Pa
             data : pagos
         }
     } catch (error) {
-        console.error("Error al obtener los pagos", error)
+        console.error("Error al obtener los pagos")
         return {
             error: true,
             message: "Error al obtener los pagos",
@@ -121,7 +121,7 @@ export const puedeVerEstadisticas = async (id: number) : Promise<ActionsResponse
             data: true
         }
     } catch (error) {
-        console.error("Error al verificar si puede ver estadisticas", error)
+        console.error("Error al verificar si puede ver estadisticas")
         return {
             error: true,
             message: "Error al verificar si puede ver estadisticas",
@@ -168,7 +168,7 @@ export const suscribir_a_plan = async (id: number, plan: Planes) : Promise<Actio
             message: "Suscripción creada correctamente",
         }
     } catch (error) {
-        console.error("Error al suscribir a un plan", error)
+        console.error("Error al suscribir a un plan")
         return {
             error: true,
             message: "Error al suscribir a un plan",

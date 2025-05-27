@@ -53,7 +53,7 @@ export function PublicacionJsonLd({ publicacion }: { publicacion: PublicacionCom
       },
     },
     image: publicacion.publicacion_imagenes?.map((img) => img.url) || [imagenPrincipal],
-    url: `https://carmarket.com.ar/publicaciones/${publicacion.id}`,
+    url: `https://carmarket.com/publicaciones/${publicacion.id}`,
   }
 
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

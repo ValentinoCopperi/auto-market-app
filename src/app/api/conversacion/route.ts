@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session/session";
-import { Conversacion, ConversacionConUltimoMensaje } from "@/types/conversaciones";
-import { Mensaje } from "@/types/mensajes";
+import { ConversacionConUltimoMensaje } from "@/types/conversaciones";
 
 
 
@@ -80,6 +79,7 @@ export async function GET() {
         }, error: false, message: "Conversaciones obtenidas correctamente" }, { status: 200 });
 
     } catch (error) {
+        console.error("Error al obtener las conversaciones")
         return NextResponse.json({data: null, error: true, message: "Error al obtener las conversaciones" }, { status: 500 });
     }
         

@@ -30,7 +30,6 @@ export async function getResenasByUsuario(id_usuario: number): Promise<Resena[]>
         })
         return resenas as unknown as Resena[];
     } catch (error) {
-        console.error(error)
         return [];
     }
 }
@@ -56,7 +55,6 @@ export async function getResenasByUsuarioStats(id_usuario: number): Promise<Rese
             promedio_valoracion: promedioValoracion
         }
     } catch (error) {
-        console.error(error)
         return {
             total_resenas: 0,
             promedio_valoracion: 0

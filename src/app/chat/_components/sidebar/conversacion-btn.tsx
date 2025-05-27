@@ -1,7 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { Conversacion } from '@/types/conversaciones'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useMensajes } from '@/hooks/use-mensajes'
 import { useAuth } from '@/hooks/use-auth'

@@ -11,6 +11,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: true, message: "Todos los campos son requeridos" }, { status: 400 })
   }
 
+  if (nombre.trim().length < 2 || nombre.trim().length > 50) { // Ejemplo de longitud
+    return NextResponse.json({ error: true, message: "El nombre debe tener entre 2 y 50 caracteres" }, { status: 400 });
+  }
+
+  if (apellido.trim().length < 2 || apellido.trim().length > 50) { // Ejemplo de longitud
+    return NextResponse.json({ error: true, message: "El apellido debe tener entre 2 y 50 caracteres" }, { status: 400 });
+  }
+
+  
+
   if(!CIUDADES.includes(ciudad)) {
     return NextResponse.json({ error: true, message: "Ciudad no válida" }, { status: 400 })
   }
@@ -61,6 +71,7 @@ export async function POST(req: Request) {
       suscripcion:null,
     } }, { status: 200 })
   } catch (error) {
+    console.error("Error al crear el cliente")
     return NextResponse.json({ error: true, message: "Error al crear el cliente" }, { status: 500 })
   }
 }

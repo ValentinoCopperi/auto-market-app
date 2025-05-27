@@ -1,6 +1,5 @@
 import { SearchBar } from "@/components/search-bar"
 import PublicacionCard from "@/components/publicaciones/publicacion-card"
-import { FavoritosResult } from "@/types/favoritos"
 import { getSession } from "@/lib/session/session"
 import { Metadata } from "next"
 import { Publicacion } from "@/types/publicaciones"
@@ -11,6 +10,13 @@ type SearchParams = Promise<{ [q: string]: string | undefined }>
 export const metadata: Metadata = {
   title: 'Mis Favoritos',
   description: 'Publicaciones que te gustan',
+  alternates: {
+    canonical: "https://carmarket.com/favoritos",
+  },
+  openGraph: {
+    title: 'Mis Favoritos',
+    description: 'Publicaciones que te gustan',
+  },
 }
 
 const getFavoritos = async (q?: string) : Promise<Publicacion[]> => {

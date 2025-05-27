@@ -36,6 +36,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         ])
         return NextResponse.json({ error: false, estadisticas: { vistas: vistas, favoritas: favoritas } }, { status: 200 })
     } catch (error) {
+        console.error("Error al obtener las estadisticas")
         return NextResponse.json({ error: true, message: "Error al obtener las estadisticas" }, { status: 500 })
     }
 }

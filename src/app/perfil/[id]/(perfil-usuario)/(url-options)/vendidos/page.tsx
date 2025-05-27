@@ -1,10 +1,6 @@
-import { getPublicacionesByUsuario, getPublicacionesByUsuarioVendidos } from "@/actions/publicaciones-actions"
-import { getSession } from "@/lib/session/session"
+import { getPublicacionesByUsuarioVendidos } from "@/actions/publicaciones-actions"
 import { notFound } from "next/navigation"
-import { TabsContent } from "@/components/ui/tabs"
-import { SearchBar } from "@/components/search-bar"
 import { PublicacionesGrid } from "@/components/publicaciones/publicaciones-grid"
-import PublicarBtn from "../../_components/publicar-btn"
 
 
 

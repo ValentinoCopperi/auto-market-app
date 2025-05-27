@@ -53,6 +53,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: false, message: "Inicio de sesión exitoso", cliente }, { status: 200 })
     
   } catch (error) {
+    console.error("Error al iniciar sesión")
     return NextResponse.json({ error: true, message: "Error al iniciar sesión" }, { status: 500 })
   }
 }

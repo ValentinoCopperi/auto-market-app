@@ -71,7 +71,7 @@ export async function uploadImage({ file, publicacionId, tx }: UploadImageData) 
 
         return { error: false, message: "Imagen subida correctamente", url: publicUrl }
     } catch (error) {
-        console.error("Error al subir imagen:", error)
+        console.error("Error al subir imagen:")
         return { error: true, message: "Error al subir imagen" }
     }
 }
@@ -154,7 +154,7 @@ export async function uploadProfileBannerImage(file: File, id: number, old_banne
 
 
     } catch (error) {
-        console.error("Error al subir imagen de perfil:", error)
+        console.error("Error al subir imagen de perfil:")
         return { error: true, message: "Error al subir imagen de perfil" }
     }
 }
@@ -196,7 +196,7 @@ export async function uploadProfileImage(file: File, id: number, old_profile_url
                     .remove([oldPath])
 
                 if (deleteError) {
-                    console.warn("No se pudo eliminar la imagen anterior:", deleteError)
+                    console.warn("No se pudo eliminar la imagen anterior:")
                 }
             }
         }
@@ -205,7 +205,7 @@ export async function uploadProfileImage(file: File, id: number, old_profile_url
 
 
     } catch (error) {
-        console.error("Error al subir imagen de perfil:", error)
+        console.error("Error al subir imagen de perfil:")
         return { error: true, message: "Error al subir imagen de perfil" }
     }
 
@@ -233,7 +233,7 @@ export const deleteImage = async (publicacionId: number, url: string): Promise<A
 
         return { error: false, message: "Imagen eliminada correctamente" };
     } catch (error) {
-        console.error("Error inesperado:", error);
+        console.error("Error inesperado:");
         return { error: true, message: `Error inesperado: ${error instanceof Error ? error.message : String(error)}` };
     }
 };

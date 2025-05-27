@@ -77,7 +77,7 @@ export const getFavoritosByUsuario = async (q?: string): Promise<FavoritosResult
 
     return favoritos as unknown as FavoritosResult[]
   } catch (error) {
-    console.error("Error al obtener favoritos:", error)
+    console.error("Error al obtener favoritos:")
     return []
   }
 }
@@ -118,7 +118,7 @@ export const agregarFavorito = async (publicacionId: number): Promise<ActionsRes
     return { error: false, message: "Publicación agregada a favoritos" }
     
   } catch (error) {
-    console.error("Error al agregar favorito:", error)
+    console.error("Error al agregar favorito:")
     return { error: true, message: "Error al agregar favorito" }
   }
 }
@@ -151,7 +151,7 @@ export const eliminarFavorito = async (publicacionId: number): Promise<ActionsRe
     return { error: false, message: "Publicación eliminada de favoritos" }
 
   } catch (error) {
-    console.error("Error al eliminar favorito:", error)
+    console.error("Error al eliminar favorito:")
     return { error: true, message: "Error al eliminar favorito" }
   }
 }

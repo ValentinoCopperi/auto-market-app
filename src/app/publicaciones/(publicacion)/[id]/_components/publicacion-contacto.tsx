@@ -6,8 +6,6 @@ import { useState } from "react"
 import { Send, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { useAuth } from "@/hooks/use-auth"
-import { useDialogStore } from "@/lib/store/dialogs-store"
 import { useMensajes } from "@/hooks/use-mensajes"
 
 interface PublicacionContactoProps {

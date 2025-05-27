@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ data: publicaciones, error: false, message: "Publicaciones obtenidas correctamente" }, { status: 200 });
     } catch (error) {
+        console.error("Error al obtener las publicaciones")
         return NextResponse.json({ error: true, message: "Error al obtener las publicaciones" }, { status: 500 });
     }
 
@@ -250,6 +251,7 @@ export async function POST(request: NextRequest) {
             error: false, message: "Publicación creada correctamente", data: newPublicacionId,}, { status: 200 })
 
     } catch (error) {
+        console.error("Error al publicar el vehículo")
         return NextResponse.json(
             {
                 error: true,

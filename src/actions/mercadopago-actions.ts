@@ -97,7 +97,6 @@ export const init_point = async (plan: Planes): Promise<ActionsResponse<string>>
             data: preference.init_point!
         }
     } catch (error) {
-        console.log(error)
         return {
             error: true,
             message: "Error al crear la preferencia",

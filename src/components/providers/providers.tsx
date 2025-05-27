@@ -7,7 +7,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <AuthProvider>
                     {children}
-                    <Toaster />
+                    <Toaster richColors />
             </AuthProvider>
         </ThemeProvider>
     )

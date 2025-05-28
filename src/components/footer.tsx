@@ -45,11 +45,11 @@ export function Footer() {
                 <Instagram size={18} />
                 <span className="sr-only">Instagram</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="https://x.com/carmarketsa?s=21" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Twitter size={18} />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="https://youtube.com/@carmarketar?si=Gtwva4pqEmT5BoSA" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Youtube size={18} />
                 <span className="sr-only">YouTube</span>
               </Link>

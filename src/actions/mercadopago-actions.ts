@@ -63,10 +63,18 @@ export const init_point = async (plan: Planes, code: string | null): Promise<Act
             }
         });
 
+
         if (!codigoExistente) {
             return {
                 error: true,
                 message: "El código ingresado no es válido"
+            }
+        }
+
+        if(codigoExistente.fecha_fin < new Date()) {
+            return {
+                error: true,
+                message: "El código ingresado expiro"
             }
         }
 

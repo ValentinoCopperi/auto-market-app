@@ -50,7 +50,7 @@ export default function SuscripcionesPage() {
     } else {
       codeToSend = code
     }
-    const response = await init_point(selectedPlan)
+    const response = await init_point(selectedPlan,codeToSend)
     if (response.error) {
       setLoading(false)
       toast.error(response.message, {

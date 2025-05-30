@@ -11,7 +11,6 @@ import { RegisterDialog } from "@/components/dialogs/auth/register-dialog"
 import { Footer } from "@/components/footer"
 import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
-import { LocalBusinessJsonLd } from "@/components/json-ld"
 import { WebsiteJsonLd } from "@/components/json-ld"
 import { OrganizationJsonLd } from "@/components/json-ld"
 
@@ -65,6 +64,30 @@ export const metadata: Metadata = {
     "comparador de precios",
     "mejores ofertas autos",
     "carmarketarg",
+    // Keywords principales
+    "venta de autos argentina",
+    "comprar auto usado argentina",
+    "autos en venta buenos aires",
+    "marketplace autos argentina",
+    "concesionarios argentina",
+
+    // Long-tail keywords
+    "donde comprar auto usado confiable",
+    "mejores precios autos usados argentina",
+    "financiacion autos sin interes",
+    "autos 0km argentina precios",
+
+    // Ubicaciones específicas
+    "autos usados capital federal",
+    "venta autos zona norte",
+    "autos usados zona oeste",
+    "concesionarios cordoba",
+    "autos rosario santa fe",
+
+    // Marcas + ubicación
+    "toyota argentina precios",
+    "ford usados buenos aires",
+    "chevrolet 0km argentina",
   ],
   authors: [{ name: "CarMarket Argentina" }],
   creator: "CarMarket Argentina",
@@ -123,11 +146,6 @@ export const metadata: Metadata = {
     creator: "@carmarket",
     site: "@carmarket",
   },
-  verification: {
-    google: "tu-código-de-verificación-de-google", // Reemplaza con tu código real
-    yandex: "tu-código-de-verificación-de-yandex", // Opcional
-    
-  },
   alternates: {
     canonical: "https://carmarketarg.com",
     languages: {
@@ -169,7 +187,6 @@ export default function RootLayout({
         <script src="https://www.mercadopago.com/v2/security.js"></script>
         <WebsiteJsonLd />
         <OrganizationJsonLd />
-        <LocalBusinessJsonLd />
         <Analytics />
       </body>
     </html>

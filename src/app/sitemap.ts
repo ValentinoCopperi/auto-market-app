@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "",
     "/publicaciones",
+    //Por Marca:
     "/publicaciones?marca=toyota",
     "/publicaciones?marca=ford",
     "/publicaciones?marca=chevrolet",

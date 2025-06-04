@@ -50,6 +50,7 @@ export default async function FavoritosPage(props: { searchParams: SearchParams 
 
   const favoritos = await getFavoritos(q)
 
+
   const totalCount = favoritos ? favoritos.length : 0
 
   //   // Obtener parámetros de búsqueda y paginación

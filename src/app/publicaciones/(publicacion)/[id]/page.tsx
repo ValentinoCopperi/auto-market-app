@@ -50,7 +50,6 @@ const esPublicacionFavorita = async (id: string, userId: string | undefined): Pr
       "Content-Type": "application/json",
     },
   })
-
   if (!response.ok) {
     return false
   }
@@ -176,7 +175,7 @@ const PublicacionPage = async ({
     verEstadisticas = data || false
   }
 
-
+  console.log(esFavorito)
   // Extraer marca y modelo de manera segura
   const marcaNombre = publicacion.marca.nombre
   const modeloNombre = publicacion.modelo

@@ -127,11 +127,12 @@ export function PublicacionActions({ publicacion, esFavorito, esEditable }: Publ
       <div className="bg-card rounded-lg border border-border p-4">
         <h1 className="text-2xl font-bold mb-1">{publicacion.titulo}</h1>
         <h5 className="text-sm text-muted-foreground">{publicacion.modelo}</h5>
-        {publicacion.precio && (
-          <div className="mb-4">
-            <p className="text-2xl font-bold text-blue-600">${publicacion.precio.toLocaleString()}</p>
-          </div>
-        )}
+        <div className="mb-4 flex items-center gap-2">
+          <p className="text-2xl font-bold text-blue-600">${publicacion.precio.toLocaleString()}</p>
+          <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+            {publicacion.tipo_moneda === "ARG" ? "ARS" : "USD"}
+          </span>
+        </div>
 
         <div className="space-y-3">
           {!esEditable ? (

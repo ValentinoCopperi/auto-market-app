@@ -19,11 +19,7 @@ export async function POST(request: NextRequest){
 
   try {
 
-    const session = await getSession();
-
-    if (!session || !session.userId) {
-      return NextResponse.json({ error: true, esFavorito: false, message: "No estás autenticado" }, { status: 401 });
-    }
+    
     const { publicacionId, userId } = (await request.json()) as RequestBody;
     
     

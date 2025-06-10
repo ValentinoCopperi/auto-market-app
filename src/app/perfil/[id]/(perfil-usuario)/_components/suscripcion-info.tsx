@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { getPlanName, Planes } from '@/types/suscriciones'
 
-const SuscripcionInfoUI = ({ suscripcion }: { suscripcion: any }) => {
+const SuscripcionInfoUI = ({ suscripcion, id_cliente }: { suscripcion: any, id_cliente: number }) => {
+
   if (!suscripcion) {
     return (
       <div className="bg-card rounded-lg border border-border p-6">
@@ -16,7 +17,7 @@ const SuscripcionInfoUI = ({ suscripcion }: { suscripcion: any }) => {
           <p className="text-muted-foreground mb-6">
             Actualmente no tienes una suscripción activa. ¡Considera suscribirte para acceder a más beneficios!
           </p>
-          <Link href="/suscripcion" className="w-full">
+          <Link href={`/perfil/${id_cliente}/suscripcion`} className="w-full">
             <Button className="w-full">
               Ver Suscripciones
             </Button>
@@ -26,7 +27,7 @@ const SuscripcionInfoUI = ({ suscripcion }: { suscripcion: any }) => {
     )
   }
 
-  if(suscripcion.estado === "vencida"){
+  if (suscripcion.estado === "vencida") {
     return (
       <div className="bg-card rounded-lg border border-border p-6">
         <div className="flex flex-col items-center justify-center text-center py-8">
@@ -38,17 +39,17 @@ const SuscripcionInfoUI = ({ suscripcion }: { suscripcion: any }) => {
           <p className="text-muted-foreground mb-6">
             Fecha de fin: {format(new Date(suscripcion.fecha_fin), 'PPP', { locale: es })}
           </p>
-          <Link href="/suscripcion" className="w-full">
+          <Link href={`/perfil/${id_cliente}/suscripcion`} className="w-full">
             <Button className="w-full">
               Ver Suscripciones
             </Button>
           </Link>
         </div>
       </div>
-    ) 
+    )
   }
 
-  if(suscripcion.estado === "cancelada"){
+  if (suscripcion.estado === "cancelada") {
     return (
       <div className="bg-card rounded-lg border border-border p-6">
         <div className="flex flex-col items-center justify-center text-center py-8">
@@ -60,7 +61,7 @@ const SuscripcionInfoUI = ({ suscripcion }: { suscripcion: any }) => {
           <p className="text-muted-foreground mb-6">
             Fecha de fin: {format(new Date(suscripcion.fecha_fin), 'PPP', { locale: es })}
           </p>
-          <Link href="/suscripcion" className="w-full">
+          <Link href={`/perfil/${id_cliente}/suscripcion`} className="w-full">
             <Button className="w-full">
               Ver Suscripciones
             </Button>
@@ -92,7 +93,7 @@ const SuscripcionInfoUI = ({ suscripcion }: { suscripcion: any }) => {
           </div>
         </div>
 
-        <Link href="/suscripcion" className="w-full">
+        <Link href={`/perfil/${id_cliente}/suscripcion`} className="w-full">
           <Button className="w-full">
             Administrar Suscripción
           </Button>
@@ -111,7 +112,7 @@ const SuscripcionInfo = async ({ id_cliente }: { id_cliente: number }) => {
   const response = await getSuscripcionByUsuario(id_cliente)
   const suscripcion = response.data;
 
-  return <SuscripcionInfoUI suscripcion={suscripcion} />
+  return <SuscripcionInfoUI suscripcion={suscripcion} id_cliente={id_cliente} />
 }
 
 export default SuscripcionInfo

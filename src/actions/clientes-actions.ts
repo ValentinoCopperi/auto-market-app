@@ -318,6 +318,11 @@ export const getAgenciasPopulares = async (): Promise<ActionsResponse<AgenciaPop
         nombre: true,
         profile_img_url: true,
         id: true,
+        _count: {
+          select: {
+            publicacion: true
+          }
+        }
       },
       orderBy: {
         publicacion: {
@@ -327,8 +332,6 @@ export const getAgenciasPopulares = async (): Promise<ActionsResponse<AgenciaPop
       take: 4
     })
 
-
-
     return {
       error: false,
       message: "Agencias populares obtenidas correctamente",
@@ -336,7 +339,7 @@ export const getAgenciasPopulares = async (): Promise<ActionsResponse<AgenciaPop
     }
 
   } catch (error) {
-    console.error("Error al obtener las agencias populares:")
+    console.error("Error al obtener las agencias populares:", error)
     return {
       error: true,
       message: "Error al obtener las agencias populares"

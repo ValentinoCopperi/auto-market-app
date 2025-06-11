@@ -1,3 +1,5 @@
+"use cache"
+
 import { getAgenciasPopulares } from "@/actions/clientes-actions"
 import Image from "next/image"
 import Link from "next/link"

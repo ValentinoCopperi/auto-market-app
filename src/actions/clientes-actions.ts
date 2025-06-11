@@ -9,18 +9,20 @@ import { uploadProfileImage, uploadProfileBannerImage } from "./images-actions"
 
 export const getClienteById = cache(async (id: string) => {
   try {
-    const cliente = await prisma.cliente.findUnique({ where: { id: parseInt(id) }, include: {
-      suscripcion: {
-        select: {
-          estado:true,
-          tipo_suscripcion: {
-            select: {
-              nombre: true,
+    const cliente = await prisma.cliente.findUnique({
+      where: { id: parseInt(id) }, include: {
+        suscripcion: {
+          select: {
+            estado: true,
+            tipo_suscripcion: {
+              select: {
+                nombre: true,
+              }
             }
           }
         }
       }
-    } })
+    })
     const serializedCliente = {
       ...cliente,
       suscripcion: {
@@ -300,4 +302,44 @@ export const calificarCliente = async (id_cliente_calificado: number, rating: nu
 
 }
 
+interface AgenciaPopularesResponse {
+  nombre: string;
+  profile_img_url: string;
+  id: number;
+}
 
+export const getAgenciasPopulares = async (): Promise<ActionsResponse<AgenciaPopularesResponse[]>> => {
+  try {
+    const agencias = await prisma.cliente.findMany({
+      where: {
+        tipo_cliente: "empresa"
+      },
+      select: {
+        nombre: true,
+        profile_img_url: true,
+        id: true,
+      },
+      orderBy: {
+        publicacion: {
+          _count: 'desc'
+        }
+      },
+      take: 4
+    })
+
+
+
+    return {
+      error: false,
+      message: "Agencias populares obtenidas correctamente",
+      data: agencias as unknown as AgenciaPopularesResponse[]
+    }
+
+  } catch (error) {
+    console.error("Error al obtener las agencias populares:")
+    return {
+      error: true,
+      message: "Error al obtener las agencias populares"
+    }
+  }
+}

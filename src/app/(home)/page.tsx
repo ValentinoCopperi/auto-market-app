@@ -4,6 +4,7 @@ import { BrandsSection } from "./_componenets/brands-section"
 import { PublicacionesDestacadas } from "./_componenets/publicaciones-destacadas"
 import { HomeJsonLd } from "./_componenets/home-json"
 import type { Metadata } from "next"
+import { AgenciasPopulares } from "./_componenets/agencias-populares"
 
 // Metadatos optimizados para la página de inicio
 export const metadata: Metadata = {
@@ -27,6 +28,16 @@ export const metadata: Metadata = {
     "particulares",
     "carmarketarg",
     "carmarket",
+    "car market",
+    "car market argentina",
+    "venta de autos en argentina",
+    "compra de autos en argentina",
+    "autos en argentina",
+    "autos usados en argentina",
+    "autos nuevos en argentina",
+    "autos baratos en argentina",
+    "autos de segunda mano en argentina",
+    "autos de lujo en argentina",
   ],
   alternates: {
     canonical: "https://carmarketarg.com",
@@ -78,9 +89,10 @@ const HomePage = async () => {
 
       <LandingPage />
       <div className="bg-[#F9FAFB] dark:bg-[#00000063]">
-        <div className="container">
+        <div className="container lg:px-10">
           <CategorySection />
           <BrandsSection />
+          <AgenciasPopulares />
           <PublicacionesDestacadas />
         </div>
       </div>

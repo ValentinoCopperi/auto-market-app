@@ -4,9 +4,10 @@ import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Filter } from "lucide-react"
+import { Search, Filter, ArrowDown, ArrowUp } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -22,7 +23,9 @@ async function getSuggestions(query: string): Promise<Suggestion[]> {
   try {
     // Aquí deberías hacer una llamada a tu API o usar una Server Action
     // para obtener las sugerencias desde la base de datos
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/sugerencias/buscador?query=${encodeURIComponent(query)}`)
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/publiaciones/sugerencias/buscador?query=${encodeURIComponent(query)}`,
+    )
     const data = await response.json()
     return data.suggestions || []
   } catch (error) {
@@ -30,6 +33,25 @@ async function getSuggestions(query: string): Promise<Suggestion[]> {
     return []
   }
 }
+
+const busquedas_populares = [
+  { title: "Autos menos de US$13.000", link: "/publicaciones?categoria=automovil&precio_max=13000&moneda=USD" },
+  { title: "Amarok 2024", link: "/publicaciones?q=amarok&anio=2024" },
+  { title: "Ford Ranger 2024", link: "/publicaciones?q=amarok&anio=2024" },
+  { title: "Volkswagen Gol", link: "/publicaciones?marca=volkswagen&q=gol" },
+  { title: "Fiat Cronos", link: "/publicaciones?marca=fiat&q=cronos" },
+  { title: "Renault Sandero", link: "/publicaciones?marca=renault&q=sandero" },
+]
+
+// Array de colores para los badges
+const badgeColors = [
+  "bg-blue-100 text-blue-800 hover:bg-blue-200",
+  "bg-green-100 text-green-800 hover:bg-green-200",
+  "bg-purple-100 text-purple-800 hover:bg-purple-200",
+  "bg-amber-100 text-amber-800 hover:bg-amber-200",
+  "bg-rose-100 text-rose-800 hover:bg-rose-200",
+  "bg-cyan-100 text-cyan-800 hover:bg-cyan-200",
+]
 
 export default function SearchWithSuggestions() {
   const [query, setQuery] = useState("")
@@ -41,10 +63,50 @@ export default function SearchWithSuggestions() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [loadingSuggestions, setLoadingSuggestions] = useState(false)
   const router = useRouter()
+  const [verBusquedasPopulares, setVerBusquedasPopulares] = useState(false)
 
   const childVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
+  }
+
+  const popularSearchesVariants = {
+    hidden: { opacity: 0, height: 0 },
+    visible: {
+      opacity: 1,
+      height: "auto",
+      transition: {
+        duration: 0.3,
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+      },
+    },
+    exit: {
+      opacity: 0,
+      height: 0,
+      transition: {
+        duration: 0.2,
+        when: "afterChildren",
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+  }
+
+  const badgeVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 10 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 15 },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      y: -10,
+      transition: { duration: 0.2 },
+    },
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,6 +158,10 @@ export default function SearchWithSuggestions() {
     } else if (e.key === "Escape") {
       setShowSuggestions(false)
     }
+  }
+
+  const togglePopularSearches = () => {
+    setVerBusquedasPopulares((prev) => !prev)
   }
 
   // Efecto para obtener sugerencias cuando cambia la consulta
@@ -193,9 +259,8 @@ export default function SearchWithSuggestions() {
                       suggestions.map((suggestion, index) => (
                         <motion.div
                           key={suggestion.id}
-                          className={`px-4 py-2 cursor-pointer hover:bg-muted/50 ${
-                            selectedSuggestionIndex === index ? "bg-muted" : ""
-                          }`}
+                          className={`px-4 py-2 cursor-pointer hover:bg-muted/50 ${selectedSuggestionIndex === index ? "bg-muted" : ""
+                            }`}
                           onClick={() => handleSuggestionClick(suggestion)}
                           whileHover={{ backgroundColor: "rgba(0,0,0,0.05)" }}
                           transition={{ duration: 0.1 }}
@@ -231,6 +296,51 @@ export default function SearchWithSuggestions() {
             </Link>
           </div>
         </div>
+        <div className="mt-3">
+          <Button
+            variant="link"
+            onClick={togglePopularSearches}
+            className={`transition-colors flex items-center gap-1 p-0 ${verBusquedasPopulares ? "text-primary font-medium" : "text-muted-foreground"
+              }`}
+          >
+            <span>Ver Búsquedas Populares</span>
+            <motion.span
+              initial={false}
+              animate={{ rotate: verBusquedasPopulares ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center"
+            >
+              {verBusquedasPopulares ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
+            </motion.span>
+          </Button>
+        </div>
+
+        <AnimatePresence>
+          {verBusquedasPopulares && (
+            <motion.div
+              className="mt-3 overflow-hidden"
+              variants={popularSearchesVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <div className="flex flex-wrap gap-2 py-2">
+                {busquedas_populares.map((busqueda, index) => (
+                  <motion.div key={index} variants={badgeVariants} className="inline-block">
+                    <Link href={busqueda.link}>
+                      <Badge
+                        className={`cursor-pointer px-3 py-1.5 text-sm font-medium transition-all hover:shadow-md ${badgeColors[index % badgeColors.length]}`}
+                        variant="outline"
+                      >
+                        {busqueda.title}
+                      </Badge>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   )

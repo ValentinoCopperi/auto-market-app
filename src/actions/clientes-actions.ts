@@ -329,7 +329,7 @@ export const getAgenciasPopulares = async (): Promise<ActionsResponse<AgenciaPop
           _count: 'desc'
         }
       },
-      take: 4
+      take: 8
     })
 
     return {

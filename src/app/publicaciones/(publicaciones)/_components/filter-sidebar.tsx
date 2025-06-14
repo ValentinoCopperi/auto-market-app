@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Filter, X } from "lucide-react"
+import { Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import type { Marca } from "@/types/publicaciones"
-import { CIUDADES, COMBUSTIBLE } from "@/types/filtros"
+import { CIUDADES, COMBUSTIBLE, TIPOS_POR_MODELO, MODELOS_POR_MARCA } from "@/types/filtros"
+
 
 interface FilterSidebarProps {
   currentFilters: Record<string, any>
@@ -54,6 +55,12 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
 
   const [priceRange, setPriceRange] = useState<[number, number]>(getPriceRange())
 
+  // Add state variables after the existing useState declarations:
+  const [selectedMarca, setSelectedMarca] = useState<string>(currentFilters.marca || "all")
+  const [selectedModelo, setSelectedModelo] = useState<string>(currentFilters.modelo || "all")
+  const [availableModelos, setAvailableModelos] = useState<string[]>([])
+  const [availableTipos, setAvailableTipos] = useState<string[]>([])
+
   const handleMonedaChange = (value: "USD" | "ARG") => {
     setMoneda(value)
     setCurrentConfig(currencyConfig[value])
@@ -63,6 +70,40 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
   useEffect(() => {
     setPriceRange(getPriceRange())
   }, [currentFilters])
+
+  // Add useEffect hooks after the existing useEffect:
+  // Update available models when brand changes
+  useEffect(() => {
+    if (selectedMarca && selectedMarca !== "all") {
+      const modelos = MODELOS_POR_MARCA[selectedMarca.toLowerCase()] || []
+      setAvailableModelos(modelos)
+      // Reset model selection when brand changes
+      if (selectedModelo !== "all") {
+        setSelectedModelo("all")
+        setAvailableTipos([])
+      }
+    } else {
+      setAvailableModelos([])
+      setSelectedModelo("all")
+      setAvailableTipos([])
+    }
+  }, [selectedMarca])
+
+  // Update available model types when model changes
+  useEffect(() => {
+    if (selectedModelo && selectedModelo !== "all") {
+      const tipos = TIPOS_POR_MODELO[selectedModelo.toLowerCase()] || []
+      setAvailableTipos(tipos)
+    } else {
+      setAvailableTipos([])
+    }
+  }, [selectedModelo])
+
+  // Update selected brand when filters change
+  useEffect(() => {
+    setSelectedMarca(currentFilters.marca || "all")
+    setSelectedModelo(currentFilters.modelo || "all")
+  }, [currentFilters.marca, currentFilters.modelo])
 
   // Función para aplicar filtros
   const applyFilters = (newFilters: Record<string, any> = {}) => {
@@ -108,14 +149,29 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
         <h2 className="text-lg font-semibold">Filtros</h2>
       </div>
 
-      <Accordion type="multiple" defaultValue={["marca", "categoria", "ciudad", "anio", "precio", "color"]}>
+      <Accordion
+        type="multiple"
+        defaultValue={[
+          "marca",
+          "categoria",
+          "ciudad",
+          "anio",
+          "precio",
+          "color",
+          ...(selectedMarca !== "all" ? ["modelo"] : []),
+          ...(selectedModelo !== "all" ? ["tipo_modelo"] : []),
+        ]}
+      >
         <AccordionItem value="marca">
           <AccordionTrigger>Marca</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-2">
               <Select
-                defaultValue={currentFilters.marca || "all"}
-                onValueChange={(value) => applyFilters({ marca: value })}
+                value={selectedMarca}
+                onValueChange={(value) => {
+                  setSelectedMarca(value)
+                  applyFilters({ marca: value, modelo: "all", tipo_modelo: "all" })
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Todas las marcas" />
@@ -132,6 +188,67 @@ export function FilterSidebar({ currentFilters, marcas }: FilterSidebarProps) {
             </div>
           </AccordionContent>
         </AccordionItem>
+
+        {selectedMarca !== "all" && availableModelos.length > 0 && (
+          <AccordionItem value="modelo">
+            <AccordionTrigger>Modelo</AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-2">
+                <Select
+                  value={selectedModelo}
+                  onValueChange={(value) => {
+                    setSelectedModelo(value);
+                    applyFilters({ modelo: value, tipo_modelo: "all" });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Todos los modelos" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los modelos</SelectItem>
+                    {availableModelos.map((modelo) => (
+                      <SelectItem key={modelo} value={modelo.toLowerCase()}>
+                        {modelo}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </AccordionContent>
+            <span className="text-xs text-muted-foreground italic  block">
+              * También podés usar el buscador para encontrar un modelo
+            </span>
+          </AccordionItem>
+        )}
+
+        {selectedModelo !== "all" && availableTipos.length > 0 && (
+          <AccordionItem value="tipo_modelo">
+            <AccordionTrigger>Tipo de Modelo</AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-2">
+                <Select
+                  defaultValue={currentFilters.tipo_modelo || "all"}
+                  onValueChange={(value) => applyFilters({ tipo_modelo: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Todos los tipos" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los tipos</SelectItem>
+                    {availableTipos.map((tipo) => (
+                      <SelectItem key={tipo} value={tipo.toLowerCase()}>
+                        {tipo}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </AccordionContent>
+            <span className="text-xs text-muted-foreground italic  block">
+              * También podés usar el buscador para encontrar un tipo
+            </span>
+          </AccordionItem>
+        )}
 
         <AccordionItem value="categoria">
           <AccordionTrigger>Categoría</AccordionTrigger>

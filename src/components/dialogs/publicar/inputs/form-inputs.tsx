@@ -78,6 +78,12 @@ export function FormSections({ control, fieldConfig, loading }: FormSectionsProp
                 />
               )}
             </FormControl>
+            {config.label === "Modelo" &&
+              (<span className="text-xs text-muted-foreground italic  block">
+                * Especificar modelo y tipo
+              </span>)
+            }
+
             <FormMessage />
           </FormItem>
         )}
@@ -134,6 +140,7 @@ export function FormSections({ control, fieldConfig, loading }: FormSectionsProp
             )}
           />
         </div>
+        
       </div>
     )
   }

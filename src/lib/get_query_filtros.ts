@@ -12,7 +12,7 @@ export const get_query_filtros = (searchParams?: Record<string, any>, marcaId?: 
   const skip = (page - 1) * pageSize
 
   // Construir objeto de filtros para Prisma
-  const where: any = {vendido: false}
+  const where: any = { vendido: false }
 
   if (!searchParams || Object.keys(searchParams).length === 0) {
     // Si no hay parámetros, devolver consulta sin filtros
@@ -46,6 +46,12 @@ export const get_query_filtros = (searchParams?: Record<string, any>, marcaId?: 
           break
         case "moneda":
           where.tipo_moneda = value
+          break
+        case "modelo":
+          where.modelo = { contains: value, mode: "insensitive" }
+          break
+        case "tipo_modelo":
+          where.modelo = { contains: value, mode: "insensitive" }
           break
         case "anio":
           where.anio = parseInt(value)

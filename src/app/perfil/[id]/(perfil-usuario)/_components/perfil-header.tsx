@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop"
 import "react-image-crop/dist/ReactCrop.css"
 import { Badge } from "@/components/ui/badge"
+
 interface PerfilHeaderProps {
   usuario: Cliente
   editable?: boolean
@@ -234,9 +235,9 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
         aria-label="Seleccionar imagen de perfil"
       />
 
-      {/* Banner */}
+      {/* Banner - Altura optimizada para mobile */}
       <div
-        className="relative w-full h-[250px] bg-gradient-to-r from-gray-900 to-gray-700 overflow-hidden"
+        className="relative w-full h-[160px] sm:h-[200px] lg:h-[250px] bg-gradient-to-r from-gray-900 to-gray-700 overflow-hidden"
         onMouseEnter={() => editable && setIsHoveringBanner(true)}
         onMouseLeave={() => editable && setIsHoveringBanner(false)}
       >
@@ -248,7 +249,7 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
             className="object-cover object-center"
             priority
-            quality={90} // Increase image quality
+            quality={90}
           />
         )}
         {isLoadingBanner && (
@@ -259,105 +260,187 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
         {/* Overlay para oscurecer ligeramente el banner */}
         <div className="absolute inset-0 bg-black/10" />
 
-        {/* Botón para cambiar banner (solo visible al hacer hover si es editable) */}
+        {/* Botón para cambiar banner */}
         {editable && (
           <Button
             variant="secondary"
             size="sm"
-            className={`absolute right-4 top-4 transition-opacity duration-200 ${isHoveringBanner ? "opacity-100" : "opacity-0"
-              }`}
+            className={`absolute right-2 top-2 sm:right-4 sm:top-4 transition-opacity duration-200 text-xs sm:text-sm ${
+              isHoveringBanner ? "opacity-100" : "opacity-0"
+            }`}
             onClick={handleCambiarBanner}
           >
-            <Upload className="h-4 w-4 mr-2" />
-            Cambiar Banner
+            <Upload className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Cambiar Banner</span>
+            <span className="sm:hidden">Banner</span>
           </Button>
         )}
       </div>
 
-      {/* Contenedor de información de perfil */}
+      {/* Contenedor principal - Nuevo diseño */}
       <div className="container mx-auto px-4">
-        <div className="relative -mt-18 bg-card rounded-lg border border-border p-6 pt-8">
-          {/* Avatar */}
-          <div
-            className="absolute -top-16 left-6 w-[120px] h-[120px]"
-            onMouseEnter={() => editable && setIsHoveringAvatar(true)}
-            onMouseLeave={() => editable && setIsHoveringAvatar(false)}
-          >
-            <div className="relative w-full h-full rounded-full border-4 border-background overflow-hidden bg-muted">
-              {isLoadingAvatar ? (
-                <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary text-4xl font-bold">
-                  <Loader2 className="h-8 w-8 text-white animate-spin" />
-                </div>
-              ) : usuario.profile_img_url ? (
-                <Image src={profile_img_url || "/placeholder.svg"} alt={nombreCompleto} fill className="object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary text-4xl font-bold">
-                  {nombreCompleto.charAt(0)}
-                </div>
-              )}
+        {/* Mobile Layout */}
+        <div className="lg:hidden">
+          <div className="relative bg-card rounded-lg border border-border -mt-8 pt-4 pb-6">
+            {/* Avatar centrado en mobile */}
+            <div className="flex justify-center -mt-16 mb-4">
+              <div
+                className="relative w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]"
+                onMouseEnter={() => editable && setIsHoveringAvatar(true)}
+                onMouseLeave={() => editable && setIsHoveringAvatar(false)}
+              >
+                <div className="relative w-full h-full rounded-full border-4 border-background overflow-hidden bg-muted shadow-lg">
+                  {isLoadingAvatar ? (
+                    <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
+                      <Loader2 className="h-8 w-8 text-white animate-spin" />
+                    </div>
+                  ) : usuario.profile_img_url ? (
+                    <Image
+                      src={profile_img_url || "/placeholder.svg"}
+                      alt={nombreCompleto}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary text-4xl sm:text-5xl font-bold">
+                      {nombreCompleto.charAt(0)}
+                    </div>
+                  )}
 
-              {/* Overlay para cambiar avatar (solo visible al hacer hover si es editable) */}
-              {editable && (
-                <div
-                  className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 cursor-pointer ${isHoveringAvatar ? "opacity-100" : "opacity-0"
-                    }`}
-                  onClick={handleCambiarAvatar}
-                >
-                  <Camera className="h-8 w-8 text-white" />
+                  {/* Overlay para cambiar avatar */}
+                  {editable && (
+                    <div
+                      className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 cursor-pointer ${
+                        isHoveringAvatar ? "opacity-100" : "opacity-0"
+                      }`}
+                      onClick={handleCambiarAvatar}
+                    >
+                      <Camera className="h-8 w-8 text-white" />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Información del perfil */}
-          <div className="flex flex-col md:flex-row justify-between">
-            <div className="mt-[22px] md:mt-[0px] md:ml-[140px]">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold">{nombreCompleto}</h1>
-                  <p className="text-muted-foreground mt-1">{usuario.descripcion}</p>
-                </div>
-
-                {editable && (
-                  <Button variant="outline" size="sm" className="md:hidden" onClick={handleEditarPerfil}>
-                    <Pencil className="h-4 w-4 mr-2" />
-                    Editar Perfil
-                  </Button>
-                )}
               </div>
             </div>
 
-            <div className="flex flex-col items-end mt-4 md:mt-0 space-y-2">
-              {
-                usuario.suscripcion && usuario.suscripcion.tipo_suscripcion !== "plan_ocasion" && usuario.suscripcion.estado === "activa" && (
-                  <Badge  className="bg-green-500 text-white">
-                    {
-                      usuario.suscripcion.tipo_suscripcion === "plan_vendedor" ? "Vendedor Verificado" : "Vendedor Profesional"
-                    }
-                  </Badge>
-                )
-              }
-             
+            {/* Información centrada en mobile */}
+            <div className="text-center px-4 space-y-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold leading-tight">{nombreCompleto}</h1>
+                {usuario.descripcion && (
+                  <p className="text-muted-foreground mt-2 text-sm sm:text-base leading-relaxed break-words">
+                    {usuario.descripcion}
+                  </p>
+                )}
+              </div>
+
+              {/* Badges y calificación */}
+              <div className="flex flex-col items-center space-y-2">
+                {usuario.suscripcion &&
+                  usuario.suscripcion.tipo_suscripcion !== "plan_ocasion" &&
+                  usuario.suscripcion.estado === "activa" && (
+                    <Badge className="bg-green-500 text-white">
+                      {usuario.suscripcion.tipo_suscripcion === "plan_vendedor"
+                        ? "Vendedor Verificado"
+                        : "Vendedor Profesional"}
+                    </Badge>
+                  )}
+
+                {numResenas > 0 && (
+                  <div className="flex items-center">
+                    <Star className="h-5 w-5 text-yellow-500 fill-yellow-500 mr-1" />
+                    <span className="font-medium">{calificacion.toFixed(1)}/5</span>
+                    <span className="text-muted-foreground ml-1">({numResenas} reseñas)</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Botón editar perfil */}
               {editable && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="hidden md:flex mb-4"
-                  onClick={() => setIsEditModalOpen(true)}
-                >
+                <Button variant="outline" onClick={handleEditarPerfil} className="mt-4">
                   <Pencil className="h-4 w-4 mr-2" />
                   Editar Perfil
                 </Button>
               )}
+            </div>
+          </div>
+        </div>
 
-              {/* Calificación */}
-              {numResenas > 0 && (
-                <div className="flex items-center">
-                  <Star className="h-5 w-5 text-yellow-500 fill-yellow-500 mr-1" />
-                  <span className="font-medium">{calificacion.toFixed(1)}/5</span>
-                  <span className="text-muted-foreground ml-1">({numResenas} reseñas)</span>
-                </div>
-              )}
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          <div className="relative -mt-18 bg-card rounded-lg border border-border p-6 pt-8">
+            {/* Avatar posicionado a la izquierda en desktop */}
+            <div
+              className="absolute -top-16 left-6 w-[120px] h-[120px]"
+              onMouseEnter={() => editable && setIsHoveringAvatar(true)}
+              onMouseLeave={() => editable && setIsHoveringAvatar(false)}
+            >
+              <div className="relative w-full h-full rounded-full border-4 border-background overflow-hidden bg-muted">
+                {isLoadingAvatar ? (
+                  <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
+                    <Loader2 className="h-8 w-8 text-white animate-spin" />
+                  </div>
+                ) : usuario.profile_img_url ? (
+                  <Image
+                    src={profile_img_url || "/placeholder.svg"}
+                    alt={nombreCompleto}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary text-4xl font-bold">
+                    {nombreCompleto.charAt(0)}
+                  </div>
+                )}
+
+                {/* Overlay para cambiar avatar */}
+                {editable && (
+                  <div
+                    className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity duration-200 cursor-pointer ${
+                      isHoveringAvatar ? "opacity-100" : "opacity-0"
+                    }`}
+                    onClick={handleCambiarAvatar}
+                  >
+                    <Camera className="h-8 w-8 text-white" />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Información del perfil en desktop */}
+            <div className="flex justify-between">
+              <div className="ml-[140px]">
+                <h1 className="text-2xl font-bold">{nombreCompleto}</h1>
+                {usuario.descripcion && (
+                  <p className="text-muted-foreground mt-1 max-w-2xl break-words">{usuario.descripcion}</p>
+                )}
+              </div>
+
+              <div className="flex flex-col items-end space-y-2">
+                {usuario.suscripcion &&
+                  usuario.suscripcion.tipo_suscripcion !== "plan_ocasion" &&
+                  usuario.suscripcion.estado === "activa" && (
+                    <Badge className="bg-green-500 text-white">
+                      {usuario.suscripcion.tipo_suscripcion === "plan_vendedor"
+                        ? "Vendedor Verificado"
+                        : "Vendedor Profesional"}
+                    </Badge>
+                  )}
+
+                {editable && (
+                  <Button variant="outline" size="sm" onClick={() => setIsEditModalOpen(true)}>
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Editar Perfil
+                  </Button>
+                )}
+
+                {numResenas > 0 && (
+                  <div className="flex items-center">
+                    <Star className="h-5 w-5 text-yellow-500 fill-yellow-500 mr-1" />
+                    <span className="font-medium">{calificacion.toFixed(1)}/5</span>
+                    <span className="text-muted-foreground ml-1">({numResenas} reseñas)</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -374,14 +457,16 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
 
       {/* Diálogo para recortar imágenes */}
       <Dialog open={cropDialogOpen} onOpenChange={(open) => !open && setCropDialogOpen(false)}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-auto">
           <DialogHeader>
-            <DialogTitle>{cropType === "banner" ? "Ajustar imagen de banner" : "Ajustar imagen de perfil"}</DialogTitle>
+            <DialogTitle className="text-base sm:text-lg">
+              {cropType === "banner" ? "Ajustar imagen de banner" : "Ajustar imagen de perfil"}
+            </DialogTitle>
           </DialogHeader>
 
           <div className="flex flex-col items-center gap-4">
             {imageSrc && (
-              <div className="max-h-[60vh] overflow-auto">
+              <div className="max-h-[50vh] sm:max-h-[60vh] overflow-auto w-full">
                 <ReactCrop
                   crop={crop}
                   onChange={(c) => setCrop(c)}
@@ -394,7 +479,7 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
                     src={imageSrc || "/placeholder.svg"}
                     alt="Imagen para recortar"
                     onLoad={onImageLoad}
-                    className="max-w-full"
+                    className="max-w-full h-auto"
                   />
                 </ReactCrop>
               </div>
@@ -403,6 +488,7 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
             <div className="flex justify-end gap-2 w-full">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => {
                   setCropDialogOpen(false)
                   setImageSrc(null)
@@ -412,7 +498,7 @@ export function PerfilHeader({ usuario, editable = false, onBannerChange, onAvat
                 Cancelar
               </Button>
 
-              <Button onClick={handleCropComplete} disabled={!completedCrop?.width || !completedCrop?.height}>
+              <Button size="sm" onClick={handleCropComplete} disabled={!completedCrop?.width || !completedCrop?.height}>
                 <Check className="h-4 w-4 mr-2" />
                 Aplicar
               </Button>

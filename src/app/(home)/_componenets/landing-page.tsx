@@ -213,7 +213,7 @@ const LandingPage = () => {
               <Link href="/publicaciones" className="cursor-pointer">
                 <Button
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-600/90 text-white px-8 py-6 text-base font-medium"
+                  className="hidden md:flex bg-blue-600 hover:bg-blue-600/90 text-white px-8 py-6 text-base font-medium"
                 >
                   Explorar vehículos
                   <motion.div

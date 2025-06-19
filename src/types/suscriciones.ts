@@ -27,9 +27,9 @@ export interface Tipo_Suscripcion {
 export type EstadoSuscripcion = "activa" | "vencida" | "cancelada"
 
 export const planes_precios = {
-    "plan_ocasion": 100,
-    "plan_vendedor": 200,
-    "plan_agencia": 300,
+    "plan_ocasion": 12500,
+    "plan_vendedor": 24990,
+    "plan_agencia": 45000,
 }
 
 export const max_fotos = {
